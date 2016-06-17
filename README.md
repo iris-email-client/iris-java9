@@ -4,15 +4,13 @@ IRIS Email Client using Java 9 modular system
 
 ## pre requisites
 
-* Install a Java Early Access Release
-
-You have basically two options:
+Install a Java Early Access Release. You have basically two options:
 
   * Download the JDK manually:
 
 [JDK 9 Early Access with Project Jigsaw](https://jdk9.java.net/jigsaw/)
 
-  * Use a packet manager (ubuntu):
+  * Use a package manager (ubuntu):
 
 ```
 sudo add-apt-repository ppa:webupd8team/java
@@ -34,21 +32,21 @@ https://www.infoq.com/articles/Latest-Project-Jigsaw-Usage-Tutorial
 
 * Videos:
 
-https://www.youtube.com/watch?v=KZfbRuvv5qc
+[Devoxx - Prepare for JDK 9! by Mark Reinhold/Alan Bateman] (https://www.youtube.com/watch?v=KZfbRuvv5qc)
 
-https://www.youtube.com/watch?v=nBAUaOoBdGU
+[JavaOne - CON5107 Prepare for JDK 9] (https://www.youtube.com/watch?v=nBAUaOoBdGU)
 
-https://www.youtube.com/watch?v=a99RmjgG5Eo
+[JavaOne - CON5118 Introduction to Modular Development] (https://www.youtube.com/watch?v=a99RmjgG5Eo)
 
-https://www.youtube.com/watch?v=YPQ2V-hQb8w
+[Devoxx - Introduction to Modular Development by Mark Reinhold/Alan Bateman] (https://www.youtube.com/watch?v=qr4O4SbzihQ)
 
-https://www.youtube.com/watch?v=xswtIp730Ho
+[JavaOne - CON6821 Advanced Modular Development] (https://www.youtube.com/watch?v=YPQ2V-hQb8w)
 
-https://www.youtube.com/watch?v=jAL72EhLTXo
+[JavaOne - CON6823 Project Jigsaw Under the Hood] (https://www.youtube.com/watch?v=xswtIp730Ho)
 
-https://www.youtube.com/watch?v=qr4O4SbzihQ
+[JavaOne - CON6826 Ask the Architects] (https://www.youtube.com/watch?v=jAL72EhLTXo)
 
-https://www.youtube.com/watch?v=r2DeuDCCywM
+[JavaOne - TUT6825 Project Jigsaw Hack Session] (https://www.youtube.com/watch?v=r2DeuDCCywM)
 
 
 ## dependencies
@@ -67,6 +65,8 @@ Example: ...
 
 
 ## build
+
+`build.sh`
 
 
 ## usage
