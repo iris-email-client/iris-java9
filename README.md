@@ -24,11 +24,13 @@ Here are few links to get started:
 
 * Articles:
 
+[Project Jigsaw] (http://openjdk.java.net/projects/jigsaw/)
+
 [Project Jigsaw: Module System Quick-Start Guide] (http://openjdk.java.net/projects/jigsaw/quick-start)
 
-[The State of the Module System] (http://openjdk.java.net/projects/jigsaw/spec/sotms/)
-
 [Project Jigsaw: Exploratory Phase] (http://openjdk.java.net/projects/jigsaw/exploratory-phase)
+
+[The State of the Module System] (http://openjdk.java.net/projects/jigsaw/spec/sotms/)
 
 [JEP 200: The Modular JDK] (http://openjdk.java.net/jeps/200)
 
@@ -40,7 +42,10 @@ Here are few links to get started:
 
 [Java 9 Module System] (http://blog.osgi.org/2015/10/java-9-module-system.html)
 
-* Videos:
+[Modularity in Java 9] (http://www.javaworld.com/article/2878952/java-platform/modularity-in-java-9.html)
+
+* Videos: some videos are 'duplicated', but they aren't the same, just to you know that the 'same' lecture was given in both events. 
+Devoxx videos have bigger slides, search the same titles in youtube to watch in devoxx channel if you want
 
 [Devoxx - Prepare for JDK 9! by Mark Reinhold/Alan Bateman] (https://www.youtube.com/watch?v=KZfbRuvv5qc)
 
