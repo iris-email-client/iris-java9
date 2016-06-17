@@ -33,7 +33,7 @@ https://www.infoq.com/articles/Latest-Project-Jigsaw-Usage-Tutorial
 
 ## dependencies
 
-Dependencies, for now, will be download 'manually', as declared on pom.xml
+Dependencies, for now, will be downloaded 'manually', as declared on pom.xml
 
 The dependencies should be selected/declared manually according to your modules selection
 
