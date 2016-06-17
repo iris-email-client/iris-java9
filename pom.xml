@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>br.unb.cic</groupId>
+	<artifactId>iris</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	
+	<description>POM used only to download the necessary dependencies.</description>
+
+	<organization>
+		<name>Universidade de Brasília</name>
+		<url>http://www.cic.unb.br/</url>
+	</organization>
+
+	<properties>
+		<java.mail.version>1.5.5</java.mail.version>		
+		<!-- <bouncycastle.version>1.51</bouncycastle.version> -->
+	</properties>
+
+	<dependencies>
+		<!-- java mail api -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>javax.mail-api</artifactId>
+			<version>${java.mail.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>${java.mail.version}</version>
+		</dependency>
+
+		<!-- sqlite driver -->
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.8.11.2</version>
+		</dependency>
+				
+		<!-- postgresql 
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.4.1208</version>
+		</dependency>-->
+		
+		<!-- Lucene 
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>6.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-common</artifactId>
+			<version>6.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-queryparser</artifactId>
+			<version>6.0.1</version>
+		</dependency>-->
+		
+		<!-- Log4j		
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-core</artifactId>
+    <version>2.6</version>
+</dependency>		
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.6.4</version>
+		</dependency> -->
+		
+		<!-- javamail-crypto http://javamail-crypto.sourceforge.net/
+		<dependency>
+			<groupId>net.suberic.crypto</groupId>
+			<artifactId>javamail-crypto</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.suberic.crypto</groupId>
+			<artifactId>javamail-crypto-cryptix-openpgp</artifactId>
+			<version>1.0</version>
+		</dependency> -->
+		<!-- cryptix
+		<dependency>
+			<groupId>cryptix</groupId>
+			<artifactId>cryptix-jce-provider</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>cryptix</groupId>
+			<artifactId>cryptix-message-api</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>cryptix</groupId>
+			<artifactId>cryptix-openpgp-provider</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>cryptix</groupId>
+			<artifactId>cryptix-pki-api</artifactId>
+			<version>1.0</version>
+		</dependency> -->
+		<!--bouncy castle 
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
+			<version>${bouncycastle.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-ext-jdk15on</artifactId>
+			<version>${bouncycastle.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcpg-jdk15on</artifactId>
+			<version>${bouncycastle.version}</version>
+		</dependency>-->
+	</dependencies>
+
+	<build>
+		<!-- <defaultGoal>dependency:copy-dependencies</defaultGoal> -->
+		<!-- http://maven.apache.org/plugins/maven-dependency-plugin/copy-dependencies-mojo.html -->
+		<plugins>
+      		<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.basedir}/libs</outputDirectory>	
+							<overWriteIfNewer>true</overWriteIfNewer>					 							
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+   	 	</plugins>
+		
+	</build>
+	
+	<repositories>
+		<!-- iris repository on github -->
+		<repository>
+			<id>git-iris-email-client</id>
+			<name>iris-email-client's Git based repo</name>
+			<url>https://github.com/iris-email-client/mvn-repo/raw/master/</url>
+		</repository>
+		<repository>
+			<id>repo2</id>
+			<url>http://repo2.maven.org/maven2/</url>
+		</repository>
+	</repositories>
+
+</project>
