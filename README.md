@@ -24,11 +24,31 @@ sudo apt-get install oracle-java9-installer
 
 Here are few links to get started:
 
+* Articles:
+
 http://openjdk.java.net/projects/jigsaw/quick-start
 
 http://openjdk.java.net/projects/jigsaw/spec/sotms/
 
 https://www.infoq.com/articles/Latest-Project-Jigsaw-Usage-Tutorial
+
+* Videos:
+
+https://www.youtube.com/watch?v=KZfbRuvv5qc
+
+https://www.youtube.com/watch?v=nBAUaOoBdGU
+
+https://www.youtube.com/watch?v=a99RmjgG5Eo
+
+https://www.youtube.com/watch?v=YPQ2V-hQb8w
+
+https://www.youtube.com/watch?v=xswtIp730Ho
+
+https://www.youtube.com/watch?v=jAL72EhLTXo
+
+https://www.youtube.com/watch?v=qr4O4SbzihQ
+
+https://www.youtube.com/watch?v=r2DeuDCCywM
 
 
 ## dependencies
