@@ -24,11 +24,21 @@ Here are few links to get started:
 
 * Articles:
 
-http://openjdk.java.net/projects/jigsaw/quick-start
+[Project Jigsaw: Module System Quick-Start Guide] (http://openjdk.java.net/projects/jigsaw/quick-start)
 
-http://openjdk.java.net/projects/jigsaw/spec/sotms/
+[The State of the Module System] (http://openjdk.java.net/projects/jigsaw/spec/sotms/)
 
-https://www.infoq.com/articles/Latest-Project-Jigsaw-Usage-Tutorial
+[Project Jigsaw: Exploratory Phase] (http://openjdk.java.net/projects/jigsaw/exploratory-phase)
+
+[JEP 200: The Modular JDK] (http://openjdk.java.net/jeps/200)
+
+[Programming with Modularity and Project Jigsaw] (https://www.infoq.com/articles/Latest-Project-Jigsaw-Usage-Tutorial)
+
+[Managing in an Age of Modularity] (https://hbr.org/1997/09/managing-in-an-age-of-modularity/ar/1)
+
+[OSGi and Java 9 Modules Working Together] (http://njbartlett.name/2015/11/13/osgi-jigsaw.html)
+
+[Java 9 Module System] (http://blog.osgi.org/2015/10/java-9-module-system.html)
 
 * Videos:
 
