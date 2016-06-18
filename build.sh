@@ -4,11 +4,21 @@
 # Script used to compile, build jars and run
 # For now: You need to select the modules 'manually'
 # 
+# USAGE:
+#  *** to launch IrisGUI:
+# ./build.sh gui
+#
+#  *** to launch IrisConsole
+# ./build.sh cli
+#    or just
+# ./build.sh
+#
 
 export JAVA_HOME=/usr/lib/jvm/java-9-oracle
 
 JAVA_BIN=$JAVA_HOME/bin
 echo Java: $JAVA_BIN
+
 
 # clean
 echo Cleaning ...
@@ -72,22 +82,39 @@ $JAVA_BIN/jar --create --file mlib/iris.persistence.jdbc@1.0.jar --module-versio
 
 
 
-#echo Creating Module: IrisConsole
-#$JAVA_BIN/jar --create --file mlib/iris.ui.cli@1.0.jar --module-version 1.0 --main-class br.unb.cic.iris.cli.MainProgram -C build/iris.ui.cli .
+# default module is CLI (command line interface)
+MODULE_NAME="IrisConsole"
+MODULE_REAL_NAME="iris.ui.cli"
+MAIN_CLASS="br.unb.cic.iris.cli.MainProgram"
 
-echo Creating Module: IrisGUI
-cp -Rf src/iris.ui.gui/images build/iris.ui.gui
-$JAVA_BIN/jar --create --file mlib/iris.ui.gui@1.0.jar --module-version 1.0 --main-class br.unb.cic.iris.gui.MainProgram -C build/iris.ui.gui .
+if [ "$#" -ne  "0" ] 
+then
+     if [ "$1" = "gui" ] 
+     then     	
+     	cp -Rf src/iris.ui.gui/images build/iris.ui.gui
+     	MODULE_NAME="IrisGUI"
+		MODULE_REAL_NAME="iris.ui.gui"
+		MAIN_CLASS="br.unb.cic.iris.gui.MainProgram"
+     fi
+fi
+
+echo Creating Module: $MODULE_NAME
+$JAVA_BIN/jar --create --file mlib/$MODULE_REAL_NAME@1.0.jar --module-version 1.0 --main-class $MAIN_CLASS -C build/$MODULE_REAL_NAME .
+
+
 
 
 # link
 echo Linking ...
 rm -rf iris
-$JAVA_BIN/jlink --modulepath $JAVA_HOME/jmods:mlib:libs --addmods iris.ui.gui --output iris
+$JAVA_BIN/jlink --modulepath $JAVA_HOME/jmods:mlib:libs --addmods $MODULE_REAL_NAME --output iris
+
 
 # run
 echo Executing ...
-$JAVA_BIN/java -mp mlib:libs -m iris.ui.gui
+$JAVA_BIN/java -mp mlib:libs -m $MODULE_REAL_NAME
+
+
 
 # run the run-time image created by jlink
 #cd mailclient/bin 
