@@ -1,12 +1,14 @@
 package br.unb.cic.iris.gui.command;
 
 import java.awt.event.ActionEvent;
+import java.util.List;
 
-import javax.swing.JOptionPane;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
-import br.unb.cic.iris.command.MailCommand;
+import br.unb.cic.iris.gui.GuiManager;
 
-public class GuiHelpCommand extends GuiCommand {
+public class GuiHelpCommand extends AbstractMailCommand {
 	static final String COMMAND_HELP = "Help";
 
 	@Override
@@ -17,10 +19,11 @@ public class GuiHelpCommand extends GuiCommand {
 	@Override
 	public void handleExecute() {
 		StringBuilder sb = new StringBuilder();
-		for (MailCommand c : GuiCommandManager.singleton().listAll()) {
-			sb.append(c.explain());
-		}
-		JOptionPane.showMessageDialog(null, sb.toString());
+				
+		GuiCommandManager.singleton().listAll().stream()
+				.sorted(COMPARE_BY_NAME).forEach(c -> sb.append(c.explain()));
+		
+		showInfoMessage(sb.toString());		
 	}
 
 	@Override
@@ -31,6 +34,26 @@ public class GuiHelpCommand extends GuiCommand {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		execute();
+	}
+
+	@Override
+	public void register(GuiManager manager) {
+		ImageIcon icon = createImageIcon("/images/status.png", getCommandName());
+
+		JButton btn = new JButton(icon);
+		btn.addActionListener(this);
+		btn.setToolTipText(getCommandName() + " - " + explain());
+
+		manager.addToolbarComponent(btn);
+	}
+
+	
+	
+	
+	@Override
+	public void setParameters(List<String> parameters) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

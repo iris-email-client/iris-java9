@@ -2,14 +2,16 @@ package br.unb.cic.iris.gui.command;
 
 
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.exception.EmailException;
+import br.unb.cic.iris.gui.GuiManager;
 import br.unb.cic.iris.gui.screen.SendPanel;
 import br.unb.cic.iris.model.EmailMessage;
 
 
-public class GuiSendMesssageCommand extends GuiCommand {
+public class GuiSendMesssageCommand extends AbstractMailCommand {
 	private SendPanel panel;
 
 	public GuiSendMesssageCommand(){
@@ -51,7 +53,19 @@ public class GuiSendMesssageCommand extends GuiCommand {
 	}
 
 	@Override
-	protected void handleExecute() throws EmailException {
+	protected void handleExecute() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void register(GuiManager manager) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setParameters(List<String> parameters) {
 		// TODO Auto-generated method stub
 		
 	}

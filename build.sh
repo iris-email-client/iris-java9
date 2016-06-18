@@ -72,21 +72,22 @@ $JAVA_BIN/jar --create --file mlib/iris.persistence.jdbc@1.0.jar --module-versio
 
 
 
-echo Creating Module: IrisConsole
-$JAVA_BIN/jar --create --file mlib/iris.ui.cli@1.0.jar --module-version 1.0 --main-class br.unb.cic.iris.cli.MainProgram -C build/iris.ui.cli .
+#echo Creating Module: IrisConsole
+#$JAVA_BIN/jar --create --file mlib/iris.ui.cli@1.0.jar --module-version 1.0 --main-class br.unb.cic.iris.cli.MainProgram -C build/iris.ui.cli .
 
-#echo Creating Module: IrisGUI
-#$JAVA_BIN/jar --create --file mlib/iris.ui.gui@1.0.jar --module-version 1.0 --main-class br.unb.cic.iris.gui.MainProgram -C build/iris.ui.gui .
+echo Creating Module: IrisGUI
+cp -Rf src/iris.ui.gui/images build/iris.ui.gui
+$JAVA_BIN/jar --create --file mlib/iris.ui.gui@1.0.jar --module-version 1.0 --main-class br.unb.cic.iris.gui.MainProgram -C build/iris.ui.gui .
 
 
 # link
 echo Linking ...
 rm -rf iris
-$JAVA_BIN/jlink --modulepath $JAVA_HOME/jmods:mlib:libs --addmods iris.ui.cli --output iris
+$JAVA_BIN/jlink --modulepath $JAVA_HOME/jmods:mlib:libs --addmods iris.ui.gui --output iris
 
 # run
 echo Executing ...
-$JAVA_BIN/java -mp mlib:libs -m iris.ui.cli
+$JAVA_BIN/java -mp mlib:libs -m iris.ui.gui
 
 # run the run-time image created by jlink
 #cd mailclient/bin 

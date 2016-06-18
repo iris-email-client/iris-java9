@@ -27,7 +27,7 @@ public abstract class AbstractCommandManager extends BaseCommandManager {
 		loadCommands();
 	}
 
-	private void loadCommands() throws EmailException {
+	protected void loadCommands() throws EmailException {
 		System.out.println("Loading commands ...");
 		ServiceLoader<MailCommand> sl = ServiceLoader.load(MailCommand.class);
 		Iterator<MailCommand> it = sl.iterator();
@@ -37,7 +37,7 @@ public abstract class AbstractCommandManager extends BaseCommandManager {
 
 		while (it.hasNext()) {
 			MailCommand command = it.next();
-			addCommand(command);
+			addCommand(command);			
 		}
 
 		System.out.println("Total commands found: " + listAll().size());

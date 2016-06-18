@@ -1,9 +1,6 @@
 package br.unb.cic.iris.cli.command;
 
-import java.util.Comparator;
-
 import br.unb.cic.iris.command.AbstractMailCommand;
-import br.unb.cic.iris.command.MailCommand;
 
 /***
  * added by dConsole
@@ -17,17 +14,10 @@ public class ConsoleHelpCommand extends AbstractMailCommand {
 	}
 
 	@Override
-	public void handleExecute() {
-		/*for (MailCommand c : ConsoleCommandManager.singleton().listAll()) {
-			System.out.print(c.explain());
-		}*/
-		
-		
-		Comparator<MailCommand> byName = (MailCommand c1, MailCommand c2) -> c1.getCommandName().compareTo(c2.getCommandName());
+	public void handleExecute() {				
 		ConsoleCommandManager.singleton().listAll().stream()
 				//.filter(c -> c instanceof MailCommand)
-				.sorted(byName).forEach(c -> System.out.print(c.explain()));
-				
+				.sorted(COMPARE_BY_NAME).forEach(c -> System.out.print(c.explain()));
 	}
 
 	@Override

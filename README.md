@@ -44,16 +44,11 @@ Here are few links to get started:
 
 [Modularity in Java 9] (http://www.javaworld.com/article/2878952/java-platform/modularity-in-java-9.html)
 
-* Videos: some videos are 'duplicated', but they aren't the same, just to you know that the 'same' lecture was given in both events. 
-Devoxx videos have bigger slides, search the same titles in youtube to watch in devoxx channel if you want
+* Videos: 
 
-[Devoxx - Prepare for JDK 9! by Mark Reinhold/Alan Bateman] (https://www.youtube.com/watch?v=KZfbRuvv5qc)
+[Devoxx - Prepare for JDK 9! by Mark Reinhold/Alan Bateman] (https://www.youtube.com/watch?v=KZfbRuvv5qc) or [JavaOne - CON5107 Prepare for JDK 9] (https://www.youtube.com/watch?v=nBAUaOoBdGU)
 
-[JavaOne - CON5107 Prepare for JDK 9] (https://www.youtube.com/watch?v=nBAUaOoBdGU)
-
-[JavaOne - CON5118 Introduction to Modular Development] (https://www.youtube.com/watch?v=a99RmjgG5Eo)
-
-[Devoxx - Introduction to Modular Development by Mark Reinhold/Alan Bateman] (https://www.youtube.com/watch?v=qr4O4SbzihQ)
+[JavaOne - CON5118 Introduction to Modular Development] (https://www.youtube.com/watch?v=a99RmjgG5Eo) or [Devoxx - Introduction to Modular Development by Mark Reinhold/Alan Bateman] (https://www.youtube.com/watch?v=qr4O4SbzihQ)
 
 [JavaOne - CON6821 Advanced Modular Development] (https://www.youtube.com/watch?v=YPQ2V-hQb8w)
 
