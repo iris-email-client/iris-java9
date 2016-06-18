@@ -12,7 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.border.TitledBorder;
 
 import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.gui.GuiManager;
@@ -31,7 +30,7 @@ public class ConnectPanel extends JPanel {
 	private void initComponents(List<EmailProvider> providers) {
 		JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(new GridLayout(3, 2));
-		centerPanel.setBorder(new TitledBorder("Select Provider"));
+		centerPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Select Provider"));
 		
 		centerPanel.add(new JLabel("Provider"));
 		

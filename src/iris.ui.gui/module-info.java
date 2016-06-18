@@ -8,4 +8,5 @@ module iris.ui.gui {
 	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.gui.command.GuiHelpCommand;
 	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.gui.command.status.GuiStatusCommand;
 	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.gui.command.connect.GuiConnectCommand;	
+	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.gui.command.send.GuiSendMessageCommand;
 }
