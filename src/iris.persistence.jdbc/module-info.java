@@ -1,6 +1,7 @@
 module iris.persistence.jdbc {
 	requires java.sql;	
 	requires sqlite.jdbc;
+	
 	requires iris.model.simple;
 	requires public iris.persistence;
 		

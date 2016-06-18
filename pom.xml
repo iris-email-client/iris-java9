@@ -17,6 +17,7 @@
 
 	<properties>
 		<java.mail.version>1.5.5</java.mail.version>		
+		<lucene.version>4.10.2</lucene.version>
 		<!-- <bouncycastle.version>1.51</bouncycastle.version> -->
 	</properties>
 
@@ -47,22 +48,27 @@
 			<version>9.4.1208</version>
 		</dependency>-->
 		
-		<!-- Lucene 
+		<!-- Lucene -->
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-core</artifactId>
-			<version>6.0.1</version>
+			<version>${lucene.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-analyzers-common</artifactId>
-			<version>6.0.1</version>
+			<version>${lucene.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-queryparser</artifactId>
-			<version>6.0.1</version>
-		</dependency>-->
+			<version>${lucene.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-codecs</artifactId>
+			<version>${lucene.version}</version>
+		</dependency>
 		
 		<!-- Log4j		
 <dependency>

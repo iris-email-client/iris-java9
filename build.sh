@@ -74,11 +74,15 @@ echo Creating Module: IrisMailProviderYahoo
 $JAVA_BIN/jar --create --file mlib/iris.mail.provider.yahoo@1.0.jar --module-version 1.0 -C build/iris.mail.provider.yahoo .
 
 
+# Persistence
+#echo Creating Module: IrisPersistenceJDBC
+#$JAVA_BIN/jar --create --file mlib/iris.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.persistence.jdbc .
+
+echo Creating Module: IrisPersistenceLucene
+$JAVA_BIN/jar --create --file mlib/iris.persistence.lucene@1.0.jar --module-version 1.0 -C build/iris.persistence.lucene .
+
 #echo Creating Module: IrisPersistenceXml
 #$JAVA_BIN/jar --create --file mlib/iris.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.persistence.xml .
-
-echo Creating Module: IrisPersistenceJDBC
-$JAVA_BIN/jar --create --file mlib/iris.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.persistence.jdbc .
 
 
 
@@ -112,7 +116,9 @@ $JAVA_BIN/jlink --modulepath $JAVA_HOME/jmods:mlib:libs --addmods $MODULE_REAL_N
 
 # run
 echo Executing ...
-$JAVA_BIN/java -mp mlib:libs -m $MODULE_REAL_NAME
+#$JAVA_BIN/java -mp mlib:libs -m $MODULE_REAL_NAME
+# TODO understand why we need to put jars on cp
+$JAVA_BIN/java -mp mlib:libs -cp libs/lucene-core-4.10.2.jar:libs/lucene-codecs-4.10.2.jar -m $MODULE_REAL_NAME
 
 
 
@@ -121,6 +127,6 @@ $JAVA_BIN/java -mp mlib:libs -m $MODULE_REAL_NAME
 #./MailClient
 
 
-
+#$JAVA_BIN/java -mp mlib:lib -cp lib/lucene-core-4.10.2.jar:lib/lucene-codecs-4.10.2.jar -m TesteLucene
 #$JAVA_BIN/java -cp libs/javax.mail-1.5.5.jar:libs/javax.mail-api-1.5.5.jar:libs/activation-1.1.1.jar -mp mlib -m iris.ui.cli
 
