@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 public class MainFrame extends JFrame {
+	private static final long serialVersionUID = -6238186065495538006L;
 	private JPanel northPanel;
 	private JPanel centerPanel;
 	private JPanel statusPanel;
