@@ -13,7 +13,7 @@ import br.unb.cic.iris.i18n.MessageBundle;
 /***
  * added by dBaseCommand
  */
-public abstract class AbstractMailCommand implements GuiMailCommand {
+public abstract class AbstractGuiMailCommand implements GuiMailCommand {
 
 	protected abstract void handleExecute() throws EmailException;
 

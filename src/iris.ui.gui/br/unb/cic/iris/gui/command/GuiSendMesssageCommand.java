@@ -11,7 +11,7 @@ import br.unb.cic.iris.gui.screen.SendPanel;
 import br.unb.cic.iris.model.EmailMessage;
 
 
-public class GuiSendMesssageCommand extends AbstractMailCommand {
+public class GuiSendMesssageCommand extends AbstractGuiMailCommand {
 	private SendPanel panel;
 
 	public GuiSendMesssageCommand(){

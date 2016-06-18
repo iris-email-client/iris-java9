@@ -9,13 +9,13 @@ import javax.swing.JButton;
 //import br.unb.cic.iris.core.FolderManager;
 import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.gui.GuiManager;
-import br.unb.cic.iris.gui.command.AbstractMailCommand;
+import br.unb.cic.iris.gui.command.AbstractGuiMailCommand;
 import br.unb.cic.iris.mail.EmailProvider;
 import br.unb.cic.iris.model.Status;
 
 
 
-public class GuiStatusCommand extends AbstractMailCommand {
+public class GuiStatusCommand extends AbstractGuiMailCommand {
 	static final String COMMAND_NAME = "Status";
 
 	@Override

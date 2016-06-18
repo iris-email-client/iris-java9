@@ -8,7 +8,7 @@ import javax.swing.JButton;
 
 import br.unb.cic.iris.gui.GuiManager;
 
-public class GuiHelpCommand extends AbstractMailCommand {
+public class GuiHelpCommand extends AbstractGuiMailCommand {
 	static final String COMMAND_HELP = "Help";
 
 	@Override
@@ -21,7 +21,8 @@ public class GuiHelpCommand extends AbstractMailCommand {
 		StringBuilder sb = new StringBuilder();
 				
 		GuiCommandManager.singleton().listAll().stream()
-				.sorted(COMPARE_BY_NAME).forEach(c -> sb.append(c.explain()));
+				.sorted(COMPARE_BY_NAME)
+				.forEach(c -> sb.append(c.explain()));
 		
 		showInfoMessage(sb.toString());		
 	}
