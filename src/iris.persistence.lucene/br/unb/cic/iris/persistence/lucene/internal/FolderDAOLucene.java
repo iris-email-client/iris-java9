@@ -11,6 +11,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 
 import br.unb.cic.iris.core.SystemFacade;
+import br.unb.cic.iris.exception.EmailUncheckedException;
 import br.unb.cic.iris.model.IrisFolder;
 import br.unb.cic.iris.persistence.IFolderDAO;
 import br.unb.cic.iris.persistence.PersistenceException;
@@ -20,23 +21,32 @@ import br.unb.cic.iris.persistence.PersistenceException;
  */
 public class FolderDAOLucene extends AbstractDAO<IrisFolder> implements IFolderDAO {
 
-	public FolderDAOLucene() {
+	private static FolderDAOLucene instance;
+
+	private FolderDAOLucene() {
 		this.type = "folder";
-
-		try {
-			ensureIsCreated(IrisFolder.INBOX);
-			ensureIsCreated(IrisFolder.OUTBOX);
-		} catch (PersistenceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 	}
 
-	private void ensureIsCreated(String folderName) throws PersistenceException {
-		List<IrisFolder> folders = doFindByName(folderName);
+	public static FolderDAOLucene instance() {
+		if (instance == null) {
+			instance = new FolderDAOLucene();
+			try {
+				ensureIsCreated(IrisFolder.INBOX);
+				ensureIsCreated(IrisFolder.OUTBOX);
+			} catch (PersistenceException e) {
+				throw new EmailUncheckedException("Error hwile initializing lucene presistence", e);
+			}
+		}
+		return instance;
+	}
+
+	private static void ensureIsCreated(String folderName) throws PersistenceException {
+		List<IrisFolder> folders = instance.doFindByName(folderName);
 		if (folders.isEmpty()) {
-			createFolder(folderName);
+			IrisFolder inbox = SystemFacade.instance().getEntityFactory().createIrisFolder();
+			inbox.setName(folderName);
+			instance.saveOrUpdate(inbox);
+			System.out.println(String.format("%s folder created.", folderName));
 		}
 	}
 
@@ -69,10 +79,10 @@ public class FolderDAOLucene extends AbstractDAO<IrisFolder> implements IFolderD
 
 	@Override
 	public IrisFolder createFolder(String folderName) throws PersistenceException {
-		IrisFolder inbox = SystemFacade.instance().getEntityFactory().createIrisFolder();
-		inbox.setName(folderName);
-		saveOrUpdate(inbox);
+		IrisFolder folder = SystemFacade.instance().getEntityFactory().createIrisFolder();
+		folder.setName(folderName);
+		instance.saveOrUpdate(folder);
 		System.out.println(String.format("%s folder created.", folderName));
-		return inbox;
+		return folder;
 	}
 }

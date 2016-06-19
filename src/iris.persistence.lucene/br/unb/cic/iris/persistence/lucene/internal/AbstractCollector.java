@@ -1,7 +1,7 @@
 package br.unb.cic.iris.persistence.lucene.internal;
 
 import java.io.IOException;
-import java.text.ParseException;
+
 import org.apache.lucene.index.AtomicReaderContext;
 import org.apache.lucene.search.Collector;
 import org.apache.lucene.search.Scorer;

@@ -101,8 +101,14 @@ public abstract class AbstractDAO<T> {
 			} else {
 				writer.updateDocument(new Term("id", id), doc);
 			}
-			writer.commit();	
-			writer.close();
+			writer.commit();
+			/*
+			 * Commits all changes to an index and closes all associated files.
+			 * Note that this may be a costly operation, so, try to re-use a
+			 * single writer instead of closing and opening a new one.
+			 */
+			//writer.close();
+			//IndexManager.closeIndex();
 			return doc;
 		} catch (IOException e) {
 			throw new PersistenceException("An error occurred while saving " + type + ".", e);
@@ -126,6 +132,7 @@ public abstract class AbstractDAO<T> {
 		return result;
 	}
 
+	// TODO PersistenceException
 	protected abstract T fromDocument(Document doc) throws Exception;
 
 	protected abstract Document toDocument(T t) throws Exception;

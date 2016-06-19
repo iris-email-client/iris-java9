@@ -28,10 +28,15 @@ import br.unb.cic.iris.persistence.PersistenceException;
 /***
  * added by dPersistenceLucene
  */
-public final class EmailDAOLucene extends AbstractDAO<EmailMessage> implements IEmailDAO {	
+public final class EmailDAOLucene extends AbstractDAO<EmailMessage>implements IEmailDAO {
+	private static EmailDAOLucene instance = new EmailDAOLucene();
 
-	public EmailDAOLucene() {
+	private EmailDAOLucene() {
 		this.type = "email";
+	}
+
+	public static EmailDAOLucene instance() {
+		return instance;
 	}
 
 	@Override
@@ -94,21 +99,21 @@ public final class EmailDAOLucene extends AbstractDAO<EmailMessage> implements I
 		return m;
 	}
 
-//	public static void main(String[] args) throws PersistenceException {
-//		EmailMessage message = SystemFacade.instance().getEntityFactory().createEmailMessage();
-//		message.setFrom("alexandrelucchesi@gmail.com");
-//		message.setTo("rbonifacio123@gmail.com");
-//		message.setCc("jeremiasmg@gmail.com");
-//		message.setBcc("somebcc@gmail.com");
-//		message.setSubject("Alexandre Lucchesi");
-//		message.setMessage("Testing Lucene. :-)");
-//		message.setDate(new Date());
-//		message.setFolder(new IrisFolder("19", "UnB"));
-//		EmailDAO emailDAO = new EmailDAO();
-//		emailDAO.saveMessage(message);
-//		System.out.println(emailDAO.listMessages("19"));
-//		System.out.println(emailDAO.findAll());
-//		System.out.println(emailDAO.findById(emailDAO.findAll().iterator().next().getId()));
-//		System.out.println(emailDAO.findById(emailDAO.findAll().iterator().next().getId()).getSubject());
-//	}
+	// public static void main(String[] args) throws PersistenceException {
+	// EmailMessage message = new EmailMessage();
+	// message.setFrom("alexandrelucchesi@gmail.com");
+	// message.setTo("rbonifacio123@gmail.com");
+	// message.setCc("jeremiasmg@gmail.com");
+	// message.setBcc("somebcc@gmail.com");
+	// message.setSubject("Alexandre Lucchesi");
+	// message.setMessage("Testing Lucene. :-)");
+	// message.setDate(new Date());
+	// message.setFolder(new IrisFolder("19", "UnB"));
+	// EmailDAOLucene emailDAO = new EmailDAOLucene();
+	// emailDAO.saveMessage(message);
+	// System.out.println(emailDAO.listMessages("19"));
+	// System.out.println(emailDAO.findAll());
+	// System.out.println(emailDAO.findById(emailDAO.findAll().iterator().next().getId()));
+	// System.out.println(emailDAO.findById(emailDAO.findAll().iterator().next().getId()).getSubject());
+	// }
 }

@@ -10,12 +10,12 @@ public class DaoFactoryLucene implements DAOFactory {
 
 	@Override
 	public IEmailDAO createEmailDAO() {		
-		return new EmailDAOLucene();
+		return EmailDAOLucene.instance();
 	}
 
 	@Override
 	public IFolderDAO createFolderDAO() {		
-		return new FolderDAOLucene();
+		return FolderDAOLucene.instance();
 	}
 
 }
