@@ -1,7 +1,5 @@
 package br.unb.cic.iris.command;
 
-import java.util.List;
-
 import br.unb.cic.iris.exception.EmailException;
 import br.unb.cic.iris.exception.EmailMessageValidationException;
 import br.unb.cic.iris.exception.EmailUncheckedException;

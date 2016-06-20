@@ -23,6 +23,7 @@ import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.exception.EmailException;
 import br.unb.cic.iris.i18n.MessageBundle;
 import br.unb.cic.iris.mail.EmailProvider;
+import br.unb.cic.iris.mail.EmailStatusManager;
 import br.unb.cic.iris.model.EmailMessage;
 import br.unb.cic.iris.model.EntityFactory;
 import br.unb.cic.iris.model.IrisFolder;
@@ -114,6 +115,7 @@ public class EmailReceiver implements StoreListener, FolderListener {
 		int total = messagesRetrieved.length;
 		for (Message m : messagesRetrieved) {
 			try {
+				//TODO
 				messages.add(convertToIrisMessage(m));
 				if (total != 0) {
 					for (int i = 0; i < 15; i++) {
@@ -122,6 +124,8 @@ public class EmailReceiver implements StoreListener, FolderListener {
 					cont++;
 					int tmp = 100 * cont;
 					System.out.print((tmp / total) + "% completed");
+					
+					EmailStatusManager.instance().notifyMessageDownloadProgress((tmp / total));
 				}
 			} catch (IOException e) {
 				throw new EmailException(e.getMessage(), e);
@@ -208,7 +212,8 @@ public class EmailReceiver implements StoreListener, FolderListener {
 	}
 
 	private Store createStoreAndConnect() throws MessagingException {
-		System.out.println("Creating store ...");
+		EmailStatusManager.instance().notifyListener("Creating store ...");
+		//System.out.println("Creating store ...");
 		Store store = session.getSession().getStore(provider.getStoreProtocol());
 		store.addStoreListener(this);
 		store.addConnectionListener(session);
@@ -241,7 +246,8 @@ public class EmailReceiver implements StoreListener, FolderListener {
 
 	@Override
 	public void notification(StoreEvent e) {
-		System.out.println("Notification: " + e.getMessage());
+		EmailStatusManager.instance().notifyListener("Notification: " + e.getMessage());
+		//System.out.println("Notification: " + e.getMessage());
 	}
 
 	@Override

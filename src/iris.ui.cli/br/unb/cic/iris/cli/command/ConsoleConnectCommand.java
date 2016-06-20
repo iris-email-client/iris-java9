@@ -27,7 +27,7 @@ public class ConsoleConnectCommand extends ConsoleAbstractMailCommand {
 		String password = read(sc, "command.connect.label.password");
 		provider.setUsername(username);
 		provider.setPassword(password);
-		SystemFacade.instance().connect(provider);
+		SystemFacade.instance().defineEmailProvider(provider);
 	}
 
 	private static String read(Scanner sc, String question) {

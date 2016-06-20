@@ -24,10 +24,12 @@ public class GuiStatusCommand extends AbstractGuiMailCommand {
 
 	@Override
 	public void handleExecute() {		
-		StatusPanel panel = new StatusPanel();
-		panel.update(createStatusText());
-		GuiManager.instance().setCenterPanel(panel);
 		GuiManager.instance().setStatusText("Executing: " + getCommandName());
+		StatusPanel panel = new StatusPanel();
+		String statusText = createStatusText();
+		panel.update(statusText);
+		GuiManager.instance().setCenterPanel(panel);		
+		GuiManager.instance().appendStatusText("\n"+statusText);
 	}
 
 	private String createStatusText(){

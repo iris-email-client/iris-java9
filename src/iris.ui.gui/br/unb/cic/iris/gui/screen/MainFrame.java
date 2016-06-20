@@ -8,6 +8,8 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
@@ -18,7 +20,8 @@ public class MainFrame extends JFrame {
 	private JPanel statusPanel;
 	
 	private JToolBar toolBar;
-	private JTextField statusTextField;
+	//private JTextField statusTextField;
+	private JTextArea statusTextArea;
 
 	public MainFrame(){
 		super();	
@@ -36,11 +39,12 @@ public class MainFrame extends JFrame {
 		centerPanel = new JPanel();
 		centerPanel.setLayout(new BorderLayout());
 		
-		statusTextField = new JTextField();
-		statusTextField.setEditable(false);
+		statusTextArea = new JTextArea();		
+		statusTextArea.setEditable(false);
+		statusTextArea.setRows(6);
 		statusPanel = new JPanel();
 		statusPanel.setLayout(new BorderLayout());
-		statusPanel.add(statusTextField, CENTER);
+		statusPanel.add(new JScrollPane(statusTextArea), CENTER);
 		
 		getContentPane().add(northPanel, NORTH);
 		getContentPane().add(centerPanel, CENTER);
@@ -59,8 +63,8 @@ public class MainFrame extends JFrame {
 		return toolBar;
 	}
 
-	public JTextField getStatusTextField() {
-		return statusTextField;
+	public JTextArea getStatusTextArea() {
+		return statusTextArea;
 	}
 
 	

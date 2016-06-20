@@ -55,8 +55,8 @@ public class ConnectPanel extends JPanel {
 				EmailProvider provider = (EmailProvider) comboBox.getModel().getSelectedItem();		
 				provider.setUsername(usernameField.getText().trim());
 				provider.setPassword(new String(passwordField.getPassword()).trim());
-				SystemFacade.instance().connect(provider);	
-				GuiManager.instance().setStatusText("Provider defined: "+provider.getName());
+				SystemFacade.instance().defineEmailProvider(provider);	
+				GuiManager.instance().appendStatusText("\nProvider defined: "+provider.getName());
 			}
 		});
 		southPanel.add(btnDefineProvider);

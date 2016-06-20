@@ -5,13 +5,14 @@ import java.util.Scanner;
 import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.exception.EmailException;
 import br.unb.cic.iris.exception.EmailUncheckedException;
+import br.unb.cic.iris.mail.EmailStatusListener;
 import br.unb.cic.iris.model.EmailMessage;
 
 /***
  * added by dConsole
  */
-public class ConsoleSendMessageCommand extends ConsoleAbstractMailCommand {
-	public static final String COMMAND_SEND = "send";
+public class ConsoleSendMessageCommand extends ConsoleAbstractMailCommand implements EmailStatusListener {
+	public static final String COMMAND_SEND = "send";		
 
 	@Override
 	public String explain() {
@@ -25,7 +26,7 @@ public class ConsoleSendMessageCommand extends ConsoleAbstractMailCommand {
 		}
 		
 		EmailMessage m = createMessage();
-		SystemFacade.instance().send(m);
+		SystemFacade.instance().send(m, this);
 	}
 
 	private EmailMessage createMessage() {
@@ -53,4 +54,16 @@ public class ConsoleSendMessageCommand extends ConsoleAbstractMailCommand {
 	public String getCommandName() {
 		return COMMAND_SEND;
 	}
+
+	
+	@Override
+	public void statusChanged(String message) {
+		System.out.println(message);
+	}
+
+	@Override
+	public void notifyMessageDownloadProgress(int value) {
+		//do nothing
+	}
+
 }

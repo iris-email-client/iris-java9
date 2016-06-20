@@ -11,6 +11,7 @@ import javax.mail.event.ConnectionEvent;
 import javax.mail.event.ConnectionListener;
 
 import br.unb.cic.iris.mail.EmailProvider;
+import br.unb.cic.iris.mail.EmailStatusManager;
 
 /***
  * added by dBaseMail
@@ -47,7 +48,7 @@ public class EmailSession implements ConnectionListener {
 	}
 
 	protected final void connect(Service service, String host, int port) throws MessagingException {
-		System.out.println("Connecting ...");
+		EmailStatusManager.instance().notifyListener("Connecting ...");
 		service.connect(host, port, getProvider().getUsername(), getProvider().getPassword());
 	}
 
@@ -65,16 +66,16 @@ public class EmailSession implements ConnectionListener {
 
 	@Override
 	public void opened(ConnectionEvent e) {
-		System.out.println("Connected ...");
+		EmailStatusManager.instance().notifyListener("Connected ...");
 	}
 
 	@Override
 	public void disconnected(ConnectionEvent e) {
-		System.out.println("Disconnected ...");
+		EmailStatusManager.instance().notifyListener("Disconnected ...");
 	}
 
 	@Override
 	public void closed(ConnectionEvent e) {
-		System.out.println("Connection closed ...");
+		EmailStatusManager.instance().notifyListener("Connection closed ...");		
 	}
 }

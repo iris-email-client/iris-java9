@@ -9,6 +9,8 @@ import br.unb.cic.iris.exception.EmailException;
 import br.unb.cic.iris.exception.EmailUncheckedException;
 import br.unb.cic.iris.i18n.MessageBundle;
 import br.unb.cic.iris.mail.EmailProvider;
+import br.unb.cic.iris.mail.EmailStatusListener;
+import br.unb.cic.iris.mail.EmailStatusManager;
 import br.unb.cic.iris.mail.IEmailClient;
 import br.unb.cic.iris.mail.provider.ProviderManager;
 import br.unb.cic.iris.model.EmailMessage;
@@ -48,11 +50,17 @@ public final class SystemFacade {
 		return instance;
 	}	
 
-	public void connect(EmailProvider provider) {
+	public void defineEmailProvider(EmailProvider provider) {
 		setStatus(Status.NOT_CONNECTED);
 		this.provider = provider;
 		client.setProvider(provider);
 		setStatus(Status.CONNECTED);		
+	}
+	
+	//TODO refactoring candidate
+	public void send(EmailMessage message, EmailStatusListener listener) throws EmailException {
+		EmailStatusManager.instance().setListener(listener);
+		send(message);
 	}
 
 	public void send(EmailMessage message) throws EmailException {

@@ -46,4 +46,5 @@ public class GuiSendMessageCommand extends AbstractGuiMailCommand {
 		execute();
 	}
 	
+	
 }

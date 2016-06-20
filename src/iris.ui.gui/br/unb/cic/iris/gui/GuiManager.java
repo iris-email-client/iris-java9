@@ -38,7 +38,11 @@ public class GuiManager {
 	}
 
 	public void setStatusText(String txt) {
-		frame.getStatusTextField().setText(txt);
+		frame.getStatusTextArea().setText(txt);
+	}
+	
+	public void appendStatusText(String txt){
+		frame.getStatusTextArea().append("\n"+txt);
 	}
 
 	public void showErrorMessage(String msg) {

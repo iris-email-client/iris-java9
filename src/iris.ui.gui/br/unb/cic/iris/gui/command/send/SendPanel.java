@@ -24,6 +24,7 @@ import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.exception.EmailException;
 import br.unb.cic.iris.exception.EmailUncheckedException;
 import br.unb.cic.iris.gui.GuiManager;
+import br.unb.cic.iris.mail.EmailStatusListener;
 import br.unb.cic.iris.model.EmailMessage;
 import br.unb.cic.iris.model.Status;
 
@@ -31,7 +32,7 @@ import br.unb.cic.iris.model.Status;
  *
  * @author pedro
  */
-public class SendPanel extends JPanel {
+public class SendPanel extends JPanel implements EmailStatusListener {
 	private static final int COLS = 40;
 	private String from; 
 
@@ -116,7 +117,7 @@ public class SendPanel extends JPanel {
 	private void jButtonSendActionPerformed(ActionEvent evt) {
 		EmailMessage m = createMessage();
 		try {
-			SystemFacade.instance().send(m);
+			SystemFacade.instance().send(m, this);
 		} catch (EmailException e) {
 			//GuiManager.instance().showErrorMessage("Error while sending message: "+e.getMessage());
 			throw new EmailUncheckedException("Error while sending message: "+e.getMessage(), e);
@@ -147,6 +148,18 @@ public class SendPanel extends JPanel {
 		return gridBagConstraints;
 	}
 
+	//TODO use swingworker ... but not in the scope of this prototype
+	@Override
+	public void statusChanged(String message) {
+		GuiManager.instance().appendStatusText(message);
+	}
+
+	@Override
+	public void notifyMessageDownloadProgress(int value) {
+		// do nothing
+	}
+	
+	
 	private JTextField jTextFieldFrom;
 	private JTextField jTextFieldTo;
 	private JTextField jTextFieldCc;

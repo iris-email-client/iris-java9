@@ -1,5 +1,7 @@
 package br.unb.cic.iris.mail.simple;
 
+import static br.unb.cic.iris.i18n.MessageBundle.message;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,8 +18,8 @@ import javax.mail.internet.MimeMessage;
 
 import br.unb.cic.iris.exception.EmailException;
 import br.unb.cic.iris.exception.EmailMessageValidationException;
-import br.unb.cic.iris.i18n.MessageBundle;
 import br.unb.cic.iris.mail.EmailProvider;
+import br.unb.cic.iris.mail.EmailStatusManager;
 import br.unb.cic.iris.model.EmailMessage;
 import br.unb.cic.iris.util.StringUtil;
 
@@ -41,19 +43,15 @@ public class EmailSender implements TransportListener {
 				message.saveChanges();
 				Transport transport = createTransport();
 				session.connect(transport, provider.getTransportHost(), provider.getTransportPort());
-				System.out.println("Sending message ...");
+				EmailStatusManager.instance().notifyListener("Sending message ...");				
 				transport.sendMessage(message, message.getAllRecipients());
 				transport.close();
 			} catch (final UnsupportedEncodingException e) {
-
 				e.printStackTrace();
-
-				throw new EmailException(MessageBundle.message("error.invalid.encoding", e.getMessage()));
+				throw new EmailException(message("error.invalid.encoding", e.getMessage()));
 			} catch (final MessagingException e) {
-
 				e.printStackTrace();
-
-				throw new EmailException(MessageBundle.message("error.send.email", e.getMessage()));
+				throw new EmailException(message("error.send.email", e.getMessage()));
 			}
 		} else {
 			throw new EmailMessageValidationException(errorMessages);
@@ -63,16 +61,15 @@ public class EmailSender implements TransportListener {
 	public static List<String> validateEmailMessage(EmailMessage message) {
 		List<String> errorMessages = new ArrayList<String>();
 		if (message == null) {
-			errorMessages.add(MessageBundle.message("error.null.message"));
+			errorMessages.add(message("error.null.message"));
 		} else if (StringUtil.isEmpty(message.getFrom())) {
-			errorMessages.add(
-					MessageBundle.message("error.required.field", MessageBundle.message("command.send.label.from")));
+			errorMessages.add(message("error.required.field", message("command.send.label.from")));
 		}
 		return errorMessages;
 	}
 
 	private Transport createTransport() throws MessagingException {
-		System.out.println("Creating transport: " + provider.getTransportProtocol());
+		EmailStatusManager.instance().notifyListener("Creating transport: " + provider.getTransportProtocol());		
 		Transport transport = session.getSession().getTransport(provider.getTransportProtocol());
 		transport.addTransportListener(this);
 		transport.addConnectionListener(session);
@@ -97,16 +94,16 @@ public class EmailSender implements TransportListener {
 
 	@Override
 	public void messageDelivered(TransportEvent e) {
-		System.out.println("Message delivered ... ");
+		EmailStatusManager.instance().notifyListener("Message delivered ... ");
 	}
 
 	@Override
 	public void messageNotDelivered(TransportEvent e) {
-		System.out.println("Message not delivered ... ");
+		EmailStatusManager.instance().notifyListener("Message not delivered ... ");
 	}
 
 	@Override
 	public void messagePartiallyDelivered(TransportEvent e) {
-		System.out.println("Message partially delivered ... ");
+		EmailStatusManager.instance().notifyListener("Message partially delivered ... ");	
 	}
 }
