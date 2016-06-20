@@ -10,17 +10,7 @@ import br.unb.cic.iris.i18n.MessageBundle;
 /***
  * added by dBaseCommand
  */
-public abstract class AbstractMailCommand implements MailCommand {
-	protected List<String> parameters;
-
-	@Override
-	public void setParameters(List<String> parameters) {
-		this.parameters = parameters;
-	}
-
-	protected boolean validParameters() {
-		return parameters != null && parameters.size() > 0;
-	}
+public abstract class AbstractMailCommand implements MailCommand {	
 
 	public static String message(String key) {
 		return MessageBundle.message(key);

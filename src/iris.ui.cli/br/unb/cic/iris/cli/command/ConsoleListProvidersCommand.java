@@ -1,11 +1,10 @@
 package br.unb.cic.iris.cli.command;
 
-import br.unb.cic.iris.command.AbstractMailCommand;
 import br.unb.cic.iris.exception.EmailException;
 import br.unb.cic.iris.mail.EmailProvider;
 import br.unb.cic.iris.mail.provider.ProviderManager;
 
-public class ConsoleListProvidersCommand extends AbstractMailCommand {
+public class ConsoleListProvidersCommand extends ConsoleAbstractMailCommand {
 	static final String COMMAND_NAME = "lp";
 
 	@Override

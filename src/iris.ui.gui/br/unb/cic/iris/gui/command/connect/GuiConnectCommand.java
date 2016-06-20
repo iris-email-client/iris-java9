@@ -48,12 +48,4 @@ public class GuiConnectCommand extends AbstractGuiMailCommand {
 		execute();
 	}
 	
-	
-	
-	
-	@Override
-	public void setParameters(List<String> parameters) {
-		// TODO Auto-generated method stub
-		
-	}
 }

@@ -1,11 +1,9 @@
 package br.unb.cic.iris.cli.command;
 
-import br.unb.cic.iris.command.AbstractMailCommand;
-
 /***
  * added by dConsole
  */
-public class ConsoleHelpCommand extends AbstractMailCommand {
+public class ConsoleHelpCommand extends ConsoleAbstractMailCommand {
 	static final String COMMAND_HELP = "help";
 
 	@Override

@@ -2,7 +2,6 @@ package br.unb.cic.iris.cli.command;
 
 import java.util.Scanner;
 
-import br.unb.cic.iris.command.AbstractMailCommand;
 import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.mail.EmailProvider;
 import br.unb.cic.iris.mail.provider.ProviderManager;
@@ -10,7 +9,7 @@ import br.unb.cic.iris.mail.provider.ProviderManager;
 /***
  * added by dConsole
  */
-public class ConsoleConnectCommand extends AbstractMailCommand {
+public class ConsoleConnectCommand extends ConsoleAbstractMailCommand {
 	public static final String COMMAND_NAME = "connect";
 
 	@Override

@@ -1,11 +1,9 @@
 package br.unb.cic.iris.cli.command;
 
-import br.unb.cic.iris.command.AbstractMailCommand;
-
 /***
  * added by dConsole
  */
-public class ConsoleQuitCommand extends AbstractMailCommand {
+public class ConsoleQuitCommand extends ConsoleAbstractMailCommand {
 	public static final String COMMAND_QUIT = "quit";
 
 	@Override

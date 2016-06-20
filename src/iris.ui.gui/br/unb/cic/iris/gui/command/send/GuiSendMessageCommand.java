@@ -1,7 +1,6 @@
 package br.unb.cic.iris.gui.command.send;
 
 import java.awt.event.ActionEvent;
-import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -47,12 +46,4 @@ public class GuiSendMessageCommand extends AbstractGuiMailCommand {
 		execute();
 	}
 	
-	
-	
-	
-	@Override
-	public void setParameters(List<String> parameters) {
-		// TODO Auto-generated method stub
-		
-	}
 }

@@ -59,7 +59,7 @@ public class ConsoleCommandManager extends AbstractCommandManager {
 		MailCommand command = null;
 		if (split.length > 1) {
 			command = getCommand(split[0].trim());
-			command.setParameters(getParameters(split));
+			((ConsoleMailCommand)command).setParameters(getParameters(split));
 		} else {
 			command = getCommand(cmd);
 		}

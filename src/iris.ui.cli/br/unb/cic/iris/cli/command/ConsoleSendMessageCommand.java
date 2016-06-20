@@ -2,7 +2,6 @@ package br.unb.cic.iris.cli.command;
 
 import java.util.Scanner;
 
-import br.unb.cic.iris.command.AbstractMailCommand;
 import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.exception.EmailException;
 import br.unb.cic.iris.exception.EmailUncheckedException;
@@ -11,7 +10,7 @@ import br.unb.cic.iris.model.EmailMessage;
 /***
  * added by dConsole
  */
-public class ConsoleSendMessageCommand extends AbstractMailCommand {
+public class ConsoleSendMessageCommand extends ConsoleAbstractMailCommand {
 	public static final String COMMAND_SEND = "send";
 
 	@Override

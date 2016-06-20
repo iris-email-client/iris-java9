@@ -1,6 +1,5 @@
 package br.unb.cic.iris.cli.command;
 
-import br.unb.cic.iris.command.AbstractMailCommand;
 //import br.unb.cic.iris.core.FolderManager;
 import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.mail.EmailProvider;
@@ -10,7 +9,7 @@ import br.unb.cic.iris.model.Status;
 /***
  * added by dConsole
  */
-public class ConsoleStatusCommand extends AbstractMailCommand {
+public class ConsoleStatusCommand extends ConsoleAbstractMailCommand {
 	static final String COMMAND_NAME = "status";
 
 	@Override

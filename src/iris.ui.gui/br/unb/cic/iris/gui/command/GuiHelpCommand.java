@@ -1,7 +1,6 @@
 package br.unb.cic.iris.gui.command;
 
 import java.awt.event.ActionEvent;
-import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -46,15 +45,6 @@ public class GuiHelpCommand extends AbstractGuiMailCommand {
 		btn.setToolTipText(getCommandName() + " - " + explain());
 
 		manager.addToolbarComponent(btn);
-	}
-
-	
-	
-	
-	@Override
-	public void setParameters(List<String> parameters) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
