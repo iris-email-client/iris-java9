@@ -1,5 +1,6 @@
-package br.unb.cic.iris.cli.command;
+package br.unb.cic.iris.cli.command.internal;
 
+import br.unb.cic.iris.cli.command.ConsoleAbstractMailCommand;
 //import br.unb.cic.iris.core.FolderManager;
 import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.mail.EmailProvider;

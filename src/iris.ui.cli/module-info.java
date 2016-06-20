@@ -6,10 +6,12 @@ module iris.ui.cli {
 	//requires iris.mail.simple;
 	//requires iris.mail.provider;
 	
-	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.ConsoleConnectCommand;
-	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.ConsoleHelpCommand;
-	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.ConsoleListProvidersCommand;
-	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.ConsoleQuitCommand;
-	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.ConsoleSendMessageCommand;
-	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.ConsoleStatusCommand;
+	exports br.unb.cic.iris.cli.command;
+	
+	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.internal.ConsoleConnectCommand;
+	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.internal.ConsoleHelpCommand;
+	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.internal.ConsoleListProvidersCommand;
+	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.internal.ConsoleQuitCommand;
+	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.internal.ConsoleSendMessageCommand;
+	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.internal.ConsoleStatusCommand;
 }

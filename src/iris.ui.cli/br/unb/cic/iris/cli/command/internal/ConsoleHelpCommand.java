@@ -1,4 +1,7 @@
-package br.unb.cic.iris.cli.command;
+package br.unb.cic.iris.cli.command.internal;
+
+import br.unb.cic.iris.cli.command.ConsoleAbstractMailCommand;
+import br.unb.cic.iris.cli.command.ConsoleCommandManager;
 
 /***
  * added by dConsole

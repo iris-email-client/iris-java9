@@ -16,6 +16,11 @@
 	<classpathentry kind="src" path="src/iris.persistence.xml"/>
 	<classpathentry kind="src" path="src/iris.ui.cli"/>
 	<classpathentry kind="src" path="src/iris.ui.gui"/>
+	<classpathentry kind="src" path="src/iris.addressbook.api"/>
+	<classpathentry kind="src" path="src/iris.addressbook.model.simple"/>
+	<classpathentry kind="src" path="src/iris.addressbook.persistence.jdbc"/>
+	<classpathentry kind="src" path="src/iris.addressbook.persistence.xml"/>
+	<classpathentry kind="src" path="src/iris.addressbook.ui.cli"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="lib" path="libs/javax.mail-1.5.5.jar"/>
 	<classpathentry kind="lib" path="libs/javax.mail-api-1.5.5.jar"/>

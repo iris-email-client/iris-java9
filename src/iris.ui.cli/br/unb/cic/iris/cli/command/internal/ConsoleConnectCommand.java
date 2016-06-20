@@ -1,7 +1,8 @@
-package br.unb.cic.iris.cli.command;
+package br.unb.cic.iris.cli.command.internal;
 
 import java.util.Scanner;
 
+import br.unb.cic.iris.cli.command.ConsoleAbstractMailCommand;
 import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.mail.EmailProvider;
 import br.unb.cic.iris.mail.provider.ProviderManager;

@@ -75,14 +75,30 @@ $JAVA_BIN/jar --create --file mlib/iris.mail.provider.yahoo@1.0.jar --module-ver
 
 
 # Persistence
-#echo Creating Module: IrisPersistenceJDBC
-#$JAVA_BIN/jar --create --file mlib/iris.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.persistence.jdbc .
+echo Creating Module: IrisPersistenceJDBC
+$JAVA_BIN/jar --create --file mlib/iris.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.persistence.jdbc .
 
 echo Creating Module: IrisPersistenceLucene
 $JAVA_BIN/jar --create --file mlib/iris.persistence.lucene@1.0.jar --module-version 1.0 -C build/iris.persistence.lucene .
 
-#echo Creating Module: IrisPersistenceXml
-#$JAVA_BIN/jar --create --file mlib/iris.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.persistence.xml .
+echo Creating Module: IrisPersistenceXml
+$JAVA_BIN/jar --create --file mlib/iris.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.persistence.xml .
+
+
+echo Creating Module: IrisAddressBookAPI
+$JAVA_BIN/jar --create --file mlib/iris.addressbook.api@1.0.jar --module-version 1.0 -C build/iris.addressbook.api .
+
+echo Creating Module: IrisAddressBookModelSimple
+$JAVA_BIN/jar --create --file mlib/iris.addressbook.model.simple@1.0.jar --module-version 1.0 -C build/iris.addressbook.model.simple .
+
+#echo Creating Module: IrisAddressBookPersistenceJDBC
+#$JAVA_BIN/jar --create --file mlib/iris.addressbook.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.addressbook.persistence.jdbc .
+
+echo Creating Module: IrisAddressBookPersistenceXml
+$JAVA_BIN/jar --create --file mlib/iris.addressbook.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.addressbook.persistence.xml .
+
+echo Creating Module: IrisAddressBookCLI
+$JAVA_BIN/jar --create --file mlib/iris.addressbook.ui.cli@1.0.jar --module-version 1.0 -C build/iris.addressbook.ui.cli .
 
 
 
@@ -116,9 +132,9 @@ $JAVA_BIN/jlink --modulepath $JAVA_HOME/jmods:mlib:libs --addmods $MODULE_REAL_N
 
 # run
 echo Executing ...
-#$JAVA_BIN/java -mp mlib:libs -m $MODULE_REAL_NAME
+$JAVA_BIN/java -mp mlib:libs -m $MODULE_REAL_NAME
 # TODO understand why we need to put jars on cp
-$JAVA_BIN/java -mp mlib:libs -cp libs/lucene-core-4.10.2.jar:libs/lucene-codecs-4.10.2.jar -m $MODULE_REAL_NAME
+#$JAVA_BIN/java -mp mlib:libs -cp libs/lucene-core-4.10.2.jar:libs/lucene-codecs-4.10.2.jar -m $MODULE_REAL_NAME
 
 
 
