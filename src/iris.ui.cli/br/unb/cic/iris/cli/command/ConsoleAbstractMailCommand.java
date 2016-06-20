@@ -4,7 +4,8 @@ import java.util.List;
 
 import br.unb.cic.iris.command.AbstractMailCommand;
 
-public abstract class ConsoleAbstractMailCommand extends AbstractMailCommand {
+//TODO rever hierarquia (AbstractMailCommand implementa MailCommand)
+public abstract class ConsoleAbstractMailCommand extends AbstractMailCommand implements ConsoleMailCommand {
 	protected List<String> parameters;
 
 
