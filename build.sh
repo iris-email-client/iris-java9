@@ -30,6 +30,7 @@ mkdir mlib
 # compile
 echo Compiling ...
 $JAVA_BIN/javac -mp libs -d build -modulesourcepath src $(find src -name "*.java")
+#$JAVA_BIN/javac -mp libs -cp lib/javax.mail-1.5.5.jar -d build -modulesourcepath src $(find src -name "*.java")
 
 
 # modules
@@ -75,11 +76,11 @@ $JAVA_BIN/jar --create --file mlib/iris.mail.provider.yahoo@1.0.jar --module-ver
 
 
 # Persistence
-echo Creating Module: IrisPersistenceJDBC
-$JAVA_BIN/jar --create --file mlib/iris.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.persistence.jdbc .
+#echo Creating Module: IrisPersistenceJDBC
+#$JAVA_BIN/jar --create --file mlib/iris.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.persistence.jdbc .
 
-echo Creating Module: IrisPersistenceLucene
-$JAVA_BIN/jar --create --file mlib/iris.persistence.lucene@1.0.jar --module-version 1.0 -C build/iris.persistence.lucene .
+#echo Creating Module: IrisPersistenceLucene
+#$JAVA_BIN/jar --create --file mlib/iris.persistence.lucene@1.0.jar --module-version 1.0 -C build/iris.persistence.lucene .
 
 echo Creating Module: IrisPersistenceXml
 $JAVA_BIN/jar --create --file mlib/iris.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.persistence.xml .
@@ -128,6 +129,7 @@ $JAVA_BIN/jar --create --file mlib/$MODULE_REAL_NAME@1.0.jar --module-version 1.
 echo Linking ...
 rm -rf iris
 $JAVA_BIN/jlink --modulepath $JAVA_HOME/jmods:mlib:libs --addmods $MODULE_REAL_NAME --output iris
+
 
 
 # run

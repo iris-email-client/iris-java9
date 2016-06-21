@@ -10,7 +10,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 
-import br.unb.cic.iris.core.SystemFacade;
+import br.unb.cic.iris.core.IrisServiceLocator;
 import br.unb.cic.iris.exception.EmailUncheckedException;
 import br.unb.cic.iris.model.IrisFolder;
 import br.unb.cic.iris.persistence.IFolderDAO;
@@ -43,7 +43,7 @@ public class FolderDAOLucene extends AbstractDAO<IrisFolder> implements IFolderD
 	private static void ensureIsCreated(String folderName) throws PersistenceException {
 		List<IrisFolder> folders = instance.doFindByName(folderName);
 		if (folders.isEmpty()) {
-			IrisFolder inbox = SystemFacade.instance().getEntityFactory().createIrisFolder();
+			IrisFolder inbox = IrisServiceLocator.instance().getEntityFactory().createIrisFolder();
 			inbox.setName(folderName);
 			instance.saveOrUpdate(inbox);
 			System.out.println(String.format("%s folder created.", folderName));
@@ -64,7 +64,7 @@ public class FolderDAOLucene extends AbstractDAO<IrisFolder> implements IFolderD
 	}
 
 	protected IrisFolder fromDocument(Document d) throws ParseException {
-		IrisFolder f = SystemFacade.instance().getEntityFactory().createIrisFolder();
+		IrisFolder f = IrisServiceLocator.instance().getEntityFactory().createIrisFolder();
 		f.setId(d.get("id"));
 		f.setName(d.get("name"));
 		return f;
@@ -79,7 +79,7 @@ public class FolderDAOLucene extends AbstractDAO<IrisFolder> implements IFolderD
 
 	@Override
 	public IrisFolder createFolder(String folderName) throws PersistenceException {
-		IrisFolder folder = SystemFacade.instance().getEntityFactory().createIrisFolder();
+		IrisFolder folder = IrisServiceLocator.instance().getEntityFactory().createIrisFolder();
 		folder.setName(folderName);
 		instance.saveOrUpdate(folder);
 		System.out.println(String.format("%s folder created.", folderName));

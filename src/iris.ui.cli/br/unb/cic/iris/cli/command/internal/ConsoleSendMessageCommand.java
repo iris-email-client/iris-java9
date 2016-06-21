@@ -3,6 +3,7 @@ package br.unb.cic.iris.cli.command.internal;
 import java.util.Scanner;
 
 import br.unb.cic.iris.cli.command.ConsoleAbstractMailCommand;
+import br.unb.cic.iris.core.IrisServiceLocator;
 import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.exception.EmailException;
 import br.unb.cic.iris.exception.EmailUncheckedException;
@@ -39,7 +40,7 @@ public class ConsoleSendMessageCommand extends ConsoleAbstractMailCommand implem
 		String bcc = read(sc, "command.send.label.bcc");
 		String subject = read(sc, "command.send.label.subject");
 		String content = read(sc, "command.send.label.content");
-		return SystemFacade.instance().getEntityFactory().createEmailMessage(from, to, cc, bcc, subject, content);		
+		return IrisServiceLocator.instance().getEntityFactory().createEmailMessage(from, to, cc, bcc, subject, content);		
 	}
 
 	private static String read(Scanner sc, String question) {

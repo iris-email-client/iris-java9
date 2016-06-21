@@ -13,6 +13,7 @@ import br.unb.cic.iris.persistence.IEmailDAO;
 import br.unb.cic.iris.persistence.PersistenceException;
 
 public class EmailDaoJdbc extends AbstractDaoJdbc implements IEmailDAO {
+	private static final String SELECT_MESSAGES_BY_ID = "SELECT * FROM message WHERE id = ?";
 	private static final String SELECT_MESSAGES_BY_FOLDER_ID = "SELECT * FROM message WHERE folderid = ?";
 	private static final String INSERT_MESSAGE = "INSERT INTO message (id, _from, _to, cc, bcc, subject, message, _date, folderid) VALUES (?,?,?,?,?,?,?,?,?)";
 
@@ -44,6 +45,12 @@ public class EmailDaoJdbc extends AbstractDaoJdbc implements IEmailDAO {
 
 	@Override
 	public List<EmailMessage> listMessages(String idFolder) throws PersistenceException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EmailMessage findById(String id) throws PersistenceException {
 		// TODO Auto-generated method stub
 		return null;
 	}

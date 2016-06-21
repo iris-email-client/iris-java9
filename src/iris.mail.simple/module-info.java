@@ -1,5 +1,5 @@
 module iris.mail.simple {
-	requires javax.mail;
+	//requires javax.mail;
 	requires java.activation;
 	
 	requires public iris.core;

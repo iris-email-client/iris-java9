@@ -1,10 +1,5 @@
 module iris.ui.cli {
-	//requires JavaMailAPI;
-	//requires iris.base;
 	requires iris.core;
-	//requires iris.mail;
-	//requires iris.mail.simple;
-	//requires iris.mail.provider;
 	
 	exports br.unb.cic.iris.cli.command;
 	
@@ -14,4 +9,7 @@ module iris.ui.cli {
 	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.internal.ConsoleQuitCommand;
 	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.internal.ConsoleSendMessageCommand;
 	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.internal.ConsoleStatusCommand;
+	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.internal.ConsoleListFoldersCommand;
+	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.internal.ConsoleCurrentFolderCommand;
+	provides br.unb.cic.iris.command.MailCommand with br.unb.cic.iris.cli.command.internal.ConsoleChangeFolderCommand;
 }

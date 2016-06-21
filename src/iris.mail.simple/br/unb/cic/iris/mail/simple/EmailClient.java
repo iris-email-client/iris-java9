@@ -49,7 +49,7 @@ public class EmailClient implements IEmailClient {
 		return getMessages(folder, null);
 	}
 
-	// @Override
+	@Override
 	public List<EmailMessage> getMessages(String folder, SearchTerm searchTerm) throws EmailException {
 		return receiver.getMessages(folder, searchTerm);
 	}

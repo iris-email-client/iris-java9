@@ -19,7 +19,7 @@ import org.apache.lucene.search.SortField.Type;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopFieldDocs;
 
-import br.unb.cic.iris.core.SystemFacade;
+import br.unb.cic.iris.core.IrisServiceLocator;
 import br.unb.cic.iris.model.EmailMessage;
 import br.unb.cic.iris.model.IrisFolder;
 import br.unb.cic.iris.persistence.IEmailDAO;
@@ -28,7 +28,7 @@ import br.unb.cic.iris.persistence.PersistenceException;
 /***
  * added by dPersistenceLucene
  */
-public final class EmailDAOLucene extends AbstractDAO<EmailMessage>implements IEmailDAO {
+public final class EmailDAOLucene extends AbstractDAO<EmailMessage> implements IEmailDAO {
 	private static EmailDAOLucene instance = new EmailDAOLucene();
 
 	private EmailDAOLucene() {
@@ -84,7 +84,7 @@ public final class EmailDAOLucene extends AbstractDAO<EmailMessage>implements IE
 	}
 
 	protected EmailMessage fromDocument(Document d) throws ParseException {
-		EmailMessage m = SystemFacade.instance().getEntityFactory().createEmailMessage();
+		EmailMessage m = IrisServiceLocator.instance().getEntityFactory().createEmailMessage();
 		m.setId(d.get("id"));
 		m.setFrom(d.get("from"));
 		m.setTo(d.get("to"));
@@ -93,7 +93,7 @@ public final class EmailDAOLucene extends AbstractDAO<EmailMessage>implements IE
 		m.setSubject(d.get("subject"));
 		m.setMessage(d.get("message"));
 		m.setDate(DateTools.stringToDate(d.get("date")));
-		IrisFolder f = SystemFacade.instance().getEntityFactory().createIrisFolder();
+		IrisFolder f = IrisServiceLocator.instance().getEntityFactory().createIrisFolder();
 		f.setId(d.get("folderId"));
 		m.setFolder(f);
 		return m;

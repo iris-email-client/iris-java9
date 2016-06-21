@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import br.unb.cic.iris.core.IrisServiceLocator;
 import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.exception.EmailException;
 import br.unb.cic.iris.exception.EmailUncheckedException;
@@ -130,7 +131,7 @@ public class SendPanel extends JPanel implements EmailStatusListener {
 		String bcc = getText(jTextFieldBcc);
 		String subject = getText(jTextFieldSubject);
 		String content = getMessage();
-		return SystemFacade.instance().getEntityFactory().createEmailMessage(from, to, cc, bcc, subject, content);
+		return IrisServiceLocator.instance().getEntityFactory().createEmailMessage(from, to, cc, bcc, subject, content);
 	}
 
 	private String getText(JTextField textField) {

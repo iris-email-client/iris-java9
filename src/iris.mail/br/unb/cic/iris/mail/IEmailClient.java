@@ -2,6 +2,8 @@ package br.unb.cic.iris.mail;
 
 import java.util.List;
 
+import javax.mail.search.SearchTerm;
+
 import br.unb.cic.iris.exception.EmailException;
 import br.unb.cic.iris.model.EmailMessage;
 import br.unb.cic.iris.model.IrisFolder;
@@ -16,7 +18,7 @@ public interface IEmailClient {
 	@SuppressWarnings("rawtypes")
 	public List<IrisFolder> listFolders() throws EmailException;
 
-	// public List<EmailMessage> getMessages(String folder, SearchTerm searchTerm) throws EmailException;
+	public List<EmailMessage> getMessages(String folder, SearchTerm searchTerm) throws EmailException;
 
 	public List<EmailMessage> getMessages(String folder) throws EmailException;
 

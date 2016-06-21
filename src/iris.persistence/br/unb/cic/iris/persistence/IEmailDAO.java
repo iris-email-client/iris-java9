@@ -10,4 +10,5 @@ public interface IEmailDAO {
 	public void saveMessage(EmailMessage message) throws PersistenceException;
 	public Date lastMessageReceived() throws PersistenceException;
 	public List<EmailMessage> listMessages(String idFolder) throws PersistenceException;
+	public EmailMessage findById(String id) throws PersistenceException;
 }

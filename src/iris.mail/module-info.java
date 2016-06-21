@@ -1,4 +1,5 @@
 module iris.mail {
+	requires public javax.mail;
 	requires public iris.base;	
 	
 	exports br.unb.cic.iris.mail;

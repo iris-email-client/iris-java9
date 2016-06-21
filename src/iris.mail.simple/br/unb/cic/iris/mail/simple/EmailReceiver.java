@@ -19,7 +19,7 @@ import javax.mail.event.StoreListener;
 import javax.mail.internet.MimeMessage;
 import javax.mail.search.SearchTerm;
 
-import br.unb.cic.iris.core.SystemFacade;
+import br.unb.cic.iris.core.IrisServiceLocator;
 import br.unb.cic.iris.exception.EmailException;
 import br.unb.cic.iris.i18n.MessageBundle;
 import br.unb.cic.iris.mail.EmailProvider;
@@ -38,7 +38,7 @@ public class EmailReceiver implements StoreListener, FolderListener {
 	private EntityFactory entityFactory;
 
 	public EmailReceiver(EmailProvider provider, String encoding) {
-		entityFactory = SystemFacade.instance().getEntityFactory();
+		entityFactory = IrisServiceLocator.instance().getEntityFactory();
 		this.provider = provider;
 		session = new EmailSession(provider, encoding);
 	}
