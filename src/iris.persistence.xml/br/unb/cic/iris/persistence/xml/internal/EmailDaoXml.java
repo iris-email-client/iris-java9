@@ -25,11 +25,11 @@ public class EmailDaoXml extends AbstractDaoXml implements IEmailDAO {
 	}
 
 	@Override
-	public Date lastMessageReceived() throws PersistenceException {
-		IrisFolder<EmailMessageXml> folder = getFolderDAO().findByName(IrisFolder.INBOX);
+	public Date lastMessageReceived(String folderName) throws PersistenceException {
+		IrisFolder<EmailMessageXml> folder = getFolderDAO().findByName(folderName);
 		return folder.getMessages().stream()
 				.map(EmailMessageXml::getDate) // m -> m.getDate()
-				.max(Date::compareTo).get();
+				.max(Date::compareTo).orElse(null);
 	}
 
 	@Override

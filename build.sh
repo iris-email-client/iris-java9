@@ -57,8 +57,8 @@ $JAVA_BIN/jar --create --file mlib/iris.persistence@1.0.jar --module-version 1.0
 
 
 
-echo Creating Module: IrisModelSimple
-$JAVA_BIN/jar --create --file mlib/iris.model.simple@1.0.jar --module-version 1.0 -C build/iris.model.simple .
+#echo Creating Module: IrisModelSimple
+#$JAVA_BIN/jar --create --file mlib/iris.model.simple@1.0.jar --module-version 1.0 -C build/iris.model.simple .
 
 
 echo Creating Module: IrisMailSimple

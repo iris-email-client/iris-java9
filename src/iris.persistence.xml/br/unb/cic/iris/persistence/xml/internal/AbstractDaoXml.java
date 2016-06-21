@@ -7,6 +7,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import br.unb.cic.iris.exception.EmailUncheckedException;
 import br.unb.cic.iris.model.xml.internal.IrisMessageStoreXml;
 import br.unb.cic.iris.persistence.IEmailDAO;
 import br.unb.cic.iris.persistence.IFolderDAO;
@@ -21,6 +22,15 @@ public abstract class AbstractDaoXml {
 	
 
 	public AbstractDaoXml() {
+		if(! XML_FILE.exists()){
+			try {
+				persistIrisStore(new IrisMessageStoreXml());
+			} catch (PersistenceException e) {				
+				e.printStackTrace();
+				throw new EmailUncheckedException("Error while creating XML store file", e);
+			}
+		}
+		
 		daoFactory = new DaoFactoryXml();
 	}
 
@@ -34,9 +44,6 @@ public abstract class AbstractDaoXml {
 	}
 
 	public File getXmlFile() throws PersistenceException {
-		if(! XML_FILE.exists()){
-			persistIrisStore(new IrisMessageStoreXml());
-		}
 		return XML_FILE;
 	}
 	

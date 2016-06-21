@@ -8,7 +8,7 @@ import br.unb.cic.iris.model.EmailMessage;
  */
 public interface IEmailDAO {
 	public void saveMessage(EmailMessage message) throws PersistenceException;
-	public Date lastMessageReceived() throws PersistenceException;
+	public Date lastMessageReceived(String folderName) throws PersistenceException;
 	public List<EmailMessage> listMessages(String idFolder) throws PersistenceException;
 	public EmailMessage findById(String id) throws PersistenceException;
 }

@@ -38,7 +38,7 @@ public class EmailDaoJdbc extends AbstractDaoJdbc implements IEmailDAO {
 	}
 
 	@Override
-	public Date lastMessageReceived() throws PersistenceException {
+	public Date lastMessageReceived(String folderName) throws PersistenceException {
 		// TODO Auto-generated method stub
 		return null;
 	}

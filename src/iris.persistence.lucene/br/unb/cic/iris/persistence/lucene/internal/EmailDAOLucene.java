@@ -45,7 +45,8 @@ public final class EmailDAOLucene extends AbstractDAO<EmailMessage> implements I
 	}
 
 	@Override
-	public Date lastMessageReceived() throws PersistenceException {
+	public Date lastMessageReceived(String folderName) throws PersistenceException {
+		//TODO
 		Date date = null;
 		try {
 			Query query = new TermQuery(new Term("type", "email"));

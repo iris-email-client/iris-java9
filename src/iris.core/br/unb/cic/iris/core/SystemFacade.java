@@ -22,6 +22,7 @@ import br.unb.cic.iris.model.Status;
 import br.unb.cic.iris.persistence.DAOFactory;
 import br.unb.cic.iris.persistence.IEmailDAO;
 import br.unb.cic.iris.persistence.IFolderDAO;
+import br.unb.cic.iris.persistence.PersistenceException;
 
 /***
  * added by dBaseFacade* modified by dPersistenceRelational
@@ -67,13 +68,9 @@ public final class SystemFacade {
 	}
 
 	private void saveMessage(EmailMessage message, String folderName) throws EmailException {
-		IEmailDAO emailDAO = getDaoFactory().createEmailDAO();
-		IFolderDAO folderDAO = getDaoFactory().createFolderDAO();
-
-		IrisFolder folder = folderDAO.findByName(folderName);
-		if (folder == null) {
-			folder = folderDAO.createFolder(folderName);
-		}
+		IEmailDAO emailDAO = getDaoFactory().createEmailDAO();		
+		
+		IrisFolder folder = checkFolder(folderName);
 
 		message.setFolder(folder);
 		emailDAO.saveMessage(message);
@@ -87,8 +84,9 @@ public final class SystemFacade {
 	public void downloadMessages(String folder) throws EmailException {
 		verifyConnection();
 		SearchTerm searchTerm = null;
-		IEmailDAO dao = getDaoFactory().createEmailDAO();;
-		Date lastMessageReceived = dao.lastMessageReceived();
+		IEmailDAO dao = getDaoFactory().createEmailDAO();	
+		checkFolder(folder);
+		Date lastMessageReceived = dao.lastMessageReceived(folder);
 		System.out.println("**************************** lastMessageReceived=" + lastMessageReceived);
 		if (lastMessageReceived != null) {
 			searchTerm = new ReceivedDateTerm(ComparisonTerm.GT, lastMessageReceived);
@@ -97,6 +95,15 @@ public final class SystemFacade {
 		for (EmailMessage message : messages) {
 			saveMessage(message, folder);
 		}
+	}
+	
+	private IrisFolder checkFolder(String folderName) throws PersistenceException{
+		IFolderDAO folderDAO = getDaoFactory().createFolderDAO();
+		IrisFolder folder = folderDAO.findByName(folderName);
+		if (folder == null) {
+			folder = folderDAO.createFolder(folderName);
+		}
+		return folder;
 	}
 
 	private void verifyConnection() {
