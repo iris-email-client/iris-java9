@@ -17,7 +17,6 @@ public abstract class AbstractCommandManager extends BaseCommandManager {
 		try {
 			loadCommands();
 		} catch (EmailException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.exit(-1);
 		}

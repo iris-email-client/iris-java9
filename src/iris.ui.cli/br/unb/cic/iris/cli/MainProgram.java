@@ -28,7 +28,7 @@ public class MainProgram {
 		MainProgram m = new MainProgram();
 		//eager loading/starting the system
 		SystemFacade.instance();
-		ConsoleCommandManager.singleton().runCommand("");
+		ConsoleCommandManager.instance().runCommand("");
 		
 		m.mainMenu();
 		m.readCommand();
@@ -45,12 +45,9 @@ public class MainProgram {
 		try {
 			System.out.print(message("prompt"));
 			String cmd = sc.nextLine().trim();
-			//System.out.println("cmd="+cmd);
-			ConsoleCommandManager.singleton().runCommand(cmd);
-			//ConsoleCommandManager.singleton().runCommand(cmd);
+			ConsoleCommandManager.instance().runCommand(cmd);
 		} catch (RuntimeException e) {
-			System.err.println(message("error") + e.getLocalizedMessage());
-			//e.printStackTrace();
+			System.err.println(message("error") +": "+e.getMessage());
 		}
 		readCommand();
 	}

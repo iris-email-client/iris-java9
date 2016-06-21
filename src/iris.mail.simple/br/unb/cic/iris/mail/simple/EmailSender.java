@@ -32,7 +32,7 @@ public class EmailSender implements TransportListener {
 
 	public EmailSender(EmailProvider provider, String encoding) {
 		this.provider = provider;
-		session = new EmailSession(provider, encoding);
+		session = new EmailSession(this.provider, encoding);
 	}
 
 	public void send(EmailMessage email) throws EmailException {
@@ -46,12 +46,10 @@ public class EmailSender implements TransportListener {
 				EmailStatusManager.instance().notifyListener("Sending message ...");				
 				transport.sendMessage(message, message.getAllRecipients());
 				transport.close();
-			} catch (final UnsupportedEncodingException e) {
-				e.printStackTrace();
-				throw new EmailException(message("error.invalid.encoding", e.getMessage()));
-			} catch (final MessagingException e) {
-				e.printStackTrace();
-				throw new EmailException(message("error.send.email", e.getMessage()));
+			} catch (final UnsupportedEncodingException e) {				
+				throw new EmailException(message("error.invalid.encoding", e.getMessage()), e);
+			} catch (final MessagingException e) {				
+				throw new EmailException(message("error.send.email", e.getMessage()), e);
 			}
 		} else {
 			throw new EmailMessageValidationException(errorMessages);

@@ -34,11 +34,9 @@ import br.unb.cic.iris.model.IrisFolder;
 public class EmailReceiver implements StoreListener, FolderListener {
 	private Store store;
 	private EmailSession session;
-	private EmailProvider provider;
-	private EntityFactory entityFactory;
+	private EmailProvider provider;	
 
-	public EmailReceiver(EmailProvider provider, String encoding) {
-		entityFactory = IrisServiceLocator.instance().getEntityFactory();
+	public EmailReceiver(EmailProvider provider, String encoding) {		
 		this.provider = provider;
 		session = new EmailSession(provider, encoding);
 	}
@@ -50,7 +48,7 @@ public class EmailReceiver implements StoreListener, FolderListener {
 			Folder defaultFolder = store.getDefaultFolder();
 			Folder[] externalFolders = defaultFolder.list();
 			for (Folder f : externalFolders) {
-				folders.add(entityFactory.createIrisFolder(f.getName()));
+				folders.add(getEntityFactory().createIrisFolder(f.getName()));
 			}
 		} catch (MessagingException e) {
 			throw new EmailException(MessageBundle.message("error.list.folder"), e);
@@ -127,9 +125,7 @@ public class EmailReceiver implements StoreListener, FolderListener {
 					
 					EmailStatusManager.instance().notifyMessageDownloadProgress((tmp / total));
 				}
-			} catch (IOException e) {
-				throw new EmailException(e.getMessage(), e);
-			} catch (MessagingException e) {
+			} catch (IOException | MessagingException e) {
 				throw new EmailException(e.getMessage(), e);
 			}
 		}
@@ -146,16 +142,14 @@ public class EmailReceiver implements StoreListener, FolderListener {
 			Folder folder = getStore().getFolder(folderName);
 			folder.open(openType);
 			return folder;
-		} catch (MessagingException e) {
-			throw new EmailException(e.getMessage(), e);
-		} catch (EmailException e) {
+		} catch (MessagingException | EmailException e) {
 			throw new EmailException(e.getMessage(), e);
 		}
 	}
 
 	private EmailMessage convertToIrisMessage(Message message) throws IOException, MessagingException {
 		MimeMessage m = (MimeMessage) message;
-		EmailMessage msg = entityFactory.createEmailMessage();
+		EmailMessage msg = getEntityFactory().createEmailMessage();
 		msg.setBcc(convertAddressToString(m.getRecipients(RecipientType.BCC)));
 		msg.setCc(convertAddressToString(m.getRecipients(RecipientType.CC)));
 		msg.setTo(convertAddressToString(m.getRecipients(RecipientType.TO)));
@@ -260,5 +254,9 @@ public class EmailReceiver implements StoreListener, FolderListener {
 
 	@Override
 	public void folderRenamed(FolderEvent e) {
+	}
+	
+	private EntityFactory getEntityFactory() {
+		return IrisServiceLocator.instance().getEntityFactory();
 	}
 }

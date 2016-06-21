@@ -5,13 +5,13 @@ import br.unb.cic.iris.command.MailCommand;
 import br.unb.cic.iris.gui.GuiManager;
 
 public class GuiCommandManager extends AbstractCommandManager {
-	private static GuiCommandManager singleton = new GuiCommandManager();
+	private static GuiCommandManager instance = new GuiCommandManager();
 
 	private GuiCommandManager() {
 	}
 
-	public static GuiCommandManager singleton() {
-		return singleton;
+	public static GuiCommandManager instance() {
+		return instance;
 	}
 
 	@Override

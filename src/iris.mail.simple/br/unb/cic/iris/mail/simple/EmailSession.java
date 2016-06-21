@@ -17,8 +17,6 @@ import br.unb.cic.iris.mail.EmailStatusManager;
  * added by dBaseMail
  */
 public class EmailSession implements ConnectionListener {
-	// private static Logger logger =
-	// Logger.getLogger(EmailSession.class.getName());
 	private final String encoding;
 	private final Session session;
 	private final EmailProvider provider;
@@ -34,7 +32,6 @@ public class EmailSession implements ConnectionListener {
 	}
 
 	private Session createMailSession() {
-		// logger.log(Level.FINE, "Creating mail session");
 		Properties props = getProvider().getProperties();
 		if (getProvider().isAuthenticationEnabled()) {
 			return Session.getInstance(props, new Authenticator() {

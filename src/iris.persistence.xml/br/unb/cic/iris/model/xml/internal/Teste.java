@@ -1,6 +1,5 @@
 package br.unb.cic.iris.model.xml.internal;
 
-import java.io.File;
 import java.util.Date;
 
 import javax.xml.bind.JAXBContext;
@@ -12,8 +11,7 @@ import br.unb.cic.iris.model.IrisFolder;
 public class Teste {
 	static String FILE = "/home/pedro/tmp/iris_store.xml";
 
-	static EmailMessageXml createMessage(String id, String from, String to, String cc, String bcc, String subject,
-			String message) {
+	static EmailMessageXml createMessage(String id, String from, String to, String cc, String bcc, String subject, String message) {
 		EmailMessageXml msg = new EmailMessageXml(from, to, cc, bcc, subject, message);
 		msg.setDate(new Date());
 		msg.setId(id);

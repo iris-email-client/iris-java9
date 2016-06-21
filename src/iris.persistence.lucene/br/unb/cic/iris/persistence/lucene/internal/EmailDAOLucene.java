@@ -58,9 +58,9 @@ public final class EmailDAOLucene extends AbstractDAO<EmailMessage> implements I
 				date = DateTools.stringToDate(doc.get("date"));
 			}
 		} catch (IOException e) {
-			throw new PersistenceException("An error occurred while retrieving last message received", e);
+			throw new PersistenceException("An error occurred while retrieving last message received: "+e.getMessage(), e);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			throw new PersistenceException("An error occurred while retrieving last message received"+e.getMessage(), e);
 		}
 		return date;
 	}
@@ -100,21 +100,4 @@ public final class EmailDAOLucene extends AbstractDAO<EmailMessage> implements I
 		return m;
 	}
 
-	// public static void main(String[] args) throws PersistenceException {
-	// EmailMessage message = new EmailMessage();
-	// message.setFrom("alexandrelucchesi@gmail.com");
-	// message.setTo("rbonifacio123@gmail.com");
-	// message.setCc("jeremiasmg@gmail.com");
-	// message.setBcc("somebcc@gmail.com");
-	// message.setSubject("Alexandre Lucchesi");
-	// message.setMessage("Testing Lucene. :-)");
-	// message.setDate(new Date());
-	// message.setFolder(new IrisFolder("19", "UnB"));
-	// EmailDAOLucene emailDAO = new EmailDAOLucene();
-	// emailDAO.saveMessage(message);
-	// System.out.println(emailDAO.listMessages("19"));
-	// System.out.println(emailDAO.findAll());
-	// System.out.println(emailDAO.findById(emailDAO.findAll().iterator().next().getId()));
-	// System.out.println(emailDAO.findById(emailDAO.findAll().iterator().next().getId()).getSubject());
-	// }
 }

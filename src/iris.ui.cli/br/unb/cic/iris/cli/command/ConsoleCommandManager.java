@@ -17,17 +17,17 @@ import br.unb.cic.iris.util.StringUtil;
  * added by dConsole
  */
 public class ConsoleCommandManager extends AbstractCommandManager {
-	private static ConsoleCommandManager singleton = new ConsoleCommandManager();
+	private static ConsoleCommandManager instance = new ConsoleCommandManager();
 
 	private ConsoleCommandManager() {
 	}
 
-	public static ConsoleCommandManager singleton() {
-		return singleton;
+	public static ConsoleCommandManager instance() {
+		return instance;
 	}
 
 	public static void run(String cmd) {
-		ConsoleCommandManager.singleton().runCommand(cmd);
+		ConsoleCommandManager.instance().runCommand(cmd);
 	}
 
 	public void runCommand(String cmd) {
@@ -36,14 +36,14 @@ public class ConsoleCommandManager extends AbstractCommandManager {
 				MailCommand command = createCommand(cmd.trim());
 				command.execute();
 			} catch (EmailUncheckedException eux) {
-				System.err.printf("%s: %s\n", MessageBundle.message("error"), eux.getLocalizedMessage());
+				System.err.printf("%s: %s\n", message("error"), eux.getLocalizedMessage());
 			} catch (EmailMessageValidationException emvx) {
 				System.err.println(MessageBundle.message("error.validation"));
 				for (String msg : emvx.getMessages()) {
 					System.err.println(" - " + msg);
 				}
 			} catch (EmailException ex) {
-				System.err.printf("%s: %s\n", MessageBundle.message("error"), ex.getMessage());
+				System.err.printf("%s: %s\n", message("error"), ex.getMessage());
 			} catch (NullPointerException npe) {
 				System.err.println(message("error.command.not.found", cmd));
 			} catch (Exception e) {

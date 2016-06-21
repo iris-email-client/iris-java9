@@ -19,28 +19,24 @@ public class EmailClient implements IEmailClient {
 	private EmailReceiver receiver;
 
 	public EmailClient() {
-
 	}
 
 	public void setProvider(EmailProvider provider) {
 		setProvider(provider, CHARACTER_ENCODING);
 	}
 
-	public void setProvider(EmailProvider provider, String encoding) {
-		//System.out.println("Using provider: " + provider.getName());
+	public void setProvider(EmailProvider provider, String encoding) {		
 		sender = new EmailSender(provider, encoding);
 		receiver = new EmailReceiver(provider, encoding);
 	}
 
-	public void send(EmailMessage email) throws EmailException {
-		//System.out.println("send message: " + email);
+	public void send(EmailMessage email) throws EmailException {		
 		sender.send(email);
 	}
 	
 	@Override
 	@SuppressWarnings("rawtypes")
-	public List<IrisFolder> listFolders() throws EmailException {
-		//System.out.println("listing folders ...");
+	public List<IrisFolder> listFolders() throws EmailException {		
 		return receiver.listFolders();
 	}
 
@@ -64,7 +60,7 @@ public class EmailClient implements IEmailClient {
 		return receiver.getMessages(folder, begin, end);
 	}
 
-	//TODO refactoring candidate. throw EmailMessageValidationException whith messages instead
+	//TODO refactoring candidate. suggestion: throw EmailMessageValidationException whith messages instead
 	@Override
 	public List<String> validateEmailMessage(EmailMessage message) {
 		return EmailSender.validateEmailMessage(message);

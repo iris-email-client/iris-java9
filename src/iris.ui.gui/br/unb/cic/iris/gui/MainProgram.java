@@ -10,27 +10,25 @@ public class MainProgram {
 
 	public static void main(String[] args) {
 		System.out.println("Starting app ...");
+		
 		/* Use an appropriate Look and Feel */
-        try {
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-        } catch (UnsupportedLookAndFeelException ex) {
-            ex.printStackTrace();
-        } catch (IllegalAccessException ex) {
-            ex.printStackTrace();
-        } catch (InstantiationException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        /* Turn off metal's use of bold fonts */
-        UIManager.put("swing.boldMetal", Boolean.FALSE);
-        
+		try {
+			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+		} catch (UnsupportedLookAndFeelException 
+				| IllegalAccessException 
+				| InstantiationException
+				| ClassNotFoundException ex) {
+			ex.printStackTrace();
+		}
+		/* Turn off metal's use of bold fonts */
+		UIManager.put("swing.boldMetal", Boolean.FALSE);
+
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
-			public void run() {				
+			public void run() {
 				GuiManager.instance();
-				GuiCommandManager.singleton();
+				GuiCommandManager.instance();
 			}
 		});
 	}

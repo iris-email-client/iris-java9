@@ -19,7 +19,7 @@ public class GuiHelpCommand extends AbstractGuiMailCommand {
 	public void handleExecute() {
 		StringBuilder sb = new StringBuilder();
 				
-		GuiCommandManager.singleton().listAll().stream()
+		GuiCommandManager.instance().listAll().stream()
 				.sorted(COMPARE_BY_NAME)
 				.forEach(c -> sb.append(c.explain()));
 		

@@ -16,7 +16,7 @@ public class ConsoleHelpCommand extends ConsoleAbstractMailCommand {
 
 	@Override
 	public void handleExecute() {				
-		ConsoleCommandManager.singleton().listAll().stream()
+		ConsoleCommandManager.instance().listAll().stream()
 				//.filter(c -> c instanceof MailCommand)
 				.sorted(COMPARE_BY_NAME).forEach(c -> System.out.print(c.explain()));
 	}

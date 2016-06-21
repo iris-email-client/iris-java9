@@ -26,8 +26,7 @@ public abstract class AbstractDaoXml {
 			try {
 				persistIrisStore(new IrisMessageStoreXml());
 			} catch (PersistenceException e) {				
-				e.printStackTrace();
-				throw new EmailUncheckedException("Error while creating XML store file", e);
+				throw new EmailUncheckedException("Error while creating XML store file: "+e.getMessage(), e);
 			}
 		}
 		

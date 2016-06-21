@@ -16,7 +16,6 @@ import br.unb.cic.iris.mail.EmailStatusManager;
 import br.unb.cic.iris.mail.IEmailClient;
 import br.unb.cic.iris.mail.provider.ProviderManager;
 import br.unb.cic.iris.model.EmailMessage;
-import br.unb.cic.iris.model.EntityFactory;
 import br.unb.cic.iris.model.IrisFolder;
 import br.unb.cic.iris.model.Status;
 import br.unb.cic.iris.persistence.DAOFactory;
@@ -126,10 +125,6 @@ public final class SystemFacade {
 
 	public EmailProvider getProvider() {
 		return provider;
-	}
-
-	private EntityFactory getEntityFactory() {
-		return IrisServiceLocator.instance().getEntityFactory();
 	}
 
 	private IEmailClient getEmailClient() {

@@ -51,7 +51,6 @@ public abstract class AbstractDAO<T> {
 			IndexSearcher searcher = IndexManager.getSearcher();
 			searcher.search(query, new TCollector(searcher, result));
 		} catch (IOException e) {
-			e.printStackTrace();
 			throw new PersistenceException("An error occurred while retrieving all " + type + "s", e);
 		}
 		return result;
@@ -70,7 +69,6 @@ public abstract class AbstractDAO<T> {
 		try {
 			saveDocument(toDocument(t));
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new PersistenceException("An error occurred while saving " + type + ".", e);
 		}
 	}

@@ -9,6 +9,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import br.unb.cic.iris.addressbook.model.xml.internal.AddressBookStoreXml;
+import br.unb.cic.iris.exception.EmailUncheckedException;
 import br.unb.cic.iris.persistence.PersistenceException;
 
 public abstract class AbstractAddressBookDaoXml {
@@ -20,8 +21,7 @@ public abstract class AbstractAddressBookDaoXml {
 			try {
 				XML_FILE.createNewFile();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new EmailUncheckedException("Could not create AddressBook XML store file", e);				
 			}
 			persistStore(new AddressBookStoreXml());
 		}

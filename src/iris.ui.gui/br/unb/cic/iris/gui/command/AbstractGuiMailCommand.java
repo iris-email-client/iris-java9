@@ -10,22 +10,19 @@ import br.unb.cic.iris.exception.EmailUncheckedException;
 import br.unb.cic.iris.gui.GuiManager;
 import br.unb.cic.iris.i18n.MessageBundle;
 
-/***
- * added by dBaseCommand
- */
 public abstract class AbstractGuiMailCommand implements GuiMailCommand {
 
 	protected abstract void handleExecute() throws EmailException;
 
-	//TODO i18n ...
+	// TODO i18n ...
 	public void execute() {
 		try {
 			handleExecute();
 		} catch (EmailUncheckedException eux) {
 			eux.printStackTrace();
-			showErrorMessage(String.format("%s: %s","ERROR", eux.getLocalizedMessage()));			
-		} catch (EmailMessageValidationException emvx) {			
-			StringBuilder sb = new StringBuilder("Erro validacao: ");			
+			showErrorMessage(String.format("%s: %s", message("error"), eux.getLocalizedMessage()));
+		} catch (EmailMessageValidationException emvx) {
+			StringBuilder sb = new StringBuilder("Erro validacao: ");
 			for (String msg : emvx.getMessages()) {
 				sb.append("\n - " + msg);
 			}
@@ -33,29 +30,30 @@ public abstract class AbstractGuiMailCommand implements GuiMailCommand {
 			emvx.printStackTrace();
 			showErrorMessage(sb.toString());
 		} catch (EmailException ex) {
-			showErrorMessage(String.format("%s: %s\n", "ERROR", ex.getMessage()));
+			ex.printStackTrace();
+			showErrorMessage(String.format("%s: %s\n", message("error"), ex.getMessage()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
 	}
-	
+
 	protected String message(String key) {
 		return MessageBundle.message(key);
 	}
-	
-	protected void showErrorMessage(String message){
+
+	protected void showErrorMessage(String message) {
 		GuiManager.instance().showErrorMessage(message);
 	}
-	
-	protected void showInfoMessage(String message){
+
+	protected void showInfoMessage(String message) {
 		GuiManager.instance().showInfoMessage(message);
 	}
-		
+
 	protected ImageIcon createImageIcon(String path, String description) {
-		java.net.URL imgURL = getClass().getResource(path);		
-		if (imgURL != null) {			
+		java.net.URL imgURL = getClass().getResource(path);
+		if (imgURL != null) {
 			Image img = new ImageIcon(imgURL, description).getImage();
 			ImageIcon icon = new ImageIcon(img.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH));
 			return icon;
