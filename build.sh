@@ -98,8 +98,12 @@ $JAVA_BIN/jar --create --file mlib/iris.addressbook.model.simple@1.0.jar --modul
 echo Creating Module: IrisAddressBookPersistenceXml
 $JAVA_BIN/jar --create --file mlib/iris.addressbook.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.addressbook.persistence.xml .
 
-echo Creating Module: IrisAddressBookCLI
-$JAVA_BIN/jar --create --file mlib/iris.addressbook.ui.cli@1.0.jar --module-version 1.0 -C build/iris.addressbook.ui.cli .
+#echo Creating Module: IrisAddressBookCLI
+#$JAVA_BIN/jar --create --file mlib/iris.addressbook.ui.cli@1.0.jar --module-version 1.0 -C build/iris.addressbook.ui.cli .
+
+echo Creating Module: IrisAddressBookGUI
+cp -Rf src/iris.addressbook.ui.gui/images build/iris.addressbook.ui.gui
+$JAVA_BIN/jar --create --file mlib/iris.addressbook.ui.gui@1.0.jar --module-version 1.0 -C build/iris.addressbook.ui.gui .
 
 
 
