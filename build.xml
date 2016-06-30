@@ -34,8 +34,8 @@
 	<property name="target.dir" value="target" />
 	<property name="modules.dir" value="mlib" />
 
-	<property name="java.home" value="/usr/lib/jvm/java-9-oracle" />
-	<property name="JAVA_BIN" value="${java.home}/bin" />
+	<property name="java_home" value="/usr/lib/jvm/java-9-oracle" />
+	<property name="JAVA_BIN" value="${java_home}/bin" />
 
 	<property name="iris.version" value="1.0" />
 	<property name="java.mail.version" value="1.5.5" />
@@ -43,7 +43,7 @@
 	<property name="sqlite.version" value="3.8.11.2" />
 
 	<!-- ================================= CLEAN ================================= -->
-	<target name="clean" description="--> clean the project">
+	<target name="clean">
 		<delete includeemptydirs="true" quiet="true">
 			<fileset dir="${build.dir}" />
 			<fileset dir="${target.dir}" />
@@ -52,13 +52,13 @@
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${modules.dir}" />
 	</target>
-	<target name="clean-ivy" description="--> clean the ivy installation">
+	<target name="clean-ivy">
 		<delete dir="${ivy.jar.dir}" />
 	</target>
-	<target name="clean-cache" depends="_install-ivy" description="--> clean the ivy cache">
+	<target name="clean-cache" depends="install-ivy" >
 		<ivy:cleancache />
 	</target>
-	<target name="clean-all" depends="clean, clean-ivy, clean-cache" description="--> full clean">
+	<target name="clean-all" depends="clean, clean-ivy, clean-cache" >
 		<delete includeemptydirs="true" quiet="true">
 			<fileset dir="${libs.dir}" />
 		</delete>
@@ -71,97 +71,137 @@
 
 		<input message="What is the mail type (simple/secure)?" validargs="simple,secure" addproperty="email.type" />
 		<!-- TODO: adapt when we have the secure mail -->
-		<antcall target="_create_module">
+		<antcall target="create_module">
 			<param name="module.name" value="iris.mail.simple" />
 		</antcall>
-		<!-- TODO: select email providers -->
-		<antcall target="_create_modules">
-			<param name="list" value="iris.mail.provider.gmail,iris.mail.provider.outlook,iris.mail.provider.yahoo" />
+
+		<input message="Do you want to add gmail provider (yes/no)?" validargs="yes,no" addproperty="provider.gmail" />
+		<input message="Do you want to add outlook provider (yes/no)?" validargs="yes,no" addproperty="provider.outlook" />
+		<input message="Do you want to add yahoo provider (yes/no)?" validargs="yes,no" addproperty="provider.yahoo" />
+		<antcall target="create_mail_providers">
+			<param name="provider.gmail" value="${provider.gmail}" />
+			<param name="provider.outlook" value="${provider.outlook}" />
+			<param name="provider.yahoo" value="${provider.yahoo}" />
 		</antcall>
 
 		<input message="What is the persistence type (xml/relational/lucene)?" validargs="xml,relational,lucene" addproperty="db.type" />
-		<antcall target="_create_persistence_module">
+		<antcall target="create_persistence_module">
 			<param name="db.type" value="${db.type}" />
 		</antcall>
 
 		<input message="What is the interface type (cli,gui)?" validargs="cli,gui" addproperty="interface.type" />
-		<antcall target="_create_interface_module">
+		<antcall target="create_interface_module">
 			<param name="interface.type" value="${interface.type}" />
 		</antcall>
 	</target>
 
-
-	<target name="run" depends="_iris_basic_modules">
-
-	</target>
-
-	<target name="_iris_basic_modules" depends="_download-iris-basic-dependencies">
-		<antcall target="_create_modules">
+	<target name="_iris_basic_modules" depends="download-iris-basic-dependencies">
+		<mkdir dir="${build.dir}/iris.core" />
+		<copy todir="${build.dir}/iris.core">			
+			<fileset dir="${src.dir}/iris.core">
+				<include name="**/*.properties" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<antcall target="create_modules">
 			<param name="list" value="iris.model,iris.base,iris.mail,iris.mail.provider,iris.persistence,iris.core" />
 		</antcall>
 	</target>
 
-
-
-	<target name="_create_interface_module">
+	<target name="create_interface_module">
 		<switch value="${interface.type}">
 			<case value="gui">
 				<mkdir dir="${build.dir}/iris.ui.gui/images" />
 				<copy todir="${build.dir}/iris.ui.gui/images">
 					<fileset dir="${src.dir}/iris.ui.gui/images" />
 				</copy>
-				<antcall target="_create_module">
+				<antcall target="create_module">
 					<param name="module.name" value="iris.ui.gui" />
 				</antcall>
 			</case>
 			<default>
-				<antcall target="_create_module">
+				<antcall target="create_module">
 					<param name="module.name" value="iris.ui.cli" />
 				</antcall>
 			</default>
 		</switch>
 	</target>
-	<target name="_create_persistence_module">
+	<target name="create_persistence_module">
 		<switch value="${db.type}">
 			<case value="relational">
-				<antcall target="_download-sqlite" />
-				<antcall target="_create_modules">
+				<antcall target="download-sqlite" />
+				<antcall target="create_modules">
 					<param name="list" value="iris.model.simple,iris.persistence.jdbc" />
 				</antcall>
 			</case>
 			<case value="lucene">
-				<antcall target="_download-lucene" />
-				<antcall target="_create_modules">
+				<antcall target="download-lucene" />
+				<antcall target="create_modules">
 					<param name="list" value="iris.model.simple,iris.persistence.lucene" />
 				</antcall>
 			</case>
 			<default>
-				<antcall target="_create_module">
+				<antcall target="create_module">
 					<param name="module.name" value="iris.persistence.xml" />
 				</antcall>
 			</default>
 		</switch>
 	</target>
+	<target name="create_mail_providers">
+		<var name="mail_provider_selected" value="false" />
+		<if>
+			<equals arg1="${provider.gmail}" arg2="yes" />
+			<then>
+				<antcall target="create_module">
+					<param name="module.name" value="iris.mail.provider.gmail" />
+				</antcall>
+				<var name="mail_provider_selected" value="true" />
+			</then>
+		</if>
+		<if>
+			<equals arg1="${provider.outlook}" arg2="yes" />
+			<then>
+				<antcall target="create_module">
+					<param name="module.name" value="iris.mail.provider.outlook" />
+				</antcall>
+				<var name="mail_provider_selected" value="true" />
+			</then>
+		</if>
+		<if>
+			<equals arg1="${provider.yahoo}" arg2="yes" />
+			<then>
+				<antcall target="create_module">
+					<param name="module.name" value="iris.mail.provider.yahoo" />
+				</antcall>
+				<var name="mail_provider_selected" value="true" />
+			</then>
+		</if>
+		<if>
+			<equals arg1="${mail_provider_selected}" arg2="false" />
+			<then>
+				<fail message="No email provider selected." />
+			</then>
+		</if>
+	</target>
 
-	<target name="_create_modules">
-		<foreach list="${list}" param="module.name" target="_create_module" />
+	<target name="create_modules">
+		<foreach list="${list}" param="module.name" target="create_module" />
 	</target>
-	<target name="_create_module">
+	<target name="create_module">
 		<echo>Creating Module: ${module.name}</echo>
-		<antcall target="_compile_module">
+		<antcall target="compile_module">
 			<param name="module.name" value="${module.name}" />
 		</antcall>
-		<antcall target="_create_jar">
+		<antcall target="create_jar">
 			<param name="module.name" value="${module.name}" />
 		</antcall>
 	</target>
-	<target name="_compile_module">
+	<target name="compile_module">
 		<fileset dir="${src.dir}/${module.name}" id="fileset" casesensitive="yes">
 			<include name="**/*.java" />
 		</fileset>
 		<pathconvert refid="fileset" property="converted" pathsep=" " />
-		<exec executable="${JAVA_BIN}/javac">
-			<env key="JAVA_HOME" value="${java.home}" />
+		<exec executable="${JAVA_BIN}/javac" failonerror="true">
 			<arg value="-mp" />
 			<arg value="${modules.dir}:${libs.dir}" />
 			<arg value="-d" />
@@ -171,9 +211,8 @@
 			<arg line="${converted}" />
 		</exec>
 	</target>
-	<target name="_create_jar">
-		<exec executable="${JAVA_BIN}/jar">
-			<env key="JAVA_HOME" value="${java.home}" />
+	<target name="create_jar">
+		<exec executable="${JAVA_BIN}/jar" failonerror="true">
 			<arg value="--create" />
 			<arg value="--file" />
 			<arg value="${modules.dir}/${module.name}@${iris.version}.jar" />
@@ -186,22 +225,23 @@
 	</target>
 
 
-	<target name="_download-lucene" depends="_install-ivy" unless="skip.download">
+	<target name="download-lucene" depends="install-ivy" unless="skip.download">
 		<ivy:retrieve pattern="${libs.pattern}">
 			<dependency org="org.apache.lucene" name="lucene-core" rev="${lucene.version}" />
 			<dependency org="org.apache.lucene" name="lucene-analyzers-common" rev="${lucene.version}" />
 			<dependency org="org.apache.lucene" name="lucene-queryparser" rev="${lucene.version}" />
 			<dependency org="org.apache.lucene" name="lucene-codecs" rev="${lucene.version}" />
-			<!-- TODO: prevent to download javadocs and sources -->
+			<exclude org="*" ext="*" type="source" />
+			<exclude org="*" ext="*" type="javadoc" />
 		</ivy:retrieve>
 	</target>
-	<target name="_download-sqlite" depends="_install-ivy" unless="skip.download">
+	<target name="download-sqlite" depends="install-ivy" unless="skip.download">
 		<ivy:retrieve pattern="${libs.pattern}">
 			<dependency org="org.xerial" name="sqlite-jdbc" rev="${sqlite.version}" />
 			<exclude org="junit" module="junit" />
 		</ivy:retrieve>
 	</target>
-	<target name="_download-iris-basic-dependencies" depends="_install-ant-contrib" unless="skip.download">
+	<target name="download-iris-basic-dependencies" depends="install-ant-contrib" unless="skip.download">
 		<ivy:retrieve pattern="${libs.pattern}">
 			<dependency org="javax.mail" name="javax.mail-api" rev="${java.mail.version}" />
 			<dependency org="com.sun.mail" name="javax.mail" rev="${java.mail.version}" />
@@ -209,18 +249,18 @@
 		</ivy:retrieve>
 	</target>
 
-	<target name="_install-ant-contrib" depends="_install-ivy" unless="skip.download">
-		<ivy:retrieve organisation="ant-contrib" module="ant-contrib" revision="20020829" inline="true" pattern="${ivy.pattern}" />
+	<target name="install-ant-contrib" depends="install-ivy" unless="skip.download">
+		<ivy:retrieve organisation="ant-contrib" module="ant-contrib" revision="1.0b3" inline="true" pattern="${ivy.pattern}" />
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 			<classpath>
-				<pathelement location="${ivy.jar.dir}/ant-contrib-20020829.jar" />
+				<pathelement location="${ivy.jar.dir}/ant-contrib-1.0b3.jar" />
 			</classpath>
 		</taskdef>
 	</target>
 
 
 	<!-- ================================= IVY ================================= -->
-	<target name="_download-ivy" unless="skip.download">
+	<target name="download-ivy" unless="skip.download">
 		<mkdir dir="${ivy.jar.dir}" />
 		<!-- download Ivy from web site so that it can be used even without any 
 			special installation -->
@@ -231,7 +271,7 @@
 		not necessary if you put ivy.jar in your ant lib directory if you already 
 		have ivy in your ant lib, you can simply remove this target and the dependency 
 		the 'go' target has on it ================================= -->
-	<target name="_install-ivy" depends="_download-ivy">
+	<target name="install-ivy" depends="download-ivy">
 		<!-- try to load ivy here from local ivy dir, in case the user has not 
 			already dropped it into ant's lib dir (note that the latter copy will always 
 			take precedence). We will not fail as long as local lib dir exists (it may 
@@ -241,50 +281,5 @@
 		</path>
 		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path" />
 	</target>
-
-	<target name="teste" depends="_install-ivy">
-		<!-- <ivy:cachepath organisation="ant-contrib" module="ant-contrib" conf="ant" 
-			revision="20020829" pathid="ant-contrib.path.id" inline="true" /> <taskdef 
-			resource="net/sf/antcontrib/antlib.xml" classpathref="ant-contrib.path.id" 
-			/> <echo message="The first five letters of the alphabet are:" /> <for list="a,b,c,d,e" 
-			param="letter"> <sequential> <echo>Letter @{letter}</echo> </sequential> 
-			</for> -->
-
-		<!-- http://ant.apache.org/ivy/history/2.2.0/use/retrieve.html 
-		http://ant.apache.org/ivy/history/latest-milestone/use/resolve.html
-		-->
-		<!-- 
-		<ivy:retrieve organisation="javax.mail" module="javax.mail-api" revision="1.5.5" inline="true" pattern="${ivy.jar.dir}/[artifact]-[revision].[ext]" />
-		<ivy:retrieve organisation="com.sun.mail" module="javax.mail" revision="1.5.5" conf="compile" inline="true" />
-		TODO arrumar ... trazendo dependencias de test 
-		<ivy:retrieve organisation="org.xerial" module="sqlite-jdbc" revision="3.8.11.2" inline="true" pattern="${ivy.jar.dir}/[artifact]-[revision].[ext]" />
--->
-
-		<ivy:retrieve pattern="${ivy.jar.dir}/[artifact]-[revision].[ext]">
-			<dependency org="javax.mail" name="javax.mail-api" rev="1.5.5" />
-			<dependency org="com.sun.mail" name="javax.mail" rev="1.5.5" />
-			<exclude org="junit" module="junit" />
-		</ivy:retrieve>
-
-
-		<ivy:retrieve organisation="ant-contrib" module="ant-contrib" revision="20020829" inline="true" pattern="${ivy.jar.dir}/[artifact]-[revision].[ext]" />
-		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
-			<classpath>
-				<pathelement location="${ivy.jar.dir}/ant-contrib-20020829.jar" />
-			</classpath>
-		</taskdef>
-		<foreach list="a,b,c,d,e" param="letter" target="novo" />
-
-	</target>
-
-	<target name="novo">
-		<echo>Letter ${letter}</echo>
-	</target>
-
-	<target name="_tmp">
-		<echo>Letter ${letter}</echo>
-	</target>
-
-
 
 </project>
