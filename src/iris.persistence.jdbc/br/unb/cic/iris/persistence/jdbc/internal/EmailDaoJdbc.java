@@ -2,9 +2,11 @@ package br.unb.cic.iris.persistence.jdbc.internal;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,14 +47,53 @@ public class EmailDaoJdbc extends AbstractDaoJdbc implements IEmailDAO {
 
 	@Override
 	public List<EmailMessage> listMessages(String idFolder) throws PersistenceException {
-		// TODO Auto-generated method stub
-		return null;
+		List<EmailMessage> messages = new LinkedList<>();
+		try (Connection conn = getDbUtil().connect();
+				PreparedStatement pstmt = conn.prepareStatement(SELECT_MESSAGES_BY_FOLDER_ID)) {
+			
+			pstmt.setString(1, idFolder);    
+			ResultSet rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				messages.add(toEmailMessage(rs));
+			}			
+		} catch (SQLException e) {
+			throw new PersistenceException("Could not list all folders: "+e.getMessage(), e);
+		}
+		return messages;
 	}
 
 	@Override
 	public EmailMessage findById(String id) throws PersistenceException {
-		// TODO Auto-generated method stub
-		return null;
+		EmailMessage message = null;
+		try (Connection conn = getDbUtil().connect();
+                PreparedStatement pstmt = conn.prepareStatement(SELECT_MESSAGES_BY_ID)) {
+            pstmt.setString(1, id);           
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+            	message = toEmailMessage(rs);
+            }
+        } catch (SQLException e) {
+        	throw new PersistenceException("Could not find message with id '"+id+"': "+e.getMessage(), e);
+        }
+		return message;
 	}
 
+	private EmailMessage toEmailMessage(ResultSet rs) throws SQLException, PersistenceException{
+		EmailMessage message = getEntityFactory().createEmailMessage();
+		message.setId(rs.getString("id"));
+		message.setFrom(rs.getString("_from"));
+		message.setTo(rs.getString("_to"));
+		message.setCc(rs.getString("cc"));
+		message.setBcc(rs.getString("bcc"));
+		message.setSubject(rs.getString("subject"));
+		message.setMessage(rs.getString("message"));
+		message.setDate(rs.getDate("_date"));
+		
+		String folderId = rs.getString("folderid");
+		message.setFolder(getFolderDAO().findById(folderId));
+				
+		return message;
+	}
+	
 }

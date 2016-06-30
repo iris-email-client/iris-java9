@@ -20,8 +20,8 @@ public class FolderDaoJdbc extends AbstractDaoJdbc implements IFolderDAO {
 	private static final String INSERT_FOLDER = "INSERT INTO folder (id, name) VALUES (?,?)";
 
 	@Override
-	public IrisFolder createFolder(String folderName) throws PersistenceException {
-		IrisFolder folder = getEntityFactory().createIrisFolder();
+	public IrisFolder<?> createFolder(String folderName) throws PersistenceException {
+		IrisFolder<?> folder = getEntityFactory().createIrisFolder();
 		folder.setId(UUID.randomUUID().toString());
 		folder.setName(folderName);
 		
@@ -38,23 +38,23 @@ public class FolderDaoJdbc extends AbstractDaoJdbc implements IFolderDAO {
 	}
 
 	@Override
-	public IrisFolder findByName(String folderName) throws PersistenceException {		
+	public IrisFolder<?> findByName(String folderName) throws PersistenceException {		
 		return executeQuery(SELECT_FOLDER_BY_NAME, folderName);
 	}
 
 	@Override
-	public IrisFolder findById(String id) throws PersistenceException {		
+	public IrisFolder<?> findById(String id) throws PersistenceException {		
 		return executeQuery(SELECT_FOLDER_BY_ID, id);
 	}	
-
+	
 	@Override
+	@SuppressWarnings("rawtypes")
 	public List<IrisFolder> findAll() throws PersistenceException {
 		List<IrisFolder> folders = new LinkedList<>();
 		try (Connection conn = getDbUtil().connect();
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(SELECT_FOLDER_ALL)) {
-
-			// loop through the result set
+			
 			while (rs.next()) {
 				folders.add(toFolder(rs));
 			}
@@ -64,7 +64,7 @@ public class FolderDaoJdbc extends AbstractDaoJdbc implements IFolderDAO {
 		return folders;
 	}
 	
-	private IrisFolder executeQuery(String sql, String value) throws PersistenceException {
+	private IrisFolder<?> executeQuery(String sql, String value) throws PersistenceException {
 		try (Connection conn = getDbUtil().connect();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, value);            
@@ -78,8 +78,8 @@ public class FolderDaoJdbc extends AbstractDaoJdbc implements IFolderDAO {
 		return null;
 	}
 	
-	private IrisFolder toFolder(ResultSet rs) throws SQLException{
-		IrisFolder folder = getEntityFactory().createIrisFolder();
+	private IrisFolder<?> toFolder(ResultSet rs) throws SQLException{
+		IrisFolder<?> folder = getEntityFactory().createIrisFolder();
 		folder.setId(rs.getString("id"));
 		folder.setName(rs.getString("name"));
 		return folder;
