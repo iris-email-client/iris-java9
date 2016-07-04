@@ -33,6 +33,7 @@
 	<property name="src.dir" value="src" />
 	<property name="target.dir" value="target" />
 	<property name="modules.dir" value="mlib" />
+	<property name="jlink.dir" value="iris" />
 
 	<property name="java_home" value="/usr/lib/jvm/java-9-oracle" />
 	<property name="JAVA_BIN" value="${java_home}/bin" />
@@ -43,7 +44,7 @@
 	<property name="sqlite.version" value="3.8.11.2" />
 
 	<!-- ================================= CLEAN ================================= -->
-	<target name="clean">
+	<target name="clean" description="Basic cleaning">
 		<delete includeemptydirs="true" quiet="true">
 			<fileset dir="${build.dir}" />
 			<fileset dir="${target.dir}" />
@@ -55,10 +56,10 @@
 	<target name="clean-ivy">
 		<delete dir="${ivy.jar.dir}" />
 	</target>
-	<target name="clean-cache" depends="install-ivy" >
+	<target name="clean-cache" depends="install-ivy">
 		<ivy:cleancache />
 	</target>
-	<target name="clean-all" depends="clean, clean-ivy, clean-cache" >
+	<target name="clean-full" depends="clean, clean-ivy, clean-cache" description="Full cleaning">
 		<delete includeemptydirs="true" quiet="true">
 			<fileset dir="${libs.dir}" />
 		</delete>
@@ -67,7 +68,7 @@
 
 	<!-- ================================= IRIS ================================= -->
 	<target name="choose-products" description="Choose the product to be generated" depends="clean,_iris_basic_modules">
-		<echo>Choose the product ...</echo>
+		<echo>Choose the product to be generated ...</echo>
 
 		<input message="What is the mail type (simple/secure)?" validargs="simple,secure" addproperty="email.type" />
 		<!-- TODO: adapt when we have the secure mail -->
@@ -84,20 +85,41 @@
 			<param name="provider.yahoo" value="${provider.yahoo}" />
 		</antcall>
 
-		<input message="What is the persistence type (xml/relational/lucene)?" validargs="xml,relational,lucene" addproperty="db.type" />
+		<input message="What is the persistence type (xml/relational/lucene)?" validargs="xml,relational,lucene" addproperty="persistence.type" />
 		<antcall target="create_persistence_module">
-			<param name="db.type" value="${db.type}" />
+			<param name="persistence.type" value="${persistence.type}" />
 		</antcall>
 
 		<input message="What is the interface type (cli,gui)?" validargs="cli,gui" addproperty="interface.type" />
 		<antcall target="create_interface_module">
 			<param name="interface.type" value="${interface.type}" />
 		</antcall>
+
+		<input message="Would you like to add Address Book feature (yes/no)?" validargs="yes,no" addproperty="addressbook.enabled" />
+		<antcall target="create_addressbook_module">
+			<param name="addressbook.enabled" value="${addressbook.enabled}" />
+			<param name="interface.type" value="${interface.type}" />
+			<param name="persistence.type" value="${persistence.type}" />
+		</antcall>
+
+		<!--<input message="Would you like to add Tagging feature (yes/no)?" validargs="yes,no" addproperty="tag.enabled" />-->
+		<!--
+		<input message="Would you like to create a Runtime Image (yes/no)?" validargs="yes,no" addproperty="jlink.enabled" />
+		<antcall target="create_runtime_image">
+			<param name="jlink.enabled" value="${jlink.enabled}" />
+			<param name="interface.type" value="${interface.type}" />
+		</antcall>
+		-->
+		<!--<input message="Would you like to run the application (jar/jlink/no)?" validargs="jar,jlink,no" addproperty="run.enabled" />-->
+
+		<antcall target="run_info">
+			<param name="interface.type" value="${interface.type}" />
+		</antcall>
 	</target>
 
 	<target name="_iris_basic_modules" depends="download-iris-basic-dependencies">
 		<mkdir dir="${build.dir}/iris.core" />
-		<copy todir="${build.dir}/iris.core">			
+		<copy todir="${build.dir}/iris.core">
 			<fileset dir="${src.dir}/iris.core">
 				<include name="**/*.properties" />
 				<exclude name="**/*.java" />
@@ -108,6 +130,48 @@
 		</antcall>
 	</target>
 
+	<target name="create_addressbook_module">
+		<if>
+			<equals arg1="${addressbook.enabled}" arg2="yes" />
+			<then>
+				<antcall target="create_module">
+					<param name="module.name" value="iris.addressbook.api" />
+				</antcall>
+				<switch value="${persistence.type}">
+					<case value="relational">
+						<antcall target="create_module">
+							<param name="list" value="iris.addressbook.persistence.jdbc" />
+						</antcall>
+					</case>
+					<case value="lucene">
+						<!-- TODO: not yet imlpemented -->
+						<fail message="Not yet implemented: iris.addressbook.persistence.lucene" />
+					</case>
+					<default>
+						<antcall target="create_module">
+							<param name="module.name" value="iris.addressbook.persistence.xml" />
+						</antcall>
+					</default>
+				</switch>
+				<switch value="${interface.type}">
+					<case value="gui">
+						<mkdir dir="${build.dir}/iris.addressbook.ui.gui/images" />
+						<copy todir="${build.dir}/iris.addressbook.ui.gui/images">
+							<fileset dir="${src.dir}/iris.addressbook.ui.gui/images" />
+						</copy>
+						<antcall target="create_module">
+							<param name="module.name" value="iris.addressbook.ui.gui" />
+						</antcall>
+					</case>
+					<default>
+						<antcall target="create_module">
+							<param name="module.name" value="iris.addressbook.ui.cli" />
+						</antcall>
+					</default>
+				</switch>
+			</then>
+		</if>
+	</target>
 	<target name="create_interface_module">
 		<switch value="${interface.type}">
 			<case value="gui">
@@ -115,19 +179,21 @@
 				<copy todir="${build.dir}/iris.ui.gui/images">
 					<fileset dir="${src.dir}/iris.ui.gui/images" />
 				</copy>
-				<antcall target="create_module">
+				<antcall target="create_main_module">
 					<param name="module.name" value="iris.ui.gui" />
+					<param name="main.class" value="br.unb.cic.iris.cli.MainProgram" />
 				</antcall>
 			</case>
 			<default>
-				<antcall target="create_module">
+				<antcall target="create_main_module">
 					<param name="module.name" value="iris.ui.cli" />
+					<param name="main.class" value="br.unb.cic.iris.gui.MainProgram" />
 				</antcall>
 			</default>
 		</switch>
 	</target>
 	<target name="create_persistence_module">
-		<switch value="${db.type}">
+		<switch value="${persistence.type}">
 			<case value="relational">
 				<antcall target="download-sqlite" />
 				<antcall target="create_modules">
@@ -196,6 +262,16 @@
 			<param name="module.name" value="${module.name}" />
 		</antcall>
 	</target>
+	<target name="create_main_module">
+		<echo>Creating Main Module: ${module.name}</echo>
+		<antcall target="compile_module">
+			<param name="module.name" value="${module.name}" />
+		</antcall>
+		<antcall target="create_main_jar">
+			<param name="module.name" value="${module.name}" />
+			<param name="main.class" value="${main.class}" />
+		</antcall>
+	</target>
 	<target name="compile_module">
 		<fileset dir="${src.dir}/${module.name}" id="fileset" casesensitive="yes">
 			<include name="**/*.java" />
@@ -223,6 +299,68 @@
 			<arg line="." />
 		</exec>
 	</target>
+	<target name="create_main_jar">
+		<exec executable="${JAVA_BIN}/jar" failonerror="true">
+			<arg value="--create" />
+			<arg value="--file" />
+			<arg value="${modules.dir}/${module.name}@${iris.version}.jar" />
+			<arg value="--module-version" />
+			<arg value="${iris.version}" />
+			<arg value="--main-class" />
+			<arg value="${main.class}" />
+			<arg value="-C" />
+			<arg line="${build.dir}/${module.name}" />
+			<arg line="." />
+		</exec>
+	</target>
+	<target name="create_runtime_image">
+		<if>
+			<equals arg1="${jlink.enabled}" arg2="yes" />
+			<then>
+				<echo>Creating run-time image ...</echo>
+				<switch value="${interface.type}">
+					<case value="gui">
+						<antcall target="jlink">
+							<param name="module.name" value="iris.ui.gui" />
+						</antcall>
+					</case>
+					<default>
+						<antcall target="jlink">
+							<param name="module.name" value="iris.ui.cli" />
+						</antcall>
+					</default>
+				</switch>
+			</then>
+		</if>
+	</target>
+	<target name="jlink">
+		<delete dir="${jlink.dir}" />
+		<exec executable="${JAVA_BIN}/jlink" failonerror="true">
+			<arg value="--modulepath" />
+			<arg value="${java_home}/jmods:${modules.dir}:${libs.dir}" />
+			<arg value="--addmods" />
+			<arg value="${module.name}" />
+			<arg value="--output" />
+			<arg value="${jlink.dir}" />
+		</exec>
+	</target>
+	<target name="run_info">
+		<var name="module.name" value="iris.ui.cli" />
+		<switch value="${interface.type}">
+			<case value="gui">
+				<var name="module.name" value="iris.ui.gui" />
+			</case>
+			<default>
+				<var name="module.name" value="iris.ui.cli" />
+			</default>
+		</switch>
+		<echo>Modules were successfully generated!</echo>
+		<echo>To run the application:</echo>
+		<echo>export JAVA_HOME=${java_home}</echo>
+		<echo>export JAVA_BIN=$JAVA_HOME/bin</echo>
+		<echo>$JAVA_BIN/java -mp ${modules.dir}:${libs.dir} -m ${module.name}</echo>
+	</target>
+
 
 
 	<target name="download-lucene" depends="install-ivy" unless="skip.download">
@@ -239,6 +377,8 @@
 		<ivy:retrieve pattern="${libs.pattern}">
 			<dependency org="org.xerial" name="sqlite-jdbc" rev="${sqlite.version}" />
 			<exclude org="junit" module="junit" />
+			<exclude org="*" ext="*" type="source" />
+			<exclude org="*" ext="*" type="javadoc" />
 		</ivy:retrieve>
 	</target>
 	<target name="download-iris-basic-dependencies" depends="install-ant-contrib" unless="skip.download">
@@ -246,6 +386,8 @@
 			<dependency org="javax.mail" name="javax.mail-api" rev="${java.mail.version}" />
 			<dependency org="com.sun.mail" name="javax.mail" rev="${java.mail.version}" />
 			<exclude org="junit" module="junit" />
+			<exclude org="*" ext="*" type="source" />
+			<exclude org="*" ext="*" type="javadoc" />
 		</ivy:retrieve>
 	</target>
 
