@@ -34,7 +34,7 @@ public class GuiConnectCommand extends AbstractGuiMailCommand {
 
 	@Override
 	public void register(GuiManager manager) {
-		ImageIcon icon = createImageIcon("/images/status.png", getCommandName());
+		ImageIcon icon = createImageIcon("/images/connect.png", getCommandName());
 
 		JButton btn = new JButton(icon);
 		btn.addActionListener(this);

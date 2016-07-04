@@ -10,7 +10,7 @@ public class ConsoleDownloadMessagesCommand extends ConsoleAbstractMailCommand {
 
 	@Override
 	public String explain() {
-		return String.format("(%s) - %s %n", COMMAND_NAME, message("command.download.explain"));
+		return String.format("(%s) - %s %n", COMMAND_NAME, message("command.download.messages.explain"));
 	}
 
 	@Override

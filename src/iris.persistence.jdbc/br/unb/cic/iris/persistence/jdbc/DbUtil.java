@@ -1,4 +1,4 @@
-package br.unb.cic.iris.persistence.jdbc.internal;
+package br.unb.cic.iris.persistence.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,13 +10,22 @@ import br.unb.cic.iris.persistence.PersistenceException;
 public class DbUtil {
 	private static String DB_PATH = System.getProperty("user.home") + "/.iris/iris.db";
 	private static String DB_URL = "jdbc:sqlite:" + DB_PATH;
+	
+	private static DbUtil instance;	
 
-	public DbUtil() throws PersistenceException{
+	private DbUtil() throws PersistenceException {
 		execute(CREATE_TABLE_FOLDER);
 		execute(CREATE_TABLE_MESSAGE);
 	}
 	
-	protected Connection connect() throws PersistenceException {
+	public static DbUtil instance() throws PersistenceException {
+		if(instance == null){
+			instance = new DbUtil();
+		}
+		return instance;
+	}
+	
+	public Connection connect() throws PersistenceException {
 		Connection conn = null;
 		try {
 			conn = DriverManager.getConnection(DB_URL);
@@ -55,7 +64,5 @@ public class DbUtil {
 			  +"_date     TIMESTAMP," 
 			  +"folderid INTEGER,"
 			  +"FOREIGN KEY(folderid) REFERENCES folder(id)"
-			+");";
-	
-	
+			+");";	
 }

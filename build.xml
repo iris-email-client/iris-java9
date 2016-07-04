@@ -139,8 +139,8 @@
 				</antcall>
 				<switch value="${persistence.type}">
 					<case value="relational">
-						<antcall target="create_module">
-							<param name="list" value="iris.addressbook.persistence.jdbc" />
+						<antcall target="create_modules">
+							<param name="list" value="iris.addressbook.model.simple,iris.addressbook.persistence.jdbc" />
 						</antcall>
 					</case>
 					<case value="lucene">
@@ -181,13 +181,13 @@
 				</copy>
 				<antcall target="create_main_module">
 					<param name="module.name" value="iris.ui.gui" />
-					<param name="main.class" value="br.unb.cic.iris.cli.MainProgram" />
+					<param name="main.class" value="br.unb.cic.iris.gui.MainProgram" />
 				</antcall>
 			</case>
 			<default>
 				<antcall target="create_main_module">
 					<param name="module.name" value="iris.ui.cli" />
-					<param name="main.class" value="br.unb.cic.iris.gui.MainProgram" />
+					<param name="main.class" value="br.unb.cic.iris.cli.MainProgram" />
 				</antcall>
 			</default>
 		</switch>

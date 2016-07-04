@@ -38,6 +38,17 @@ public class IrisServiceLocator {
 		return daoFactory;
 	}
 	
+	
+	public Object getService(Class<?> clazz){
+		ServiceLoader<?> sl = ServiceLoader.load(clazz);
+		Iterator<?> it = sl.iterator();
+
+		if (!it.hasNext())
+			throw new EmailUncheckedException("No service implementation found for: "+clazz);
+		
+		return it.next();		
+	}
+	
 
 	private void initEmailClient(){		
 		ServiceLoader<IEmailClient> sl = ServiceLoader.load(IEmailClient.class);

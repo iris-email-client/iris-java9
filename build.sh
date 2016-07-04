@@ -57,8 +57,8 @@ $JAVA_BIN/jar --create --file mlib/iris.persistence@1.0.jar --module-version 1.0
 
 
 
-#echo Creating Module: IrisModelSimple
-#$JAVA_BIN/jar --create --file mlib/iris.model.simple@1.0.jar --module-version 1.0 -C build/iris.model.simple .
+echo Creating Module: IrisModelSimple
+$JAVA_BIN/jar --create --file mlib/iris.model.simple@1.0.jar --module-version 1.0 -C build/iris.model.simple .
 
 
 echo Creating Module: IrisMailSimple
@@ -76,14 +76,14 @@ $JAVA_BIN/jar --create --file mlib/iris.mail.provider.yahoo@1.0.jar --module-ver
 
 
 # Persistence
-#echo Creating Module: IrisPersistenceJDBC
-#$JAVA_BIN/jar --create --file mlib/iris.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.persistence.jdbc .
+echo Creating Module: IrisPersistenceJDBC
+$JAVA_BIN/jar --create --file mlib/iris.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.persistence.jdbc .
 
 #echo Creating Module: IrisPersistenceLucene
 #$JAVA_BIN/jar --create --file mlib/iris.persistence.lucene@1.0.jar --module-version 1.0 -C build/iris.persistence.lucene .
 
-echo Creating Module: IrisPersistenceXml
-$JAVA_BIN/jar --create --file mlib/iris.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.persistence.xml .
+#echo Creating Module: IrisPersistenceXml
+#$JAVA_BIN/jar --create --file mlib/iris.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.persistence.xml .
 
 
 echo Creating Module: IrisAddressBookAPI
@@ -92,11 +92,11 @@ $JAVA_BIN/jar --create --file mlib/iris.addressbook.api@1.0.jar --module-version
 echo Creating Module: IrisAddressBookModelSimple
 $JAVA_BIN/jar --create --file mlib/iris.addressbook.model.simple@1.0.jar --module-version 1.0 -C build/iris.addressbook.model.simple .
 
-#echo Creating Module: IrisAddressBookPersistenceJDBC
-#$JAVA_BIN/jar --create --file mlib/iris.addressbook.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.addressbook.persistence.jdbc .
+echo Creating Module: IrisAddressBookPersistenceJDBC
+$JAVA_BIN/jar --create --file mlib/iris.addressbook.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.addressbook.persistence.jdbc .
 
-echo Creating Module: IrisAddressBookPersistenceXml
-$JAVA_BIN/jar --create --file mlib/iris.addressbook.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.addressbook.persistence.xml .
+#echo Creating Module: IrisAddressBookPersistenceXml
+#$JAVA_BIN/jar --create --file mlib/iris.addressbook.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.addressbook.persistence.xml .
 
 #echo Creating Module: IrisAddressBookCLI
 #$JAVA_BIN/jar --create --file mlib/iris.addressbook.ui.cli@1.0.jar --module-version 1.0 -C build/iris.addressbook.ui.cli .

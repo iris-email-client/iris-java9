@@ -39,7 +39,7 @@ public class AddressBookGuiCommand extends AbstractGuiMailCommand {
 
 	@Override
 	public void register(GuiManager manager) {
-		ImageIcon icon = this.createImageIcon("/images/status.png", getCommandName());	
+		ImageIcon icon = this.createImageIcon("/images/addressbook.png", getCommandName());	
 		
 		JButton btn = new JButton(icon);
 		btn.addActionListener(new ActionListener() {
@@ -48,7 +48,7 @@ public class AddressBookGuiCommand extends AbstractGuiMailCommand {
 			public void actionPerformed(ActionEvent evt) {
 				// Create a Popup menu
 			    JPopupMenu popup = new JPopupMenu("Popup");
-			    popup.add(new JMenuItem("Manage Address Books"));
+			    popup.add(new JMenuItem("Manage Address Book"));
 			    popup.add(new JMenuItem("Send Email using adb"));
 			    // show on the button?
 			    Component source = (Component)evt.getSource();

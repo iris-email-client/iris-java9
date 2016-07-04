@@ -7,6 +7,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class StatusPanel extends JPanel {
+	private static final long serialVersionUID = -8191286754725706587L;
 	private JTextArea textArea;
 	
 	public StatusPanel(){

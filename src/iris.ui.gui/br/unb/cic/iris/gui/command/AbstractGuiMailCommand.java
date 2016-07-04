@@ -51,7 +51,7 @@ public abstract class AbstractGuiMailCommand implements GuiMailCommand {
 		GuiManager.instance().showInfoMessage(message);
 	}
 
-	protected ImageIcon createImageIcon(String path, String description) {
+	protected ImageIcon createImageIcon(String path, String description) {		
 		java.net.URL imgURL = getClass().getResource(path);
 		if (imgURL != null) {
 			Image img = new ImageIcon(imgURL, description).getImage();

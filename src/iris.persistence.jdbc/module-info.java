@@ -1,9 +1,10 @@
 module iris.persistence.jdbc {
-	requires java.sql;	
-	requires sqlite.jdbc;
+	requires public java.sql;	
+	requires public sqlite.jdbc;
 	
 	requires iris.model.simple;
-	requires public iris.persistence;
+	requires public iris.core;
+	requires public iris.persistence;	
 		
 	exports br.unb.cic.iris.persistence.jdbc;	
 	

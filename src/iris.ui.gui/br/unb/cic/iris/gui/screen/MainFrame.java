@@ -10,7 +10,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 public class MainFrame extends JFrame {
@@ -28,7 +27,9 @@ public class MainFrame extends JFrame {
 		initLayout();
 	}
 	
-	private void initLayout(){
+	private void initLayout(){				
+		setIconImage(getToolkit().createImage("/images/iris.png"));
+		
 		setLayout(new BorderLayout());
 		
 		toolBar = new JToolBar("Commands");	

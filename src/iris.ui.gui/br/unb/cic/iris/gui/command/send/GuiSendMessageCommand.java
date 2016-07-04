@@ -32,7 +32,7 @@ public class GuiSendMessageCommand extends AbstractGuiMailCommand {
 
 	@Override
 	public void register(GuiManager manager) {
-		ImageIcon icon = createImageIcon("/images/status.png", getCommandName());
+		ImageIcon icon = createImageIcon("/images/send.png", getCommandName());
 
 		JButton btn = new JButton(icon);
 		btn.addActionListener(this);

@@ -18,6 +18,7 @@ import br.unb.cic.iris.gui.GuiManager;
 import br.unb.cic.iris.mail.EmailProvider;
 
 public class ConnectPanel extends JPanel {
+	private static final long serialVersionUID = -8235259308690935520L;
 	private JComboBox<Object> comboBox;
 	private JTextField usernameField;
 	private JPasswordField passwordField;

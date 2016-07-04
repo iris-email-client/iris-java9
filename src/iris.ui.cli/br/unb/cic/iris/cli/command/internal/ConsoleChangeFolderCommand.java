@@ -9,7 +9,7 @@ public class ConsoleChangeFolderCommand extends ConsoleAbstractMailCommand {
 
 	@Override
 	public String explain() {
-		return String.format("(cd <folder_name>) - change current folder)");
+		return String.format("(cd <folder_name>) - change current folder\n");
 	}
 
 	@Override

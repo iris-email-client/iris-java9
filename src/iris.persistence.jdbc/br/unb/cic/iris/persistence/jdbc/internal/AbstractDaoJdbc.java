@@ -1,23 +1,18 @@
 package br.unb.cic.iris.persistence.jdbc.internal;
 
-import java.util.Iterator;
-import java.util.ServiceLoader;
-
-import br.unb.cic.iris.exception.EmailUncheckedException;
+import br.unb.cic.iris.core.IrisServiceLocator;
 import br.unb.cic.iris.model.EntityFactory;
 import br.unb.cic.iris.persistence.IEmailDAO;
 import br.unb.cic.iris.persistence.IFolderDAO;
 import br.unb.cic.iris.persistence.PersistenceException;
 import br.unb.cic.iris.persistence.jdbc.DaoFactoryJDBC;
+import br.unb.cic.iris.persistence.jdbc.DbUtil;
 
 public abstract class AbstractDaoJdbc {
 	private DaoFactoryJDBC daoFactory;
-	private EntityFactory entityFactory;
-	private DbUtil dbUtil;
 
 	public AbstractDaoJdbc() {
 		daoFactory = new DaoFactoryJDBC();
-		initEntityFactory();
 	}
 
 	public IEmailDAO getEmailDAO() {
@@ -29,23 +24,10 @@ public abstract class AbstractDaoJdbc {
 	}
 
 	public EntityFactory getEntityFactory() {
-		return entityFactory;
+		return IrisServiceLocator.instance().getEntityFactory();
 	}
 
-	public DbUtil getDbUtil() throws PersistenceException {
-		if(dbUtil == null){
-			dbUtil = new DbUtil();
-		}
-		return dbUtil;
-	}
-
-	private void initEntityFactory() {
-		ServiceLoader<EntityFactory> sl = ServiceLoader.load(EntityFactory.class);
-		Iterator<EntityFactory> it = sl.iterator();
-
-		if (!it.hasNext())
-			throw new EmailUncheckedException("No entity factory found!");
-
-		entityFactory = it.next();
+	public DbUtil getDbUtil() throws PersistenceException {		
+		return DbUtil.instance();
 	}
 }

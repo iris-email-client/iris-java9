@@ -9,6 +9,7 @@ import javax.swing.ComboBoxModel;
 import br.unb.cic.iris.mail.EmailProvider;
 
 public class ConnectComboBoxModel extends AbstractListModel<Object>implements ComboBoxModel<Object> {
+	private static final long serialVersionUID = 6557768516654433069L;
 	private List<EmailProvider> providers;
 	private EmailProvider selectedProvider;
 	private final static int FIRSTINDEX = 0;

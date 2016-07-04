@@ -34,6 +34,7 @@ import br.unb.cic.iris.model.Status;
  * @author pedro
  */
 public class SendPanel extends JPanel implements EmailStatusListener {
+	private static final long serialVersionUID = 2648101003972409009L;
 	private static final int COLS = 40;
 	private String from; 
 
@@ -116,13 +117,19 @@ public class SendPanel extends JPanel implements EmailStatusListener {
 	}
 
 	private void jButtonSendActionPerformed(ActionEvent evt) {
+		final SendPanel panel = this;
 		EmailMessage m = createMessage();
-		try {
-			SystemFacade.instance().send(m, this);
-		} catch (EmailException e) {
-			//GuiManager.instance().showErrorMessage("Error while sending message: "+e.getMessage());
-			throw new EmailUncheckedException("Error while sending message: "+e.getMessage(), e);
-		}
+		
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					SystemFacade.instance().send(m, panel);
+				} catch (EmailException e) {
+					//GuiManager.instance().showErrorMessage("Error while sending message: "+e.getMessage());
+					throw new EmailUncheckedException("Error while sending message: "+e.getMessage(), e);
+				}
+			}
+		}).start();	
 	}
 
 	private EmailMessage createMessage() {

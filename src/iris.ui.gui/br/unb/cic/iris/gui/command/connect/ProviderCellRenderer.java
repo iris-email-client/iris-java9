@@ -8,6 +8,7 @@ import javax.swing.JList;
 import br.unb.cic.iris.mail.EmailProvider;
 
 public class ProviderCellRenderer extends DefaultListCellRenderer {
+	private static final long serialVersionUID = 2469560191232933610L;
 
 	@Override
 	public Component getListCellRendererComponent(JList<? extends Object> list, Object value, int index,

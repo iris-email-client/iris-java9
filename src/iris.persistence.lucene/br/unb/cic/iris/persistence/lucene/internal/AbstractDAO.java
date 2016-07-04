@@ -1,7 +1,6 @@
 package br.unb.cic.iris.persistence.lucene.internal;
 
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,6 @@ import br.unb.cic.iris.persistence.PersistenceException;
  * added by dPersistenceLucene
  */
 public abstract class AbstractDAO<T> {
-	private Class<T> clazz;
 	protected String type;
 
 	protected class TCollector extends AbstractCollector {
@@ -40,9 +38,6 @@ public abstract class AbstractDAO<T> {
 		}
 	}
 
-	public AbstractDAO() {
-		clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-	}
 
 	public List<T> findAll() throws PersistenceException {
 		List<T> result = new ArrayList<T>();
