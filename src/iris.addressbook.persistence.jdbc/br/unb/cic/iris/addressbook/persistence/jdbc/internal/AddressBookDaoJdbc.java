@@ -5,14 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ServiceLoader;
 import java.util.UUID;
 
 import br.unb.cic.iris.addressbook.model.AddressBookEntityFactory;
 import br.unb.cic.iris.addressbook.model.AddressBookEntry;
 import br.unb.cic.iris.addressbook.persistence.IAddressBookDAO;
-import br.unb.cic.iris.core.IrisServiceLocator;
+import br.unb.cic.iris.exception.EmailUncheckedException;
 import br.unb.cic.iris.persistence.PersistenceException;
 import br.unb.cic.iris.persistence.jdbc.DbUtil;
 
@@ -111,9 +113,16 @@ public class AddressBookDaoJdbc implements IAddressBookDAO {
 		return DbUtil.instance();
 	}
 
-	private AddressBookEntityFactory getEntityFactory() {
+	private AddressBookEntityFactory getEntityFactory() {		
 		if (entityFactory == null) {
-			entityFactory = (AddressBookEntityFactory) IrisServiceLocator.instance().getService(AddressBookEntityFactory.class);
+			ServiceLoader<AddressBookEntityFactory> sl = ServiceLoader.load(AddressBookEntityFactory.class);
+			Iterator<AddressBookEntityFactory> it = sl.iterator();
+
+			if (!it.hasNext())
+				throw new EmailUncheckedException("No address book entity factory found!");
+			
+			entityFactory = it.next();
+			System.out.println("Address Book Entity Factory: "+entityFactory.getClass().getCanonicalName());
 		}
 		return entityFactory;
 	}
@@ -122,7 +131,7 @@ public class AddressBookDaoJdbc implements IAddressBookDAO {
 	private static final String CREATE_TABLE = 
 		"CREATE TABLE IF NOT EXISTS addressbook ("
 		+"  id    TEXT PRIMARY KEY," 
-		+"  nick  TEXT,"
-		+"  address  TEXT"
+		+"  nick  TEXT UNIQUE,"
+		+"  address  TEXT NOT NULL"
 		+");";
 }

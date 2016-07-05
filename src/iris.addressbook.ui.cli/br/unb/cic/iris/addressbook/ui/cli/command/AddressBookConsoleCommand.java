@@ -72,7 +72,7 @@ public class AddressBookConsoleCommand extends ConsoleAbstractMailCommand {
 			String name = parameters.get(1);
 			String email = parameters.get(2);
 			if (!EmailValidator.validate(email)) {
-				throw new EmailUncheckedException("invalid email: "+email);
+				throw new EmailUncheckedException("Invalid email: "+email);
 			}
 			AddressBookManager.instance().save(name, email);
 		} else {

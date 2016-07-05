@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import br.unb.cic.iris.addressbook.ui.gui.command.manage.AddressBookManagerPanel;
 import br.unb.cic.iris.exception.EmailException;
 import br.unb.cic.iris.gui.GuiManager;
 import br.unb.cic.iris.gui.command.AbstractGuiMailCommand;
@@ -48,7 +49,13 @@ public class AddressBookGuiCommand extends AbstractGuiMailCommand {
 			public void actionPerformed(ActionEvent evt) {
 				// Create a Popup menu
 			    JPopupMenu popup = new JPopupMenu("Popup");
-			    popup.add(new JMenuItem("Manage Address Book"));
+			    JMenuItem menuItemManage = new JMenuItem("Manage Address Book");
+			    menuItemManage.addActionListener(al -> {
+						AddressBookManagerPanel panel = new AddressBookManagerPanel();
+						GuiManager.instance().setCenterPanel(panel);
+						GuiManager.instance().setStatusText("Manage address book entries");					
+				});			   
+			    popup.add(menuItemManage);
 			    popup.add(new JMenuItem("Send Email using adb"));
 			    // show on the button?
 			    Component source = (Component)evt.getSource();

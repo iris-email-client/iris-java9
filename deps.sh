@@ -15,7 +15,8 @@ rm -Rf dot
 mkdir dot
 
 echo Generating DOT files ...
-$JAVA_BIN/jdeps -dotoutput dot mlib/*.jar
+#$JAVA_BIN/jdeps -help
+$JAVA_BIN/jdeps -dotoutput dot -mp mlib:libs mlib/*.jar
 
 echo Converting summary to image ...
 dot dot/summary.dot -Tpng -o dot/summary.png

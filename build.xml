@@ -26,14 +26,15 @@
 	<property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
 	<property name="ivy.pattern" value="${ivy.jar.dir}/[artifact]-[revision].[ext]" />
 
-	<property name="libs.dir" value="libs" />
+	<property name="libs.dir" value="${basedir}/libs" />
 	<property name="libs.pattern" value="${libs.dir}/[artifact]-[revision].[ext]" />
 
-	<property name="build.dir" value="build" />
-	<property name="src.dir" value="src" />
-	<property name="target.dir" value="target" />
-	<property name="modules.dir" value="mlib" />
-	<property name="jlink.dir" value="iris" />
+	<property name="build.dir" value="${basedir}/build" />
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="target.dir" value="${basedir}/target" />
+	<property name="modules.dir" value="${basedir}/mlib" />
+	<property name="jlink.dir" value="${basedir}/iris" />
+	<property name="javadoc.dir" value="${basedir}/javadoc" />
 
 	<property name="java_home" value="/usr/lib/jvm/java-9-oracle" />
 	<property name="JAVA_BIN" value="${java_home}/bin" />
@@ -59,7 +60,7 @@
 	<target name="clean-cache" depends="install-ivy">
 		<ivy:cleancache />
 	</target>
-	<target name="clean-full" depends="clean, clean-ivy, clean-cache" description="Full cleaning">
+	<target name="clean_full" depends="clean, clean-ivy, clean-cache" description="Full cleaning">
 		<delete includeemptydirs="true" quiet="true">
 			<fileset dir="${libs.dir}" />
 		</delete>
@@ -359,6 +360,26 @@
 		<echo>export JAVA_HOME=${java_home}</echo>
 		<echo>export JAVA_BIN=$JAVA_HOME/bin</echo>
 		<echo>$JAVA_BIN/java -mp ${modules.dir}:${libs.dir} -m ${module.name}</echo>
+	</target>
+	<target name="create_javadoc" description="Generates javadoc">
+		<delete dir="${javadoc.dir}" />
+		<mkdir dir="${javadoc.dir}" />
+		<fileset dir="${src.dir}" id="fileset" casesensitive="yes">
+			<include name="**/*.java" />
+		</fileset>
+		<pathconvert refid="fileset" property="converted" pathsep=" " />
+		<!-- TODO:  
+		$JAVA_BIN/javadoc -d javadoc -modulepath $JAVA_HOME/jmods:mlib:libs -modulesourcepath src $(find src -name "*.java") 
+		-->
+		<exec executable="${JAVA_BIN}/javadoc" failonerror="true">
+			<arg value="-d" />
+			<arg value="${javadoc.dir}" />
+			<arg value="-modulepath" />
+			<arg value="${java_home}/jmods:${modules.dir}:${libs.dir}" />
+			<arg value="-modulesourcepath" />
+			<arg value="${src.dir}" />
+			<arg value="${converted}" />			
+		</exec>
 	</target>
 
 

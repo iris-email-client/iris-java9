@@ -127,6 +127,11 @@ echo Creating Module: $MODULE_NAME
 $JAVA_BIN/jar --create --file mlib/$MODULE_REAL_NAME@1.0.jar --module-version 1.0 --main-class $MAIN_CLASS -C build/$MODULE_REAL_NAME .
 
 
+#javadoc
+#echo Creating javadocs ...
+#rm -Rf javadoc
+#mkdir javadoc
+#$JAVA_BIN/javadoc -d javadoc -modulepath $JAVA_HOME/jmods:mlib:libs -modulesourcepath src $(find src -name "*.java")
 
 
 # link
