@@ -24,7 +24,7 @@ public class GuiConnectCommand extends AbstractGuiMailCommand {
 		List<EmailProvider> providers = ProviderManager.instance().getProviders();
 		ConnectPanel panel = new ConnectPanel(providers);
 		GuiManager.instance().setCenterPanel(panel);
-		GuiManager.instance().setStatusText("Defining the email provider");
+		GuiManager.instance().setStatusText(message("command.connect.status"));
 	}
 
 	@Override

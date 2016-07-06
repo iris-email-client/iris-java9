@@ -117,6 +117,7 @@ then
      if [ "$1" = "gui" ] 
      then     	
      	cp -Rf src/iris.ui.gui/images build/iris.ui.gui
+     	cp src/iris.ui.gui/*.properties build/iris.ui.gui
      	MODULE_NAME="IrisGUI"
 		MODULE_REAL_NAME="iris.ui.gui"
 		MAIN_CLASS="br.unb.cic.iris.gui.MainProgram"

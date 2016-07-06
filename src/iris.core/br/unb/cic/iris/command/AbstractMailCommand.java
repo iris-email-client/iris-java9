@@ -1,9 +1,9 @@
 package br.unb.cic.iris.command;
 
+import br.unb.cic.iris.core.i18n.MessageBundle;
 import br.unb.cic.iris.exception.IrisException;
 import br.unb.cic.iris.exception.IrisValidationException;
 import br.unb.cic.iris.exception.IrisUncheckedException;
-import br.unb.cic.iris.i18n.MessageBundle;
 
 /***
  * added by dBaseCommand

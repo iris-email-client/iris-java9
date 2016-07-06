@@ -1,15 +1,20 @@
 package br.unb.cic.iris.core;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
 
 import javax.mail.search.ComparisonTerm;
 import javax.mail.search.ReceivedDateTerm;
 import javax.mail.search.SearchTerm;
 
+import br.unb.cic.iris.core.i18n.MessageBundle;
 import br.unb.cic.iris.exception.IrisException;
 import br.unb.cic.iris.exception.IrisUncheckedException;
-import br.unb.cic.iris.i18n.MessageBundle;
 import br.unb.cic.iris.mail.EmailProvider;
 import br.unb.cic.iris.mail.EmailStatusListener;
 import br.unb.cic.iris.mail.EmailStatusManager;
@@ -22,6 +27,7 @@ import br.unb.cic.iris.persistence.DAOFactory;
 import br.unb.cic.iris.persistence.EmailDAO;
 import br.unb.cic.iris.persistence.FolderDAO;
 import br.unb.cic.iris.persistence.IrisPersistenceException;
+import br.unb.cic.iris.util.StringUtil;
 
 /***
  * added by dBaseFacade* modified by dPersistenceRelational
@@ -32,8 +38,14 @@ public final class SystemFacade {
 	private EmailProvider provider;
 	private Status status = Status.NOT_CONNECTED;
 
+	private Locale locale;
+	private Properties irisProperties;
+
 	private SystemFacade() {
 		System.out.println("Starting system ...");
+		initIrisProperties();
+		initLocale();
+
 		IrisServiceLocator.instance();
 		ProviderManager.instance();
 	}
@@ -67,8 +79,8 @@ public final class SystemFacade {
 	}
 
 	private void saveMessage(EmailMessage message, String folderName) throws IrisException {
-		EmailDAO emailDAO = getDaoFactory().createEmailDAO();		
-		
+		EmailDAO emailDAO = getDaoFactory().createEmailDAO();
+
 		IrisFolder folder = checkFolder(folderName);
 
 		message.setFolder(folder);
@@ -83,7 +95,7 @@ public final class SystemFacade {
 	public void downloadMessages(String folder) throws IrisException {
 		verifyConnection();
 		SearchTerm searchTerm = null;
-		EmailDAO dao = getDaoFactory().createEmailDAO();	
+		EmailDAO dao = getDaoFactory().createEmailDAO();
 		checkFolder(folder);
 		Date lastMessageReceived = dao.lastMessageReceived(folder);
 		System.out.println("**************************** lastMessageReceived=" + lastMessageReceived);
@@ -95,8 +107,8 @@ public final class SystemFacade {
 			saveMessage(message, folder);
 		}
 	}
-	
-	private IrisFolder checkFolder(String folderName) throws IrisPersistenceException{
+
+	private IrisFolder checkFolder(String folderName) throws IrisPersistenceException {
 		FolderDAO folderDAO = getDaoFactory().createFolderDAO();
 		IrisFolder folder = folderDAO.findByName(folderName);
 		if (folder == null) {
@@ -135,4 +147,34 @@ public final class SystemFacade {
 		return IrisServiceLocator.instance().getDaoFactory();
 	}
 
+	private void initLocale() {
+		String language = getIrisProperties().getProperty("language");
+		if(!StringUtil.isEmpty(language)){
+			locale = new Locale(getIrisProperties().getProperty("language"));
+		}else{
+			locale = Locale.ENGLISH;
+		}		
+	}
+
+	public Locale getLocale() {
+		return locale;
+	}
+
+	private void initIrisProperties() {
+		String irisPropertiesFile = System.getProperty("user.home") + "/.iris/iris.properties";
+		irisProperties = new Properties();
+		try {
+			System.out.println("str="+irisPropertiesFile);
+			System.out.println("file="+new File(irisPropertiesFile).exists());
+			System.out.println("IRIS_PROPERTIES="+new FileInputStream(irisPropertiesFile));
+			irisProperties.load(new FileInputStream(irisPropertiesFile));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public Properties getIrisProperties() {
+		return irisProperties;
+	}
 }

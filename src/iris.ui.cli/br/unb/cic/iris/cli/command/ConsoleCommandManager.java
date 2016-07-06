@@ -1,16 +1,16 @@
 package br.unb.cic.iris.cli.command;
 
-import static br.unb.cic.iris.i18n.MessageBundle.message;
+import static br.unb.cic.iris.core.i18n.MessageBundle.message;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.unb.cic.iris.command.AbstractCommandManager;
 import br.unb.cic.iris.command.MailCommand;
+import br.unb.cic.iris.core.i18n.MessageBundle;
 import br.unb.cic.iris.exception.IrisException;
 import br.unb.cic.iris.exception.IrisValidationException;
 import br.unb.cic.iris.exception.IrisUncheckedException;
-import br.unb.cic.iris.i18n.MessageBundle;
 import br.unb.cic.iris.util.StringUtil;
 
 /***

@@ -1,6 +1,6 @@
 package br.unb.cic.iris.mail.simple;
 
-import static br.unb.cic.iris.i18n.MessageBundle.message;
+import static br.unb.cic.iris.core.i18n.MessageBundle.message;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;

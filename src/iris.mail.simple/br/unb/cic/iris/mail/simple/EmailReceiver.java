@@ -20,8 +20,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.search.SearchTerm;
 
 import br.unb.cic.iris.core.IrisServiceLocator;
+import br.unb.cic.iris.core.i18n.MessageBundle;
 import br.unb.cic.iris.exception.IrisException;
-import br.unb.cic.iris.i18n.MessageBundle;
 import br.unb.cic.iris.mail.EmailProvider;
 import br.unb.cic.iris.mail.EmailStatusManager;
 import br.unb.cic.iris.model.EmailMessage;

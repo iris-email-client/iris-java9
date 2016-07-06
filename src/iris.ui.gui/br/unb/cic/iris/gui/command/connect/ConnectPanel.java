@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 
 import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.gui.GuiManager;
+import br.unb.cic.iris.gui.i18n.MessageBundle;
 import br.unb.cic.iris.mail.EmailProvider;
 
 public class ConnectPanel extends JPanel {
@@ -33,18 +34,18 @@ public class ConnectPanel extends JPanel {
 		centerPanel.setLayout(new GridLayout(3, 2));
 		centerPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Select Provider"));
 		
-		centerPanel.add(new JLabel("Provider"));
+		centerPanel.add(new JLabel(message("command.connect.label.provider")));
 		
 		comboBox = new JComboBox<>();
 		comboBox.setModel(new ConnectComboBoxModel(providers));
 		comboBox.setRenderer(new ProviderCellRenderer());
 		centerPanel.add(comboBox);
 				
-		centerPanel.add(new JLabel("User"));
+		centerPanel.add(new JLabel(message("command.connect.label.username")));
 		usernameField = new JTextField(15);
 		centerPanel.add(usernameField);
 		
-		centerPanel.add(new JLabel("Password"));
+		centerPanel.add(new JLabel(message("command.connect.label.password")));
 		passwordField = new JPasswordField(15);
 		centerPanel.add(passwordField);
 				
@@ -70,6 +71,8 @@ public class ConnectPanel extends JPanel {
 		add(contentPanel);
 	}
 	
-	
+	private String message(String key){
+		return MessageBundle.message(key);
+	}
 
 }

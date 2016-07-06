@@ -5,7 +5,7 @@ module iris.core {
 	
 	exports br.unb.cic.iris.command;
 	exports br.unb.cic.iris.core;	
-	exports br.unb.cic.iris.i18n;
+	exports br.unb.cic.iris.core.i18n;
 	
 	uses br.unb.cic.iris.command.MailCommand;
 	uses br.unb.cic.iris.mail.IEmailClient;

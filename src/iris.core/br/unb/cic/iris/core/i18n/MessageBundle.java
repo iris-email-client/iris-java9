@@ -1,6 +1,9 @@
-package br.unb.cic.iris.i18n;
+package br.unb.cic.iris.core.i18n;
 
+import java.util.Locale;
 import java.util.ResourceBundle;
+
+import br.unb.cic.iris.core.SystemFacade;
 
 /***
  * added by dBase
@@ -9,13 +12,14 @@ public class MessageBundle {
 	ResourceBundle rb;
 	private static MessageBundle instance;
 
-	public MessageBundle() {
-		rb = ResourceBundle.getBundle("MessageBundle");
+	
+	public MessageBundle(Locale locale) {
+		rb = ResourceBundle.getBundle("MessageBundle", locale);
 	}
 
 	public static MessageBundle instance() {
 		if (instance == null) {
-			instance = new MessageBundle();
+			instance = new MessageBundle(SystemFacade.instance().getLocale());
 		}
 		return instance;
 	}
@@ -43,4 +47,9 @@ public class MessageBundle {
 	public static String message(String key, Object[] args) {
 		return MessageBundle.instance().getMessage(key, args);
 	}
+	
+	public ResourceBundle getBundle(){
+		return rb;
+	}
+
 }

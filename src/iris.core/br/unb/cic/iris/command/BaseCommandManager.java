@@ -1,6 +1,6 @@
 package br.unb.cic.iris.command;
 
-import static br.unb.cic.iris.i18n.MessageBundle.message;
+import static br.unb.cic.iris.core.i18n.MessageBundle.message;
 
 import java.util.HashSet;
 import java.util.List;

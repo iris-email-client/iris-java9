@@ -8,7 +8,7 @@ import br.unb.cic.iris.exception.IrisException;
 import br.unb.cic.iris.exception.IrisUncheckedException;
 import br.unb.cic.iris.exception.IrisValidationException;
 import br.unb.cic.iris.gui.GuiManager;
-import br.unb.cic.iris.i18n.MessageBundle;
+import br.unb.cic.iris.gui.i18n.MessageBundle;
 import br.unb.cic.iris.persistence.IrisPersistenceException;
 
 public abstract class AbstractGuiMailCommand implements GuiMailCommand {

@@ -1,6 +1,6 @@
 package br.unb.cic.iris.gui;
 
-import static br.unb.cic.iris.i18n.MessageBundle.message;
+import static br.unb.cic.iris.core.i18n.MessageBundle.message;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -19,7 +19,7 @@ public class GuiManager {
 
 	private MainFrame frame;
 
-	private GuiManager() {
+	private GuiManager() {		
 		frame = new MainFrame();
 		frame.setTitle(message("title"));
 		frame.setVisible(true);
