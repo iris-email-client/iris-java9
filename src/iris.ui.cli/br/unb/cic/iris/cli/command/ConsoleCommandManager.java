@@ -1,6 +1,6 @@
 package br.unb.cic.iris.cli.command;
 
-import static br.unb.cic.iris.core.i18n.MessageBundle.message;
+import static br.unb.cic.iris.cli.i18n.MessageBundle.message;
 
 import java.util.ArrayList;
 import java.util.List;

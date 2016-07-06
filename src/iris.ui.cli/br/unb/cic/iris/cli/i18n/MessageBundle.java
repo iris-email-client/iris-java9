@@ -1,20 +1,35 @@
-package br.unb.cic.iris.core.i18n;
+package br.unb.cic.iris.cli.i18n;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.ResourceBundle.Control;
 
 import br.unb.cic.iris.core.SystemFacade;
 
-/***
- * added by dBase
- */
-public class MessageBundle {
-	ResourceBundle rb;
+public class MessageBundle {	
 	private static MessageBundle instance;
 
+	ResourceBundle rb;
 	
-	public MessageBundle(Locale locale) {		
-		rb = ResourceBundle.getBundle("MessageBundle", locale);
+	private MessageBundle(Locale locale) {		
+		Control control = ResourceBundle.Control.getControl(ResourceBundle.Control.FORMAT_PROPERTIES);
+		
+		String defaultFile = "/MessageBundle.properties";
+		String baseName = control.toBundleName("MessageBundle", locale);		
+		//String baseName = control.toBundleName("MessageBundle", Locale.ENGLISH);		
+		try {
+			String file = String.format("/%s.properties", baseName);				
+			InputStream is = getClass().getResourceAsStream(file);			
+			if(is == null){				
+				is = getClass().getResourceAsStream(defaultFile);
+			}
+			rb = new IrisCliResourceBundle(is);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public static MessageBundle instance() {
@@ -40,16 +55,8 @@ public class MessageBundle {
 		return instance().getMessage(key);
 	}
 
-	public static String message(String key, int param) {
-		return instance().getMessage(key, param+"");
-	}
-	
 	public static String message(String key, String param) {
 		return instance().getMessage(key, param);
-	}
-	
-	public static String message(String key, String... params) {
-		return instance().getMessage(key, params);
 	}
 
 	public static String message(String key, Object[] args) {
@@ -59,5 +66,4 @@ public class MessageBundle {
 	public ResourceBundle getBundle(){
 		return rb;
 	}
-
 }

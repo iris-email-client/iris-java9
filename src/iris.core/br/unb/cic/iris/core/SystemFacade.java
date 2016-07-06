@@ -164,9 +164,9 @@ public final class SystemFacade {
 		String irisPropertiesFile = System.getProperty("user.home") + "/.iris/iris.properties";
 		irisProperties = new Properties();
 		try {
-			System.out.println("str="+irisPropertiesFile);
-			System.out.println("file="+new File(irisPropertiesFile).exists());
-			System.out.println("IRIS_PROPERTIES="+new FileInputStream(irisPropertiesFile));
+			//System.out.println("str="+irisPropertiesFile);
+			//System.out.println("file="+new File(irisPropertiesFile).exists());
+			//System.out.println("IRIS_PROPERTIES="+new FileInputStream(irisPropertiesFile));
 			irisProperties.load(new FileInputStream(irisPropertiesFile));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

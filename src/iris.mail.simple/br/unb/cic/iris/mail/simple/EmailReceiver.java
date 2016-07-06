@@ -1,5 +1,7 @@
 package br.unb.cic.iris.mail.simple;
 
+import static br.unb.cic.iris.core.i18n.MessageBundle.message;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.search.SearchTerm;
 
 import br.unb.cic.iris.core.IrisServiceLocator;
-import br.unb.cic.iris.core.i18n.MessageBundle;
 import br.unb.cic.iris.exception.IrisException;
 import br.unb.cic.iris.mail.EmailProvider;
 import br.unb.cic.iris.mail.EmailStatusManager;
@@ -51,7 +52,7 @@ public class EmailReceiver implements StoreListener, FolderListener {
 				folders.add(getEntityFactory().createIrisFolder(f.getName()));
 			}
 		} catch (MessagingException e) {
-			throw new IrisException(MessageBundle.message("error.list.folder"), e);
+			throw new IrisException(message("error.list.folder"), e);
 		}
 		return folders;
 	}
@@ -121,7 +122,7 @@ public class EmailReceiver implements StoreListener, FolderListener {
 					}
 					cont++;
 					int tmp = 100 * cont;
-					System.out.print((tmp / total) + "% completed");
+					System.out.print(message("email.receiver.download.progress", (tmp / total)));
 					
 					EmailStatusManager.instance().notifyMessageDownloadProgress((tmp / total));
 				}
@@ -187,8 +188,8 @@ public class EmailReceiver implements StoreListener, FolderListener {
 				}
 			} else if (contentObject instanceof String) {
 				result = (String) contentObject;
-			} else {
-				System.out.printf("WARNING: not a mime part or multipart %s", message.toString());
+			} else {				
+				System.err.println(message("email.receiver.invalid.body", message.toString()));
 				result = null;
 			}
 		}
@@ -206,8 +207,7 @@ public class EmailReceiver implements StoreListener, FolderListener {
 	}
 
 	private Store createStoreAndConnect() throws MessagingException {
-		EmailStatusManager.instance().notifyListener("Creating store ...");
-		//System.out.println("Creating store ...");
+		EmailStatusManager.instance().notifyListener(message("email.status.receiver.create.store"));		
 		Store store = session.getSession().getStore(provider.getStoreProtocol());
 		store.addStoreListener(this);
 		store.addConnectionListener(session);
@@ -240,8 +240,7 @@ public class EmailReceiver implements StoreListener, FolderListener {
 
 	@Override
 	public void notification(StoreEvent e) {
-		EmailStatusManager.instance().notifyListener("Notification: " + e.getMessage());
-		//System.out.println("Notification: " + e.getMessage());
+		EmailStatusManager.instance().notifyListener(message("email.status.receiver.notification", e.getMessage()));		
 	}
 
 	@Override

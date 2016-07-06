@@ -18,7 +18,7 @@ public abstract class BaseCommandManager implements ICommandManager {
 	protected abstract void handleAddCommand(MailCommand command);
 
 	public void addCommand(MailCommand command) throws IrisException {
-		System.out.println("Adding command: " + command.getCommandName() +" <"+command.getClass().getCanonicalName()+">");
+		System.out.println(message("command.base.manager.add", command.getCommandName() +" <"+command.getClass().getCanonicalName()+">"));
 
 		// TODO validar comando?
 		manager.add(command.getCommandName(), command);

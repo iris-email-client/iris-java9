@@ -9,7 +9,7 @@
  */
 package br.unb.cic.iris.cli;
 
-import static br.unb.cic.iris.core.i18n.MessageBundle.message;
+import static br.unb.cic.iris.cli.i18n.MessageBundle.message;
 
 import java.util.Scanner;
 
@@ -35,7 +35,7 @@ public class MainProgram {
 	}
 
 	private void mainMenu() {
-		System.out.println("Iniciou ...");
+		//System.out.println("Iniciou ...");
 		System.out.println(message("interpreter"));
 		System.out.println(message("version"));
 		System.out.println(message("help"));

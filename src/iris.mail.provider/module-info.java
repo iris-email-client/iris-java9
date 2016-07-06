@@ -1,5 +1,4 @@
-module iris.mail.provider {
-	requires iris.base;
+module iris.mail.provider {	
 	requires public iris.mail;
 		
 	exports br.unb.cic.iris.mail.provider;

@@ -1,5 +1,7 @@
 package br.unb.cic.iris.mail.simple;
 
+import static br.unb.cic.iris.core.i18n.MessageBundle.message;
+
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -45,7 +47,7 @@ public class EmailSession implements ConnectionListener {
 	}
 
 	protected final void connect(Service service, String host, int port) throws MessagingException {
-		EmailStatusManager.instance().notifyListener("Connecting ...");
+		EmailStatusManager.instance().notifyListener(message("email.status.session.connecting"));
 		service.connect(host, port, getProvider().getUsername(), getProvider().getPassword());
 	}
 
@@ -63,16 +65,16 @@ public class EmailSession implements ConnectionListener {
 
 	@Override
 	public void opened(ConnectionEvent e) {
-		EmailStatusManager.instance().notifyListener("Connected ...");
+		EmailStatusManager.instance().notifyListener(message("email.status.session.connected"));
 	}
 
 	@Override
 	public void disconnected(ConnectionEvent e) {
-		EmailStatusManager.instance().notifyListener("Disconnected ...");
+		EmailStatusManager.instance().notifyListener(message("email.status.session.disconnected"));
 	}
 
 	@Override
 	public void closed(ConnectionEvent e) {
-		EmailStatusManager.instance().notifyListener("Connection closed ...");		
+		EmailStatusManager.instance().notifyListener(message("email.status.session.connection.closed"));
 	}
 }

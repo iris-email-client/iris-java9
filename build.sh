@@ -2,15 +2,10 @@
 
 #
 # Script used to compile, build jars and run
-# For now: You need to select the modules 'manually'
+# For now: You need to put all dependencies(jars) in 'libs' dir
 # 
 # USAGE:
-#  *** to launch IrisGUI:
-# ./build.sh gui
-#
-#  *** to launch IrisConsole
-# ./build.sh cli
-#    or just
+#  * define basic config and run:
 # ./build.sh
 #
 
@@ -18,6 +13,17 @@ export JAVA_HOME=/usr/lib/jvm/java-9-oracle
 
 JAVA_BIN=$JAVA_HOME/bin
 echo Java: $JAVA_BIN
+
+############### BASIC CONFIG ###################
+#interface: gui/cli
+INTERFACE=cli
+
+#persistence: xml/lucene/relational
+PERSISTENCE=xml
+
+#adb: true/false
+ADDRESS_BOOK=true
+################################################
 
 
 # clean
@@ -56,10 +62,10 @@ echo Creating Module: IrisPersistence
 $JAVA_BIN/jar --create --file mlib/iris.persistence@1.0.jar --module-version 1.0 -C build/iris.persistence .
 
 
-
-echo Creating Module: IrisModelSimple
-$JAVA_BIN/jar --create --file mlib/iris.model.simple@1.0.jar --module-version 1.0 -C build/iris.model.simple .
-
+if [ $PERSISTENCE = "relational" ] || [ $PERSISTENCE = "lucene" ]; then
+	echo Creating Module: IrisModelSimple
+	$JAVA_BIN/jar --create --file mlib/iris.model.simple@1.0.jar --module-version 1.0 -C build/iris.model.simple .
+fi
 
 echo Creating Module: IrisMailSimple
 $JAVA_BIN/jar --create --file mlib/iris.mail.simple@1.0.jar --module-version 1.0 -C build/iris.mail.simple .
@@ -76,52 +82,58 @@ $JAVA_BIN/jar --create --file mlib/iris.mail.provider.yahoo@1.0.jar --module-ver
 
 
 # Persistence
-echo Creating Module: IrisPersistenceJDBC
-$JAVA_BIN/jar --create --file mlib/iris.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.persistence.jdbc .
+if [ $PERSISTENCE = "relational" ]; then
+	echo Creating Module: IrisPersistenceJDBC
+	$JAVA_BIN/jar --create --file mlib/iris.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.persistence.jdbc .
+elif [ $PERSISTENCE = "lucene" ]; then
+	echo Creating Module: IrisPersistenceLucene
+	$JAVA_BIN/jar --create --file mlib/iris.persistence.lucene@1.0.jar --module-version 1.0 -C build/iris.persistence.lucene .
+else
+	echo Creating Module: IrisPersistenceXml
+	$JAVA_BIN/jar --create --file mlib/iris.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.persistence.xml .
+fi
 
-#echo Creating Module: IrisPersistenceLucene
-#$JAVA_BIN/jar --create --file mlib/iris.persistence.lucene@1.0.jar --module-version 1.0 -C build/iris.persistence.lucene .
+if [ $ADDRESS_BOOK = true ]; then
+	echo Creating Module: IrisAddressBookAPI
+	$JAVA_BIN/jar --create --file mlib/iris.addressbook.api@1.0.jar --module-version 1.0 -C build/iris.addressbook.api .
 
-#echo Creating Module: IrisPersistenceXml
-#$JAVA_BIN/jar --create --file mlib/iris.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.persistence.xml .
+	if [ $PERSISTENCE = "relational" ] || [ $PERSISTENCE = "lucene" ]; then
+		echo Creating Module: IrisAddressBookModelSimple
+		$JAVA_BIN/jar --create --file mlib/iris.addressbook.model.simple@1.0.jar --module-version 1.0 -C build/iris.addressbook.model.simple .
+	fi
+	
+	if [ $PERSISTENCE = "relational" ]; then
+		echo Creating Module: IrisAddressBookPersistenceJDBC
+		$JAVA_BIN/jar --create --file mlib/iris.addressbook.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.addressbook.persistence.jdbc .
+	elif [ $PERSISTENCE = "lucene" ]; then
+		echo Creating Module: IrisAddressBookPersistenceLucene NOT YET IMPLEMENTED!!!!!!!!!!!		
+	else
+		echo Creating Module: IrisAddressBookPersistenceXml
+		$JAVA_BIN/jar --create --file mlib/iris.addressbook.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.addressbook.persistence.xml .
+	fi
+		
+	if [ $INTERFACE = "gui" ]; then
+		echo Creating Module: IrisAddressBookGUI
+		cp -Rf src/iris.addressbook.ui.gui/images build/iris.addressbook.ui.gui
+		$JAVA_BIN/jar --create --file mlib/iris.addressbook.ui.gui@1.0.jar --module-version 1.0 -C build/iris.addressbook.ui.gui .
+	else
+		echo Creating Module: IrisAddressBookCLI
+		$JAVA_BIN/jar --create --file mlib/iris.addressbook.ui.cli@1.0.jar --module-version 1.0 -C build/iris.addressbook.ui.cli .
+	fi
+fi #end_of if [ $ADDRESS_BOOK = true ]
 
 
-echo Creating Module: IrisAddressBookAPI
-$JAVA_BIN/jar --create --file mlib/iris.addressbook.api@1.0.jar --module-version 1.0 -C build/iris.addressbook.api .
-
-echo Creating Module: IrisAddressBookModelSimple
-$JAVA_BIN/jar --create --file mlib/iris.addressbook.model.simple@1.0.jar --module-version 1.0 -C build/iris.addressbook.model.simple .
-
-echo Creating Module: IrisAddressBookPersistenceJDBC
-$JAVA_BIN/jar --create --file mlib/iris.addressbook.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.addressbook.persistence.jdbc .
-
-#echo Creating Module: IrisAddressBookPersistenceXml
-#$JAVA_BIN/jar --create --file mlib/iris.addressbook.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.addressbook.persistence.xml .
-
-#echo Creating Module: IrisAddressBookCLI
-#$JAVA_BIN/jar --create --file mlib/iris.addressbook.ui.cli@1.0.jar --module-version 1.0 -C build/iris.addressbook.ui.cli .
-
-echo Creating Module: IrisAddressBookGUI
-cp -Rf src/iris.addressbook.ui.gui/images build/iris.addressbook.ui.gui
-$JAVA_BIN/jar --create --file mlib/iris.addressbook.ui.gui@1.0.jar --module-version 1.0 -C build/iris.addressbook.ui.gui .
-
-
-
-# default module is CLI (command line interface)
-MODULE_NAME="IrisConsole"
-MODULE_REAL_NAME="iris.ui.cli"
-MAIN_CLASS="br.unb.cic.iris.cli.MainProgram"
-
-if [ "$#" -ne  "0" ] 
-then
-     if [ "$1" = "gui" ] 
-     then     	
-     	cp -Rf src/iris.ui.gui/images build/iris.ui.gui
-     	cp src/iris.ui.gui/*.properties build/iris.ui.gui
-     	MODULE_NAME="IrisGUI"
-		MODULE_REAL_NAME="iris.ui.gui"
-		MAIN_CLASS="br.unb.cic.iris.gui.MainProgram"
-     fi
+if [ $INTERFACE = "gui" ]; then
+ 	cp -Rf src/iris.ui.gui/images build/iris.ui.gui
+ 	cp src/iris.ui.gui/*.properties build/iris.ui.gui
+ 	MODULE_NAME="IrisGUI"
+	MODULE_REAL_NAME="iris.ui.gui"
+	MAIN_CLASS="br.unb.cic.iris.gui.MainProgram"
+else
+	cp src/iris.ui.cli/*.properties build/iris.ui.cli    
+	MODULE_NAME="IrisConsole"
+	MODULE_REAL_NAME="iris.ui.cli"
+	MAIN_CLASS="br.unb.cic.iris.cli.MainProgram" 
 fi
 
 echo Creating Module: $MODULE_NAME
@@ -136,17 +148,20 @@ $JAVA_BIN/jar --create --file mlib/$MODULE_REAL_NAME@1.0.jar --module-version 1.
 
 
 # link
-echo Linking ...
-rm -rf iris
-$JAVA_BIN/jlink --modulepath $JAVA_HOME/jmods:mlib:libs --addmods $MODULE_REAL_NAME --output iris
+#echo Linking ...
+#rm -rf iris
+#$JAVA_BIN/jlink --modulepath $JAVA_HOME/jmods:mlib:libs --addmods $MODULE_REAL_NAME --output iris
 
 
 
 # run
 echo Executing ...
+if [ $PERSISTENCE = "lucene" ]; then
+# TODO understand why we need to put jars in cp
+$JAVA_BIN/java -mp mlib:libs -cp libs/lucene-core-4.10.2.jar:libs/lucene-codecs-4.10.2.jar -m $MODULE_REAL_NAME
+else
 $JAVA_BIN/java -mp mlib:libs -m $MODULE_REAL_NAME
-# TODO understand why we need to put jars on cp
-#$JAVA_BIN/java -mp mlib:libs -cp libs/lucene-core-4.10.2.jar:libs/lucene-codecs-4.10.2.jar -m $MODULE_REAL_NAME
+fi
 
 
 

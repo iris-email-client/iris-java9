@@ -43,7 +43,7 @@ public class EmailSender implements TransportListener {
 				message.saveChanges();
 				Transport transport = createTransport();
 				session.connect(transport, provider.getTransportHost(), provider.getTransportPort());
-				EmailStatusManager.instance().notifyListener("Sending message ...");				
+				EmailStatusManager.instance().notifyListener(message("email.status.sender.sending"));				
 				transport.sendMessage(message, message.getAllRecipients());
 				transport.close();
 			} catch (final UnsupportedEncodingException e) {				
@@ -67,7 +67,7 @@ public class EmailSender implements TransportListener {
 	}
 
 	private Transport createTransport() throws MessagingException {
-		EmailStatusManager.instance().notifyListener("Creating transport: " + provider.getTransportProtocol());		
+		EmailStatusManager.instance().notifyListener(message("email.status.sender.create.transport", provider.getTransportProtocol()));		
 		Transport transport = session.getSession().getTransport(provider.getTransportProtocol());
 		transport.addTransportListener(this);
 		transport.addConnectionListener(session);
@@ -92,16 +92,16 @@ public class EmailSender implements TransportListener {
 
 	@Override
 	public void messageDelivered(TransportEvent e) {
-		EmailStatusManager.instance().notifyListener("Message delivered ... ");
+		EmailStatusManager.instance().notifyListener(message("email.status.sender.message.delivered"));
 	}
 
 	@Override
 	public void messageNotDelivered(TransportEvent e) {
-		EmailStatusManager.instance().notifyListener("Message not delivered ... ");
+		EmailStatusManager.instance().notifyListener(message("email.status.sender.message.not.delivered"));
 	}
 
 	@Override
 	public void messagePartiallyDelivered(TransportEvent e) {
-		EmailStatusManager.instance().notifyListener("Message partially delivered ... ");	
+		EmailStatusManager.instance().notifyListener(message("email.status.sender.message.partially.delivered"));	
 	}
 }
