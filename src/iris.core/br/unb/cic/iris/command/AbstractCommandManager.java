@@ -3,8 +3,8 @@ package br.unb.cic.iris.command;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-import br.unb.cic.iris.exception.EmailException;
-import br.unb.cic.iris.exception.EmailUncheckedException;
+import br.unb.cic.iris.exception.IrisException;
+import br.unb.cic.iris.exception.IrisUncheckedException;
 
 public abstract class AbstractCommandManager extends BaseCommandManager {
 
@@ -16,7 +16,7 @@ public abstract class AbstractCommandManager extends BaseCommandManager {
 	public AbstractCommandManager() {
 		try {
 			loadCommands();
-		} catch (EmailException e) {
+		} catch (IrisException e) {
 			e.printStackTrace();
 			System.exit(-1);
 		}
@@ -26,13 +26,13 @@ public abstract class AbstractCommandManager extends BaseCommandManager {
 		loadCommands();
 	}
 
-	protected void loadCommands() throws EmailException {
+	protected void loadCommands() throws IrisException {
 		System.out.println("Loading commands ...");
 		ServiceLoader<MailCommand> sl = ServiceLoader.load(MailCommand.class);
 		Iterator<MailCommand> it = sl.iterator();
 
 		if (!it.hasNext())
-			throw new EmailUncheckedException("No mail commands found!");
+			throw new IrisUncheckedException("No mail commands found!");
 
 		while (it.hasNext()) {
 			MailCommand command = it.next();

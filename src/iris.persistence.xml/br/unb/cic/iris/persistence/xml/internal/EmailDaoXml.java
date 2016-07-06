@@ -10,13 +10,13 @@ import br.unb.cic.iris.model.IrisFolder;
 import br.unb.cic.iris.model.xml.internal.EmailMessageXml;
 import br.unb.cic.iris.model.xml.internal.IrisFolderXml;
 import br.unb.cic.iris.model.xml.internal.IrisMessageStoreXml;
-import br.unb.cic.iris.persistence.IEmailDAO;
-import br.unb.cic.iris.persistence.PersistenceException;
+import br.unb.cic.iris.persistence.EmailDAO;
+import br.unb.cic.iris.persistence.IrisPersistenceException;
 
-public class EmailDaoXml extends AbstractDaoXml implements IEmailDAO {
+public class EmailDaoXml extends AbstractDaoXml implements EmailDAO {
 
 	@Override
-	public void saveMessage(EmailMessage message) throws PersistenceException {
+	public void saveMessage(EmailMessage message) throws IrisPersistenceException {
 		IrisMessageStoreXml store = getIrisXmlStore();
 		IrisFolderXml folder = store.findFolderByPredicate(f -> f.getId().equals(message.getFolder().getId()));
 		message.setId(UUID.randomUUID().toString());
@@ -25,7 +25,7 @@ public class EmailDaoXml extends AbstractDaoXml implements IEmailDAO {
 	}
 
 	@Override
-	public Date lastMessageReceived(String folderName) throws PersistenceException {
+	public Date lastMessageReceived(String folderName) throws IrisPersistenceException {
 		IrisFolder<EmailMessageXml> folder = getFolderDAO().findByName(folderName);
 		return folder.getMessages().stream()
 				.map(EmailMessageXml::getDate) // m -> m.getDate()
@@ -33,10 +33,10 @@ public class EmailDaoXml extends AbstractDaoXml implements IEmailDAO {
 	}
 
 	@Override
-	public List<EmailMessage> listMessages(String idFolder) throws PersistenceException {
+	public List<EmailMessage> listMessages(String idFolder) throws IrisPersistenceException {
 		IrisFolder folder = getFolderDAO().findById(idFolder);
 		if (folder == null) {
-			throw new PersistenceException("There exists no folder with the specified ID: " + idFolder);
+			throw new IrisPersistenceException("There exists no folder with the specified ID: " + idFolder);
 		}
 		return folder.getMessages();
 	}
@@ -48,7 +48,7 @@ public class EmailDaoXml extends AbstractDaoXml implements IEmailDAO {
 	 * provided mapping function to each element.
 	 */
 	@Override
-	public EmailMessage findById(String id) throws PersistenceException {
+	public EmailMessage findById(String id) throws IrisPersistenceException {
 		Optional<EmailMessageXml> message = getIrisXmlStore().getFolders()
 			.stream()
 			.flatMap(f -> f.getMessages().stream())

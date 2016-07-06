@@ -11,15 +11,15 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 
 import br.unb.cic.iris.core.IrisServiceLocator;
-import br.unb.cic.iris.exception.EmailUncheckedException;
+import br.unb.cic.iris.exception.IrisUncheckedException;
 import br.unb.cic.iris.model.IrisFolder;
-import br.unb.cic.iris.persistence.IFolderDAO;
-import br.unb.cic.iris.persistence.PersistenceException;
+import br.unb.cic.iris.persistence.FolderDAO;
+import br.unb.cic.iris.persistence.IrisPersistenceException;
 
 /***
  * added by dPersistenceLucene
  */
-public class FolderDAOLucene extends AbstractDAO<IrisFolder> implements IFolderDAO {
+public class FolderDAOLucene extends AbstractDAO<IrisFolder> implements FolderDAO {
 
 	private static FolderDAOLucene instance;
 
@@ -33,14 +33,14 @@ public class FolderDAOLucene extends AbstractDAO<IrisFolder> implements IFolderD
 			try {
 				ensureIsCreated(IrisFolder.INBOX);
 				ensureIsCreated(IrisFolder.OUTBOX);
-			} catch (PersistenceException e) {
-				throw new EmailUncheckedException("Error hwile initializing lucene presistence", e);
+			} catch (IrisPersistenceException e) {
+				throw new IrisUncheckedException("Error hwile initializing lucene presistence", e);
 			}
 		}
 		return instance;
 	}
 
-	private static void ensureIsCreated(String folderName) throws PersistenceException {
+	private static void ensureIsCreated(String folderName) throws IrisPersistenceException {
 		List<IrisFolder> folders = instance.doFindByName(folderName);
 		if (folders.isEmpty()) {
 			IrisFolder inbox = IrisServiceLocator.instance().getEntityFactory().createIrisFolder();
@@ -50,15 +50,15 @@ public class FolderDAOLucene extends AbstractDAO<IrisFolder> implements IFolderD
 		}
 	}
 
-	public IrisFolder findByName(String folderName) throws PersistenceException {
+	public IrisFolder findByName(String folderName) throws IrisPersistenceException {
 		List<IrisFolder> result = doFindByName(folderName);
 		if (result.isEmpty()) {
-			throw new PersistenceException(String.format("Folder '%s' not found", folderName), null);
+			throw new IrisPersistenceException(String.format("Folder '%s' not found", folderName), null);
 		}
 		return result.iterator().next();
 	}
 
-	public List<IrisFolder> doFindByName(String folderName) throws PersistenceException {
+	public List<IrisFolder> doFindByName(String folderName) throws IrisPersistenceException {
 		Query nameQuery = new TermQuery(new Term("name", folderName));
 		return findByTerms(new Query[] { nameQuery });
 	}
@@ -78,7 +78,7 @@ public class FolderDAOLucene extends AbstractDAO<IrisFolder> implements IFolderD
 	}
 
 	@Override
-	public IrisFolder createFolder(String folderName) throws PersistenceException {
+	public IrisFolder createFolder(String folderName) throws IrisPersistenceException {
 		IrisFolder folder = IrisServiceLocator.instance().getEntityFactory().createIrisFolder();
 		folder.setName(folderName);
 		instance.saveOrUpdate(folder);

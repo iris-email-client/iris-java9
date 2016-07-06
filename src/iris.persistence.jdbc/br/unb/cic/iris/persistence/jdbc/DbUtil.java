@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import br.unb.cic.iris.persistence.PersistenceException;
+import br.unb.cic.iris.persistence.IrisPersistenceException;
 
 public class DbUtil {
 	private static String DB_PATH = System.getProperty("user.home") + "/.iris/iris.db";
@@ -13,34 +13,34 @@ public class DbUtil {
 	
 	private static DbUtil instance;	
 
-	private DbUtil() throws PersistenceException {
+	private DbUtil() throws IrisPersistenceException {
 		execute(CREATE_TABLE_FOLDER);
 		execute(CREATE_TABLE_MESSAGE);
 	}
 	
-	public static DbUtil instance() throws PersistenceException {
+	public static DbUtil instance() throws IrisPersistenceException {
 		if(instance == null){
 			instance = new DbUtil();
 		}
 		return instance;
 	}
 	
-	public Connection connect() throws PersistenceException {
+	public Connection connect() throws IrisPersistenceException {
 		Connection conn = null;
 		try {
 			conn = DriverManager.getConnection(DB_URL);
 		} catch (SQLException e) {
-			throw new PersistenceException("Could not connect to database: " + e.getMessage(), e);
+			throw new IrisPersistenceException("Could not connect to database: " + e.getMessage(), e);
 		}
 		return conn;
 	}
 
-	public void execute(String sql) throws PersistenceException {
+	public void execute(String sql) throws IrisPersistenceException {
 		try (Connection conn = this.connect(); 
 				Statement stmt = conn.createStatement()) {
 			stmt.execute(sql);
 		} catch (SQLException e) {
-			throw new PersistenceException("Could not execute query: " + e.getMessage(), e);
+			throw new IrisPersistenceException("Could not execute query: " + e.getMessage(), e);
 		}
 	}
 	

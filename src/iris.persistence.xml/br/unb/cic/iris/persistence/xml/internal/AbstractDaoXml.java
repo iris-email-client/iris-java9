@@ -7,11 +7,11 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import br.unb.cic.iris.exception.EmailUncheckedException;
+import br.unb.cic.iris.exception.IrisUncheckedException;
 import br.unb.cic.iris.model.xml.internal.IrisMessageStoreXml;
-import br.unb.cic.iris.persistence.IEmailDAO;
-import br.unb.cic.iris.persistence.IFolderDAO;
-import br.unb.cic.iris.persistence.PersistenceException;
+import br.unb.cic.iris.persistence.EmailDAO;
+import br.unb.cic.iris.persistence.FolderDAO;
+import br.unb.cic.iris.persistence.IrisPersistenceException;
 import br.unb.cic.iris.persistence.xml.DaoFactoryXml;
 
 public abstract class AbstractDaoXml {
@@ -25,8 +25,8 @@ public abstract class AbstractDaoXml {
 		if(! XML_FILE.exists()){
 			try {
 				persistIrisStore(new IrisMessageStoreXml());
-			} catch (PersistenceException e) {				
-				throw new EmailUncheckedException("Error while creating XML store file: "+e.getMessage(), e);
+			} catch (IrisPersistenceException e) {				
+				throw new IrisUncheckedException("Error while creating XML store file: "+e.getMessage(), e);
 			}
 		}
 		
@@ -34,29 +34,29 @@ public abstract class AbstractDaoXml {
 	}
 
 
-	public IEmailDAO getEmailDAO() {
+	public EmailDAO getEmailDAO() {
 		return daoFactory.createEmailDAO();
 	}
 
-	public IFolderDAO getFolderDAO() {
+	public FolderDAO getFolderDAO() {
 		return daoFactory.createFolderDAO();
 	}
 
-	public File getXmlFile() throws PersistenceException {
+	public File getXmlFile() throws IrisPersistenceException {
 		return XML_FILE;
 	}
 	
-	public IrisMessageStoreXml getIrisXmlStore() throws PersistenceException {
+	public IrisMessageStoreXml getIrisXmlStore() throws IrisPersistenceException {
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(IrisMessageStoreXml.class);
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			return (IrisMessageStoreXml) jaxbUnmarshaller.unmarshal(getXmlFile());
 		} catch (JAXBException e) {
-			throw new PersistenceException("Error reading XML file", e);
+			throw new IrisPersistenceException("Error reading XML file", e);
 		}
 	}
 
-	public void persistIrisStore(IrisMessageStoreXml store) throws PersistenceException {
+	public void persistIrisStore(IrisMessageStoreXml store) throws IrisPersistenceException {
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(IrisMessageStoreXml.class);
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
@@ -65,7 +65,7 @@ public abstract class AbstractDaoXml {
 
 			jaxbMarshaller.marshal(store, getXmlFile());
 		} catch (JAXBException e) {
-			throw new PersistenceException("Error writing XML file", e);
+			throw new IrisPersistenceException("Error writing XML file", e);
 		}
 	}
 

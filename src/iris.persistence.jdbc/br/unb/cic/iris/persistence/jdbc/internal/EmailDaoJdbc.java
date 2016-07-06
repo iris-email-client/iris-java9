@@ -11,16 +11,16 @@ import java.util.List;
 import java.util.UUID;
 
 import br.unb.cic.iris.model.EmailMessage;
-import br.unb.cic.iris.persistence.IEmailDAO;
-import br.unb.cic.iris.persistence.PersistenceException;
+import br.unb.cic.iris.persistence.EmailDAO;
+import br.unb.cic.iris.persistence.IrisPersistenceException;
 
-public class EmailDaoJdbc extends AbstractDaoJdbc implements IEmailDAO {
+public class EmailDaoJdbc extends AbstractDaoJdbc implements EmailDAO {
 	private static final String SELECT_MESSAGES_BY_ID = "SELECT * FROM message WHERE id = ?";
 	private static final String SELECT_MESSAGES_BY_FOLDER_ID = "SELECT * FROM message WHERE folderid = ?";
 	private static final String INSERT_MESSAGE = "INSERT INTO message (id, _from, _to, cc, bcc, subject, message, _date, folderid) VALUES (?,?,?,?,?,?,?,?,?)";
 
 	@Override
-	public void saveMessage(EmailMessage message) throws PersistenceException {
+	public void saveMessage(EmailMessage message) throws IrisPersistenceException {
 		message.setId(UUID.randomUUID().toString());
 		try (Connection conn = getDbUtil().connect();
                 PreparedStatement pstmt = conn.prepareStatement(INSERT_MESSAGE)) {
@@ -35,18 +35,18 @@ public class EmailDaoJdbc extends AbstractDaoJdbc implements IEmailDAO {
             pstmt.setString(9, message.getFolder().getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-        	throw new PersistenceException("Could not create message: "+e.getMessage(), e);
+        	throw new IrisPersistenceException("Could not create message: "+e.getMessage(), e);
         }
 	}
 
 	@Override
-	public Date lastMessageReceived(String folderName) throws PersistenceException {
+	public Date lastMessageReceived(String folderName) throws IrisPersistenceException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<EmailMessage> listMessages(String idFolder) throws PersistenceException {
+	public List<EmailMessage> listMessages(String idFolder) throws IrisPersistenceException {
 		List<EmailMessage> messages = new LinkedList<>();
 		try (Connection conn = getDbUtil().connect();
 				PreparedStatement pstmt = conn.prepareStatement(SELECT_MESSAGES_BY_FOLDER_ID)) {
@@ -58,13 +58,13 @@ public class EmailDaoJdbc extends AbstractDaoJdbc implements IEmailDAO {
 				messages.add(toEmailMessage(rs));
 			}			
 		} catch (SQLException e) {
-			throw new PersistenceException("Could not list all folders: "+e.getMessage(), e);
+			throw new IrisPersistenceException("Could not list all folders: "+e.getMessage(), e);
 		}
 		return messages;
 	}
 
 	@Override
-	public EmailMessage findById(String id) throws PersistenceException {
+	public EmailMessage findById(String id) throws IrisPersistenceException {
 		EmailMessage message = null;
 		try (Connection conn = getDbUtil().connect();
                 PreparedStatement pstmt = conn.prepareStatement(SELECT_MESSAGES_BY_ID)) {
@@ -74,12 +74,12 @@ public class EmailDaoJdbc extends AbstractDaoJdbc implements IEmailDAO {
             	message = toEmailMessage(rs);
             }
         } catch (SQLException e) {
-        	throw new PersistenceException("Could not find message with id '"+id+"': "+e.getMessage(), e);
+        	throw new IrisPersistenceException("Could not find message with id '"+id+"': "+e.getMessage(), e);
         }
 		return message;
 	}
 
-	private EmailMessage toEmailMessage(ResultSet rs) throws SQLException, PersistenceException{
+	private EmailMessage toEmailMessage(ResultSet rs) throws SQLException, IrisPersistenceException{
 		EmailMessage message = getEntityFactory().createEmailMessage();
 		message.setId(rs.getString("id"));
 		message.setFrom(rs.getString("_from"));

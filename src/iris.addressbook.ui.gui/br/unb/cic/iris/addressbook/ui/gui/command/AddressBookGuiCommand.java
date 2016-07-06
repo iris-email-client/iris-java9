@@ -11,7 +11,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import br.unb.cic.iris.addressbook.ui.gui.command.manage.AddressBookManagerPanel;
-import br.unb.cic.iris.exception.EmailException;
+import br.unb.cic.iris.exception.IrisException;
 import br.unb.cic.iris.gui.GuiManager;
 import br.unb.cic.iris.gui.command.AbstractGuiMailCommand;
 
@@ -28,7 +28,7 @@ public class AddressBookGuiCommand extends AbstractGuiMailCommand {
 	}
 
 	@Override
-	public void handleExecute() throws EmailException {
+	public void handleExecute() throws IrisException {
 		showInfoMessage("Not yet implemented");
 	}
 

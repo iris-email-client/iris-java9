@@ -8,38 +8,38 @@ import java.util.function.Predicate;
 import br.unb.cic.iris.model.IrisFolder;
 import br.unb.cic.iris.model.xml.internal.IrisFolderXml;
 import br.unb.cic.iris.model.xml.internal.IrisMessageStoreXml;
-import br.unb.cic.iris.persistence.IFolderDAO;
-import br.unb.cic.iris.persistence.PersistenceException;
+import br.unb.cic.iris.persistence.FolderDAO;
+import br.unb.cic.iris.persistence.IrisPersistenceException;
 
-public class FolderDaoXml extends AbstractDaoXml implements IFolderDAO {
+public class FolderDaoXml extends AbstractDaoXml implements FolderDAO {
 
 	@Override
-	public IrisFolderXml findByName(String folderName) throws PersistenceException {				
+	public IrisFolderXml findByName(String folderName) throws IrisPersistenceException {				
 		Predicate<IrisFolderXml> p = f -> folderName.equals(f.getName());
 		return findByPredicate(p);
 	}
 
 	@Override
-	public IrisFolderXml findById(String id) throws PersistenceException {
+	public IrisFolderXml findById(String id) throws IrisPersistenceException {
 		Predicate<IrisFolderXml> p = f -> id.equals(f.getId());
 		return findByPredicate(p);
 	}
 
 	@Override
-	public List<IrisFolder> findAll() throws PersistenceException {	
+	public List<IrisFolder> findAll() throws IrisPersistenceException {	
 		IrisMessageStoreXml store = getIrisXmlStore();
 		List<IrisFolder> list = new ArrayList<>(store.getFolders());
 		return list;
 	}
 	
-	private IrisFolderXml findByPredicate(Predicate<IrisFolderXml> p) throws PersistenceException {
+	private IrisFolderXml findByPredicate(Predicate<IrisFolderXml> p) throws IrisPersistenceException {
 		return getIrisXmlStore().findFolderByPredicate(p);
 	}
 
 	@Override
-	public IrisFolderXml createFolder(String folderName) throws PersistenceException {
+	public IrisFolderXml createFolder(String folderName) throws IrisPersistenceException {
 		if(findByName(folderName) != null){
-			throw new PersistenceException("Folder '"+folderName+"' already exists");
+			throw new IrisPersistenceException("Folder '"+folderName+"' already exists");
 		}
 		
 		IrisFolderXml folder = new IrisFolderXml(folderName);

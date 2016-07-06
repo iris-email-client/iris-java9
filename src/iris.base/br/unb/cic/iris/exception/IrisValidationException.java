@@ -8,23 +8,23 @@ import java.util.List;
  * added by dBaseException
  */
 @SuppressWarnings("serial")
-public class EmailMessageValidationException extends EmailException {
+public class IrisValidationException extends IrisException {
 	private List<String> messages = new ArrayList<String>();
 
-	public EmailMessageValidationException(String message) {
+	public IrisValidationException(String message) {
 		this(message, null);
 	}
 
-	public EmailMessageValidationException(String message, Exception error) {
+	public IrisValidationException(String message, Exception error) {
 		super(message, error);
 		addMessage(message);
 	}
 
-	public EmailMessageValidationException(List<String> messages) {
+	public IrisValidationException(List<String> messages) {
 		this(messages, null);
 	}
 
-	public EmailMessageValidationException(List<String> messages, Exception error) {
+	public IrisValidationException(List<String> messages, Exception error) {
 		super(toString(messages), error);
 		this.messages = messages;
 	}

@@ -4,38 +4,33 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-import br.unb.cic.iris.exception.EmailException;
-import br.unb.cic.iris.exception.EmailMessageValidationException;
-import br.unb.cic.iris.exception.EmailUncheckedException;
+import br.unb.cic.iris.exception.IrisException;
+import br.unb.cic.iris.exception.IrisUncheckedException;
+import br.unb.cic.iris.exception.IrisValidationException;
 import br.unb.cic.iris.gui.GuiManager;
 import br.unb.cic.iris.i18n.MessageBundle;
+import br.unb.cic.iris.persistence.IrisPersistenceException;
 
 public abstract class AbstractGuiMailCommand implements GuiMailCommand {
 
-	protected abstract void handleExecute() throws EmailException;
+	protected abstract void handleExecute() throws IrisException;
 
 	// TODO i18n ...
-	public void execute() {
+	public void execute() {	
 		try {
 			handleExecute();
-		} catch (EmailUncheckedException eux) {
-			eux.printStackTrace();
-			showErrorMessage(String.format("%s: %s", message("error"), eux.getLocalizedMessage()));
-		} catch (EmailMessageValidationException emvx) {
-			StringBuilder sb = new StringBuilder("Erro validacao: ");
-			for (String msg : emvx.getMessages()) {
-				sb.append("\n - " + msg);
-			}
-			System.err.println(sb.toString());
-			emvx.printStackTrace();
-			showErrorMessage(sb.toString());
-		} catch (EmailException ex) {
-			ex.printStackTrace();
-			showErrorMessage(String.format("%s: %s\n", message("error"), ex.getMessage()));
+		}  catch (IrisUncheckedException iue) {
+			GuiManager.instance().showException(iue);			
+		} catch (IrisValidationException ive) {
+			GuiManager.instance().showException(ive);
+		} catch (IrisPersistenceException pe) {
+			GuiManager.instance().showException(pe);
+		} catch (IrisException ex) {
+			GuiManager.instance().showException(ex);
 		} catch (Exception e) {
-			e.printStackTrace();
+			GuiManager.instance().showException(e);
 		} catch (Throwable t) {
-			t.printStackTrace();
+			GuiManager.instance().showException(t);
 		}
 	}
 

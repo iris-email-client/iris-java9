@@ -2,13 +2,13 @@ package br.unb.cic.iris.core;
 
 import java.util.List;
 
-import br.unb.cic.iris.exception.EmailException;
+import br.unb.cic.iris.exception.IrisException;
 import br.unb.cic.iris.model.EmailMessage;
 import br.unb.cic.iris.model.EntityFactory;
 import br.unb.cic.iris.model.IrisFolder;
 import br.unb.cic.iris.persistence.DAOFactory;
-import br.unb.cic.iris.persistence.IEmailDAO;
-import br.unb.cic.iris.persistence.IFolderDAO;
+import br.unb.cic.iris.persistence.EmailDAO;
+import br.unb.cic.iris.persistence.FolderDAO;
 
 public class FolderManager {
 	private static final FolderManager instance = new FolderManager();
@@ -34,7 +34,7 @@ public class FolderManager {
 		return currentMessages;
 	}
 
-	public void changeToFolder(String folderName) throws EmailException {
+	public void changeToFolder(String folderName) throws IrisException {
 		IrisFolder folder = getFolderDAO().findByName(folderName);
 		if (folder != null) {
 			currentFolder = folder;
@@ -42,11 +42,11 @@ public class FolderManager {
 		}
 	}
 
-	public List<IrisFolder> listFolders() throws EmailException {
+	public List<IrisFolder> listFolders() throws IrisException {
 		return getFolderDAO().findAll();
 	}
 
-	public List<EmailMessage> listFolderMessages() throws EmailException {
+	public List<EmailMessage> listFolderMessages() throws IrisException {
 		if (currentFolder == null || currentFolder.getId() == null) {
 			return new java.util.ArrayList<EmailMessage>();
 		}
@@ -54,7 +54,7 @@ public class FolderManager {
 		return currentMessages;
 	}
 
-	public EmailMessage getMessage(String id) throws EmailException {
+	public EmailMessage getMessage(String id) throws IrisException {
 		return getEmailDAO().findById(id);
 	}
 
@@ -62,11 +62,11 @@ public class FolderManager {
 		return IrisServiceLocator.instance().getEntityFactory();
 	}
 
-	private IEmailDAO getEmailDAO() {
+	private EmailDAO getEmailDAO() {
 		return getDaoFactory().createEmailDAO();
 	}
 
-	private IFolderDAO getFolderDAO() {
+	private FolderDAO getFolderDAO() {
 		return getDaoFactory().createFolderDAO();
 	}
 

@@ -8,10 +8,11 @@ import javax.swing.table.AbstractTableModel;
 import br.unb.cic.iris.addressbook.model.AddressBookEntry;
 
 public class AddressBookTableModel extends AbstractTableModel {
+	private static final long serialVersionUID = 4477775129932167576L;
 	private List<AddressBookEntry> entries;
 
 	public AddressBookTableModel() {
-		entries = new ArrayList();
+		entries = new ArrayList<>();
 	}
 
 	@Override
@@ -51,7 +52,14 @@ public class AddressBookTableModel extends AbstractTableModel {
 
 	public void setAddressBookEntries(List<AddressBookEntry> list) {
 		this.entries = list;
+		if(this.entries == null){
+			this.entries = new ArrayList<>();
+		}
 		fireTableDataChanged();
+	}
+	
+	public AddressBookEntry getAddressBookEntry(int idx){
+		return entries.get(idx);
 	}
 
 }

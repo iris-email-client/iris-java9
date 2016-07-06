@@ -7,9 +7,9 @@ import java.util.List;
 
 import br.unb.cic.iris.command.AbstractCommandManager;
 import br.unb.cic.iris.command.MailCommand;
-import br.unb.cic.iris.exception.EmailException;
-import br.unb.cic.iris.exception.EmailMessageValidationException;
-import br.unb.cic.iris.exception.EmailUncheckedException;
+import br.unb.cic.iris.exception.IrisException;
+import br.unb.cic.iris.exception.IrisValidationException;
+import br.unb.cic.iris.exception.IrisUncheckedException;
 import br.unb.cic.iris.i18n.MessageBundle;
 import br.unb.cic.iris.util.StringUtil;
 
@@ -35,14 +35,14 @@ public class ConsoleCommandManager extends AbstractCommandManager {
 			try {
 				MailCommand command = createCommand(cmd.trim());
 				command.execute();
-			} catch (EmailUncheckedException eux) {
+			} catch (IrisUncheckedException eux) {
 				System.err.printf("%s: %s\n", message("error"), eux.getLocalizedMessage());
-			} catch (EmailMessageValidationException emvx) {
+			} catch (IrisValidationException emvx) {
 				System.err.println(MessageBundle.message("error.validation"));
 				for (String msg : emvx.getMessages()) {
 					System.err.println(" - " + msg);
 				}
-			} catch (EmailException ex) {
+			} catch (IrisException ex) {
 				System.err.printf("%s: %s\n", message("error"), ex.getMessage());
 			} catch (NullPointerException npe) {
 				System.err.println(message("error.command.not.found", cmd));
@@ -54,7 +54,7 @@ public class ConsoleCommandManager extends AbstractCommandManager {
 		}
 	}
 
-	private MailCommand createCommand(String cmd) throws EmailException {
+	private MailCommand createCommand(String cmd) throws IrisException {
 		String[] split = cmd.split(" ");
 		MailCommand command = null;
 		if (split.length > 1) {

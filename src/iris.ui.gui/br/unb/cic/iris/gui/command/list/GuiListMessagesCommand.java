@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import br.unb.cic.iris.exception.EmailException;
+import br.unb.cic.iris.exception.IrisException;
 import br.unb.cic.iris.gui.GuiManager;
 import br.unb.cic.iris.gui.command.AbstractGuiMailCommand;
 
@@ -18,7 +18,7 @@ public class GuiListMessagesCommand extends AbstractGuiMailCommand {
 	}
 
 	@Override
-	public void handleExecute() throws EmailException {
+	public void handleExecute() throws IrisException {
 		showInfoMessage("Not yet implemented");
 	}
 

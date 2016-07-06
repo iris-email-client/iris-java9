@@ -9,36 +9,36 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import br.unb.cic.iris.addressbook.model.xml.internal.AddressBookStoreXml;
-import br.unb.cic.iris.exception.EmailUncheckedException;
-import br.unb.cic.iris.persistence.PersistenceException;
+import br.unb.cic.iris.exception.IrisUncheckedException;
+import br.unb.cic.iris.persistence.IrisPersistenceException;
 
 public abstract class AbstractAddressBookDaoXml {
 	private static String XML_PATH = System.getProperty("user.home") + "/.iris/iris_addressbook_store.xml";
 	private static File XML_FILE = new File(XML_PATH);
 
-	protected File getXmlFile() throws PersistenceException {
+	protected File getXmlFile() throws IrisPersistenceException {
 		if(! XML_FILE.exists()){
 			try {
 				XML_FILE.createNewFile();
 			} catch (IOException e) {
-				throw new EmailUncheckedException("Could not create AddressBook XML store file", e);				
+				throw new IrisUncheckedException("Could not create AddressBook XML store file", e);				
 			}
 			persistStore(new AddressBookStoreXml());
 		}
 		return XML_FILE;
 	}
 	
-	protected AddressBookStoreXml getXmlStore() throws PersistenceException {
+	protected AddressBookStoreXml getXmlStore() throws IrisPersistenceException {
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(AddressBookStoreXml.class);
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			return (AddressBookStoreXml) jaxbUnmarshaller.unmarshal(getXmlFile());
 		} catch (JAXBException e) {
-			throw new PersistenceException("Error reading XML file", e);
+			throw new IrisPersistenceException("Error reading XML file", e);
 		}
 	}
 
-	protected void persistStore(AddressBookStoreXml store) throws PersistenceException {
+	protected void persistStore(AddressBookStoreXml store) throws IrisPersistenceException {
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(AddressBookStoreXml.class);
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
@@ -47,7 +47,7 @@ public abstract class AbstractAddressBookDaoXml {
 
 			jaxbMarshaller.marshal(store, getXmlFile());
 		} catch (JAXBException e) {
-			throw new PersistenceException("Error writing XML file", e);
+			throw new IrisPersistenceException("Error writing XML file", e);
 		}
 	}
 

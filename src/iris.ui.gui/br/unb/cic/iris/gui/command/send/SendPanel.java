@@ -22,8 +22,8 @@ import javax.swing.JTextField;
 
 import br.unb.cic.iris.core.IrisServiceLocator;
 import br.unb.cic.iris.core.SystemFacade;
-import br.unb.cic.iris.exception.EmailException;
-import br.unb.cic.iris.exception.EmailUncheckedException;
+import br.unb.cic.iris.exception.IrisException;
+import br.unb.cic.iris.exception.IrisUncheckedException;
 import br.unb.cic.iris.gui.GuiManager;
 import br.unb.cic.iris.mail.EmailStatusListener;
 import br.unb.cic.iris.model.EmailMessage;
@@ -124,9 +124,9 @@ public class SendPanel extends JPanel implements EmailStatusListener {
 			public void run() {
 				try {
 					SystemFacade.instance().send(m, panel);
-				} catch (EmailException e) {
+				} catch (IrisException e) {
 					//GuiManager.instance().showErrorMessage("Error while sending message: "+e.getMessage());
-					throw new EmailUncheckedException("Error while sending message: "+e.getMessage(), e);
+					throw new IrisUncheckedException("Error while sending message: "+e.getMessage(), e);
 				}
 			}
 		}).start();	

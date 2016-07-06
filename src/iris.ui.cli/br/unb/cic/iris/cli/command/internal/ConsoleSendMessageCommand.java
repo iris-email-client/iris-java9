@@ -5,8 +5,8 @@ import java.util.Scanner;
 import br.unb.cic.iris.cli.command.ConsoleAbstractMailCommand;
 import br.unb.cic.iris.core.IrisServiceLocator;
 import br.unb.cic.iris.core.SystemFacade;
-import br.unb.cic.iris.exception.EmailException;
-import br.unb.cic.iris.exception.EmailUncheckedException;
+import br.unb.cic.iris.exception.IrisException;
+import br.unb.cic.iris.exception.IrisUncheckedException;
 import br.unb.cic.iris.mail.EmailStatusListener;
 import br.unb.cic.iris.model.EmailMessage;
 
@@ -22,9 +22,9 @@ public class ConsoleSendMessageCommand extends ConsoleAbstractMailCommand implem
 	}
 
 	@Override
-	public void handleExecute() throws EmailException {
+	public void handleExecute() throws IrisException {
 		if(SystemFacade.instance().getProvider() == null){
-			throw new EmailUncheckedException(message("error.no.provider"));
+			throw new IrisUncheckedException(message("error.no.provider"));
 		}
 		
 		EmailMessage m = createMessage();

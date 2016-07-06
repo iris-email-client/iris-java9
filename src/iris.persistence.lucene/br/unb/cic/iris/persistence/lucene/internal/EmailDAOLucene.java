@@ -22,13 +22,13 @@ import org.apache.lucene.search.TopFieldDocs;
 import br.unb.cic.iris.core.IrisServiceLocator;
 import br.unb.cic.iris.model.EmailMessage;
 import br.unb.cic.iris.model.IrisFolder;
-import br.unb.cic.iris.persistence.IEmailDAO;
-import br.unb.cic.iris.persistence.PersistenceException;
+import br.unb.cic.iris.persistence.EmailDAO;
+import br.unb.cic.iris.persistence.IrisPersistenceException;
 
 /***
  * added by dPersistenceLucene
  */
-public final class EmailDAOLucene extends AbstractDAO<EmailMessage> implements IEmailDAO {
+public final class EmailDAOLucene extends AbstractDAO<EmailMessage> implements EmailDAO {
 	private static EmailDAOLucene instance = new EmailDAOLucene();
 
 	private EmailDAOLucene() {
@@ -40,12 +40,12 @@ public final class EmailDAOLucene extends AbstractDAO<EmailMessage> implements I
 	}
 
 	@Override
-	public void saveMessage(EmailMessage m) throws PersistenceException {
+	public void saveMessage(EmailMessage m) throws IrisPersistenceException {
 		saveOrUpdate(m);
 	}
 
 	@Override
-	public Date lastMessageReceived(String folderName) throws PersistenceException {
+	public Date lastMessageReceived(String folderName) throws IrisPersistenceException {
 		//TODO
 		Date date = null;
 		try {
@@ -58,14 +58,14 @@ public final class EmailDAOLucene extends AbstractDAO<EmailMessage> implements I
 				date = DateTools.stringToDate(doc.get("date"));
 			}
 		} catch (IOException e) {
-			throw new PersistenceException("An error occurred while retrieving last message received: "+e.getMessage(), e);
+			throw new IrisPersistenceException("An error occurred while retrieving last message received: "+e.getMessage(), e);
 		} catch (ParseException e) {
-			throw new PersistenceException("An error occurred while retrieving last message received"+e.getMessage(), e);
+			throw new IrisPersistenceException("An error occurred while retrieving last message received"+e.getMessage(), e);
 		}
 		return date;
 	}
 
-	public List<EmailMessage> listMessages(String idFolder) throws PersistenceException {
+	public List<EmailMessage> listMessages(String idFolder) throws IrisPersistenceException {
 		Query folderQuery = new TermQuery(new Term("folderId", idFolder));
 		return findByTerms(new Query[] { folderQuery });
 	}

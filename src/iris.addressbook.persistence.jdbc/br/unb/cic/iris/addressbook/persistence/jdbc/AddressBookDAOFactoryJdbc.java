@@ -1,19 +1,19 @@
 package br.unb.cic.iris.addressbook.persistence.jdbc;
 
 import br.unb.cic.iris.addressbook.persistence.AddressBookDAOFactory;
-import br.unb.cic.iris.addressbook.persistence.IAddressBookDAO;
+import br.unb.cic.iris.addressbook.persistence.AddressBookDAO;
 import br.unb.cic.iris.addressbook.persistence.jdbc.internal.AddressBookDaoJdbc;
-import br.unb.cic.iris.exception.EmailUncheckedException;
-import br.unb.cic.iris.persistence.PersistenceException;
+import br.unb.cic.iris.exception.IrisUncheckedException;
+import br.unb.cic.iris.persistence.IrisPersistenceException;
 
 public class AddressBookDAOFactoryJdbc implements AddressBookDAOFactory {
 
 	@Override
-	public IAddressBookDAO createAddressBookDAO() {		
+	public AddressBookDAO createAddressBookDAO() {		
 		try {
-			return new AddressBookDaoJdbc();
-		} catch (PersistenceException e) {			
-			throw new EmailUncheckedException("Could not create AddressBookDaoJdbc: "+e.getMessage(), e);
+			return AddressBookDaoJdbc.instance();
+		} catch (IrisPersistenceException e) {			
+			throw new IrisUncheckedException("Could not create AddressBookDaoJdbc: "+e.getMessage(), e);
 		}
 	}
 

@@ -1,7 +1,7 @@
 module iris.core {
 	requires public iris.mail;
 	requires public iris.mail.provider;
-	requires iris.persistence;
+	requires public iris.persistence;
 	
 	exports br.unb.cic.iris.command;
 	exports br.unb.cic.iris.core;	

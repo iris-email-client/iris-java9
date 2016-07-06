@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.ServiceLoader;
 
 import br.unb.cic.iris.base.BaseManager;
-import br.unb.cic.iris.exception.EmailUncheckedException;
+import br.unb.cic.iris.exception.IrisUncheckedException;
 import br.unb.cic.iris.mail.EmailProvider;
 
 /***
@@ -30,7 +30,7 @@ public class ProviderManager {
 		Iterator<EmailProvider> it = sl.iterator();
 
 		if (!it.hasNext())
-			throw new EmailUncheckedException("No mail providers found!");
+			throw new IrisUncheckedException("No mail providers found!");
 
 		while (it.hasNext()) {
 			EmailProvider provider = it.next();

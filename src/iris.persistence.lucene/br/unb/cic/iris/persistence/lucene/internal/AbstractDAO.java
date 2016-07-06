@@ -15,7 +15,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 
-import br.unb.cic.iris.persistence.PersistenceException;
+import br.unb.cic.iris.persistence.IrisPersistenceException;
 
 /***
  * added by dPersistenceLucene
@@ -39,36 +39,36 @@ public abstract class AbstractDAO<T> {
 	}
 
 
-	public List<T> findAll() throws PersistenceException {
+	public List<T> findAll() throws IrisPersistenceException {
 		List<T> result = new ArrayList<T>();
 		try {
 			Query query = new TermQuery(new Term("type", type));
 			IndexSearcher searcher = IndexManager.getSearcher();
 			searcher.search(query, new TCollector(searcher, result));
 		} catch (IOException e) {
-			throw new PersistenceException("An error occurred while retrieving all " + type + "s", e);
+			throw new IrisPersistenceException("An error occurred while retrieving all " + type + "s", e);
 		}
 		return result;
 	}
 
-	public T findById(String id) throws PersistenceException {
+	public T findById(String id) throws IrisPersistenceException {
 		Query nameQuery = new TermQuery(new Term("id", id));
 		List<T> result = findByTerms(new Query[] { nameQuery });
 		if (result.isEmpty()) {
-			throw new PersistenceException(String.format("%s not found", type), null);
+			throw new IrisPersistenceException(String.format("%s not found", type), null);
 		}
 		return result.iterator().next();
 	}
 
-	public void saveOrUpdate(T t) throws PersistenceException {
+	public void saveOrUpdate(T t) throws IrisPersistenceException {
 		try {
 			saveDocument(toDocument(t));
 		} catch (Exception e) {
-			throw new PersistenceException("An error occurred while saving " + type + ".", e);
+			throw new IrisPersistenceException("An error occurred while saving " + type + ".", e);
 		}
 	}
 
-	public void delete(T t) throws PersistenceException {
+	public void delete(T t) throws IrisPersistenceException {
 		try {
 			Document d = toDocument(t);
 			BooleanQuery q = new BooleanQuery();
@@ -78,11 +78,11 @@ public abstract class AbstractDAO<T> {
 			writer.deleteDocuments(q);
 			writer.commit();
 		} catch (Exception e) {
-			throw new PersistenceException("An error occured while deleting " + type, e);
+			throw new IrisPersistenceException("An error occured while deleting " + type, e);
 		}
 	}
 
-	protected Document saveDocument(Document doc) throws PersistenceException {
+	protected Document saveDocument(Document doc) throws IrisPersistenceException {
 		try {
 			doc.add(new StringField("type", type, Store.YES));
 			IndexWriter writer = IndexManager.getWriter();
@@ -104,11 +104,11 @@ public abstract class AbstractDAO<T> {
 			//IndexManager.closeIndex();
 			return doc;
 		} catch (IOException e) {
-			throw new PersistenceException("An error occurred while saving " + type + ".", e);
+			throw new IrisPersistenceException("An error occurred while saving " + type + ".", e);
 		}
 	}
 
-	public List<T> findByTerms(Query[] queries) throws PersistenceException {
+	public List<T> findByTerms(Query[] queries) throws IrisPersistenceException {
 		List<T> result = new ArrayList<T>();
 		try {
 			BooleanQuery query = new BooleanQuery();
@@ -120,7 +120,7 @@ public abstract class AbstractDAO<T> {
 			IndexSearcher searcher = IndexManager.getSearcher();
 			searcher.search(query, new TCollector(searcher, result));
 		} catch (IOException e) {
-			throw new PersistenceException(e.getMessage(), e);
+			throw new IrisPersistenceException(e.getMessage(), e);
 		}
 		return result;
 	}

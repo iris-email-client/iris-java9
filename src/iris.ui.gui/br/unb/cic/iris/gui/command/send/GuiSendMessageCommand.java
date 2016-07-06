@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import br.unb.cic.iris.exception.EmailException;
+import br.unb.cic.iris.exception.IrisException;
 import br.unb.cic.iris.gui.GuiManager;
 import br.unb.cic.iris.gui.command.AbstractGuiMailCommand;
 
@@ -18,7 +18,7 @@ public class GuiSendMessageCommand extends AbstractGuiMailCommand {
 	}
 
 	@Override
-	public void handleExecute() throws EmailException {
+	public void handleExecute() throws IrisException {
 		SendPanel panel = new SendPanel();		
 		GuiManager.instance().setCenterPanel(panel);
 		GuiManager.instance().setStatusText("Send email");

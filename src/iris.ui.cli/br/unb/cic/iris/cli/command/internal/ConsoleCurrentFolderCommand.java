@@ -2,7 +2,7 @@ package br.unb.cic.iris.cli.command.internal;
 
 import br.unb.cic.iris.cli.command.ConsoleAbstractMailCommand;
 import br.unb.cic.iris.core.FolderManager;
-import br.unb.cic.iris.exception.EmailException;
+import br.unb.cic.iris.exception.IrisException;
 
 public class ConsoleCurrentFolderCommand extends ConsoleAbstractMailCommand {
 	static final String COMMAND_NAME = "pwd";
@@ -13,7 +13,7 @@ public class ConsoleCurrentFolderCommand extends ConsoleAbstractMailCommand {
 	}
 
 	@Override
-	public void handleExecute() throws EmailException {
+	public void handleExecute() throws IrisException {
 		String folderName = FolderManager.instance().getCurrentFolderName();
 		System.out.printf("%s%n", folderName);
 	}

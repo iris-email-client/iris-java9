@@ -13,12 +13,13 @@ import java.util.UUID;
 
 import br.unb.cic.iris.addressbook.model.AddressBookEntityFactory;
 import br.unb.cic.iris.addressbook.model.AddressBookEntry;
-import br.unb.cic.iris.addressbook.persistence.IAddressBookDAO;
-import br.unb.cic.iris.exception.EmailUncheckedException;
-import br.unb.cic.iris.persistence.PersistenceException;
+import br.unb.cic.iris.addressbook.persistence.AddressBookDAO;
+import br.unb.cic.iris.exception.IrisUncheckedException;
+import br.unb.cic.iris.persistence.IrisPersistenceException;
 import br.unb.cic.iris.persistence.jdbc.DbUtil;
 
-public class AddressBookDaoJdbc implements IAddressBookDAO {
+public class AddressBookDaoJdbc implements AddressBookDAO {
+	private static AddressBookDaoJdbc instance;
 	private static final String SELECT_ALL = "SELECT id, nick, address FROM addressbook";
 	private static final String SELECT_BY_NICK = "SELECT id, nick, address FROM addressbook WHERE nick = ?";
 	private static final String SELECT_BY_ID = "SELECT id, nick, address FROM addressbook WHERE id = ?";
@@ -28,13 +29,20 @@ public class AddressBookDaoJdbc implements IAddressBookDAO {
 	private AddressBookEntityFactory entityFactory;
 	
 	
-	public AddressBookDaoJdbc() throws PersistenceException {
+	private AddressBookDaoJdbc() throws IrisPersistenceException {
 		getDbUtil().execute(CREATE_TABLE);
+	}
+	
+	public static AddressBookDaoJdbc instance() throws IrisPersistenceException{
+		if(instance == null){
+			instance = new AddressBookDaoJdbc();
+		}
+		return instance;
 	}
 	
 
 	@Override
-	public AddressBookEntry saveOrUpdate(AddressBookEntry entry) throws PersistenceException {
+	public AddressBookEntry saveOrUpdate(AddressBookEntry entry) throws IrisPersistenceException {
 		// TODO Auto-generated method stub
 		entry.setId(UUID.randomUUID().toString());		
 		
@@ -45,24 +53,24 @@ public class AddressBookDaoJdbc implements IAddressBookDAO {
             pstmt.setString(3, entry.getAddress());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-        	throw new PersistenceException("Could not create address book entry: "+e.getMessage(), e);
+        	throw new IrisPersistenceException("Could not create address book entry: "+e.getMessage(), e);
         }
 		
 		return entry;
 	}
 
 	@Override
-	public AddressBookEntry findByNick(String nick) throws PersistenceException {
+	public AddressBookEntry findByNick(String nick) throws IrisPersistenceException {
 		return executeQuery(SELECT_BY_NICK, nick);
 	}
 
 	@Override
-	public AddressBookEntry findById(String id) throws PersistenceException {
+	public AddressBookEntry findById(String id) throws IrisPersistenceException {
 		return executeQuery(SELECT_BY_ID, id);
 	}
 
 	@Override
-	public List<AddressBookEntry> findAll() throws PersistenceException {
+	public List<AddressBookEntry> findAll() throws IrisPersistenceException {
 		List<AddressBookEntry> entries = new LinkedList<>();
 		try (Connection conn = getDbUtil().connect();
 				Statement stmt = conn.createStatement();
@@ -71,23 +79,23 @@ public class AddressBookDaoJdbc implements IAddressBookDAO {
 				entries.add(toAddressBookEntry(rs));
 			}
 		} catch (SQLException e) {
-			throw new PersistenceException("Could not list all address book entries: "+e.getMessage(), e);
+			throw new IrisPersistenceException("Could not list all address book entries: "+e.getMessage(), e);
 		}
 		return entries;
 	}
 
 	@Override
-	public void delete(String nick) throws PersistenceException {
+	public void delete(String nick) throws IrisPersistenceException {
 		try (Connection conn = getDbUtil().connect(); 
 				PreparedStatement pstmt = conn.prepareStatement(DELETE)) {
 			pstmt.setString(1, nick);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
-			throw new PersistenceException("Could not delete address book entry ("+nick+"): " + e.getMessage(), e);
+			throw new IrisPersistenceException("Could not delete address book entry ("+nick+"): " + e.getMessage(), e);
 		}
 	}
 
-	private AddressBookEntry executeQuery(String sql, String value) throws PersistenceException {
+	private AddressBookEntry executeQuery(String sql, String value) throws IrisPersistenceException {
 		try (Connection conn = getDbUtil().connect(); 
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, value);
@@ -96,7 +104,7 @@ public class AddressBookDaoJdbc implements IAddressBookDAO {
 				return toAddressBookEntry(rs);
 			}
 		} catch (SQLException e) {
-			throw new PersistenceException("Could not execute query: " + e.getMessage(), e);
+			throw new IrisPersistenceException("Could not execute query: " + e.getMessage(), e);
 		}
 		return null;
 	}
@@ -109,7 +117,7 @@ public class AddressBookDaoJdbc implements IAddressBookDAO {
 		return addressBookEntry;
 	}
 
-	private DbUtil getDbUtil() throws PersistenceException {
+	private DbUtil getDbUtil() throws IrisPersistenceException {
 		return DbUtil.instance();
 	}
 
@@ -119,7 +127,7 @@ public class AddressBookDaoJdbc implements IAddressBookDAO {
 			Iterator<AddressBookEntityFactory> it = sl.iterator();
 
 			if (!it.hasNext())
-				throw new EmailUncheckedException("No address book entity factory found!");
+				throw new IrisUncheckedException("No address book entity factory found!");
 			
 			entityFactory = it.next();
 			System.out.println("Address Book Entity Factory: "+entityFactory.getClass().getCanonicalName());

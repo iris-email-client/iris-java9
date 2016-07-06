@@ -10,17 +10,17 @@ import java.util.List;
 import java.util.UUID;
 
 import br.unb.cic.iris.model.IrisFolder;
-import br.unb.cic.iris.persistence.IFolderDAO;
-import br.unb.cic.iris.persistence.PersistenceException;
+import br.unb.cic.iris.persistence.FolderDAO;
+import br.unb.cic.iris.persistence.IrisPersistenceException;
 
-public class FolderDaoJdbc extends AbstractDaoJdbc implements IFolderDAO {
+public class FolderDaoJdbc extends AbstractDaoJdbc implements FolderDAO {
 	private static final String SELECT_FOLDER_ALL = "SELECT id, name FROM folder";
 	private static final String SELECT_FOLDER_BY_NAME = "SELECT id, name FROM folder WHERE name = ?";
 	private static final String SELECT_FOLDER_BY_ID = "SELECT id, name FROM folder WHERE id = ?";
 	private static final String INSERT_FOLDER = "INSERT INTO folder (id, name) VALUES (?,?)";
 
 	@Override
-	public IrisFolder<?> createFolder(String folderName) throws PersistenceException {
+	public IrisFolder<?> createFolder(String folderName) throws IrisPersistenceException {
 		IrisFolder<?> folder = getEntityFactory().createIrisFolder();
 		folder.setId(UUID.randomUUID().toString());
 		folder.setName(folderName);
@@ -31,25 +31,25 @@ public class FolderDaoJdbc extends AbstractDaoJdbc implements IFolderDAO {
             pstmt.setString(2, folder.getName());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-        	throw new PersistenceException("Could not create folder: "+e.getMessage(), e);
+        	throw new IrisPersistenceException("Could not create folder: "+e.getMessage(), e);
         }
 		
 		return folder;
 	}
 
 	@Override
-	public IrisFolder<?> findByName(String folderName) throws PersistenceException {		
+	public IrisFolder<?> findByName(String folderName) throws IrisPersistenceException {		
 		return executeQuery(SELECT_FOLDER_BY_NAME, folderName);
 	}
 
 	@Override
-	public IrisFolder<?> findById(String id) throws PersistenceException {		
+	public IrisFolder<?> findById(String id) throws IrisPersistenceException {		
 		return executeQuery(SELECT_FOLDER_BY_ID, id);
 	}	
 	
 	@Override
 	@SuppressWarnings("rawtypes")
-	public List<IrisFolder> findAll() throws PersistenceException {
+	public List<IrisFolder> findAll() throws IrisPersistenceException {
 		List<IrisFolder> folders = new LinkedList<>();
 		try (Connection conn = getDbUtil().connect();
 				Statement stmt = conn.createStatement();
@@ -59,12 +59,12 @@ public class FolderDaoJdbc extends AbstractDaoJdbc implements IFolderDAO {
 				folders.add(toFolder(rs));
 			}
 		} catch (SQLException e) {
-			throw new PersistenceException("Could not list all folders: "+e.getMessage(), e);
+			throw new IrisPersistenceException("Could not list all folders: "+e.getMessage(), e);
 		}
 		return folders;
 	}
 	
-	private IrisFolder<?> executeQuery(String sql, String value) throws PersistenceException {
+	private IrisFolder<?> executeQuery(String sql, String value) throws IrisPersistenceException {
 		try (Connection conn = getDbUtil().connect();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, value);            
@@ -73,7 +73,7 @@ public class FolderDaoJdbc extends AbstractDaoJdbc implements IFolderDAO {
             	return toFolder(rs);
             }
         } catch (SQLException e) {
-        	throw new PersistenceException("Could not execute query: "+e.getMessage(), e);
+        	throw new IrisPersistenceException("Could not execute query: "+e.getMessage(), e);
         }
 		return null;
 	}

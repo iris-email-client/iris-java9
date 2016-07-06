@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import br.unb.cic.iris.base.BaseManager;
-import br.unb.cic.iris.exception.EmailException;
+import br.unb.cic.iris.exception.IrisException;
 
 public abstract class BaseCommandManager implements ICommandManager {
 	private BaseManager<MailCommand> manager = new BaseManager<>();
@@ -17,7 +17,7 @@ public abstract class BaseCommandManager implements ICommandManager {
 	// EX: um ambiente gui pode add um botao para esse command
 	protected abstract void handleAddCommand(MailCommand command);
 
-	public void addCommand(MailCommand command) throws EmailException {
+	public void addCommand(MailCommand command) throws IrisException {
 		System.out.println("Adding command: " + command.getCommandName() +" <"+command.getClass().getCanonicalName()+">");
 
 		// TODO validar comando?
@@ -28,7 +28,7 @@ public abstract class BaseCommandManager implements ICommandManager {
 		notifyListeners(command);
 	}
 
-	public MailCommand getCommand(String commandName) throws EmailException {
+	public MailCommand getCommand(String commandName) throws IrisException {
 		MailCommand command = manager.get(commandName);
 		if (command == null) {
 			throw new CommandNotFoundException(message("error.command.not.found", commandName));

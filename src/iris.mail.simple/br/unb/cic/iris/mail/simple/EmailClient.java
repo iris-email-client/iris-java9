@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.mail.search.SearchTerm;
 
-import br.unb.cic.iris.exception.EmailException;
+import br.unb.cic.iris.exception.IrisException;
 import br.unb.cic.iris.mail.EmailProvider;
 import br.unb.cic.iris.mail.IEmailClient;
 import br.unb.cic.iris.model.EmailMessage;
@@ -30,33 +30,33 @@ public class EmailClient implements IEmailClient {
 		receiver = new EmailReceiver(provider, encoding);
 	}
 
-	public void send(EmailMessage email) throws EmailException {		
+	public void send(EmailMessage email) throws IrisException {		
 		sender.send(email);
 	}
 	
 	@Override
 	@SuppressWarnings("rawtypes")
-	public List<IrisFolder> listFolders() throws EmailException {		
+	public List<IrisFolder> listFolders() throws IrisException {		
 		return receiver.listFolders();
 	}
 
 	@Override
-	public List<EmailMessage> getMessages(String folder) throws EmailException {
+	public List<EmailMessage> getMessages(String folder) throws IrisException {
 		return getMessages(folder, null);
 	}
 
 	@Override
-	public List<EmailMessage> getMessages(String folder, SearchTerm searchTerm) throws EmailException {
+	public List<EmailMessage> getMessages(String folder, SearchTerm searchTerm) throws IrisException {
 		return receiver.getMessages(folder, searchTerm);
 	}
 
 	@Override
-	public List<EmailMessage> getMessages(String folder, int seqnum) throws EmailException {
+	public List<EmailMessage> getMessages(String folder, int seqnum) throws IrisException {
 		return receiver.getMessages(folder, seqnum);
 	}
 
 	@Override
-	public List<EmailMessage> getMessages(String folder, int begin, int end) throws EmailException {
+	public List<EmailMessage> getMessages(String folder, int begin, int end) throws IrisException {
 		return receiver.getMessages(folder, begin, end);
 	}
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 import br.unb.cic.iris.cli.command.ConsoleAbstractMailCommand;
 import br.unb.cic.iris.core.FolderManager;
-import br.unb.cic.iris.exception.EmailException;
+import br.unb.cic.iris.exception.IrisException;
 import br.unb.cic.iris.model.EmailMessage;
 
 public class ConsoleListMessagesCommand extends ConsoleAbstractMailCommand {
@@ -20,7 +20,7 @@ public class ConsoleListMessagesCommand extends ConsoleAbstractMailCommand {
 	}
 
 	@Override
-	public void handleExecute() throws EmailException {
+	public void handleExecute() throws IrisException {
 		messages = FolderManager.instance().listFolderMessages();
 		for (int i = 0; i < messages.size(); i++) {
 			EmailMessage msg = messages.get(i);

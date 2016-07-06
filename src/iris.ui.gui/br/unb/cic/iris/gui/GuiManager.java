@@ -1,12 +1,18 @@
 package br.unb.cic.iris.gui;
 
+import static br.unb.cic.iris.i18n.MessageBundle.message;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import br.unb.cic.iris.exception.IrisException;
+import br.unb.cic.iris.exception.IrisUncheckedException;
+import br.unb.cic.iris.exception.IrisValidationException;
 import br.unb.cic.iris.gui.screen.MainFrame;
+import br.unb.cic.iris.persistence.IrisPersistenceException;
 
 public class GuiManager {
 	private static GuiManager instance = new GuiManager();
@@ -15,6 +21,7 @@ public class GuiManager {
 
 	private GuiManager() {
 		frame = new MainFrame();
+		frame.setTitle(message("title"));
 		frame.setVisible(true);
 	}
 
@@ -40,9 +47,9 @@ public class GuiManager {
 	public void setStatusText(String txt) {
 		frame.getStatusTextArea().setText(txt);
 	}
-	
-	public void appendStatusText(String txt){
-		frame.getStatusTextArea().append("\n"+txt);
+
+	public void appendStatusText(String txt) {
+		frame.getStatusTextArea().append("\n" + txt);
 	}
 
 	public void showErrorMessage(String msg) {
@@ -55,6 +62,43 @@ public class GuiManager {
 
 	public void showMessage(String message, String title, int type) {
 		JOptionPane.showMessageDialog(frame, message, title, type);
+	}
+
+	public void showException(IrisUncheckedException e) {
+		System.out.println("IrisUncheckedException");
+		showException((Exception) e);
+	}
+
+	public void showException(IrisValidationException e) {
+		System.out.println("IrisValidationException");
+		StringBuilder sb = new StringBuilder("Validation Error: ");
+		for (String msg : e.getMessages()) {
+			sb.append("\n - " + msg);
+		}
+		System.err.println(sb.toString());
+		e.printStackTrace();
+		showErrorMessage(sb.toString());
+	}
+
+	public void showException(IrisPersistenceException e) {
+		System.out.println("PersistenceException");
+		showException((Exception) e);
+	}
+
+	public void showException(IrisException e) {
+		System.out.println("IrisException");
+		showException((Exception) e);		
+	}
+
+	public void showException(Exception e) {
+		System.out.println("Exception");
+		e.printStackTrace();
+		showErrorMessage(String.format("%s: %s\n", message("error"), e.getLocalizedMessage()));
+	}
+
+	public void showException(Throwable e) {
+		System.out.println("Throwable");
+		e.printStackTrace();
 	}
 
 }

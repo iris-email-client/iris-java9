@@ -20,7 +20,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.search.SearchTerm;
 
 import br.unb.cic.iris.core.IrisServiceLocator;
-import br.unb.cic.iris.exception.EmailException;
+import br.unb.cic.iris.exception.IrisException;
 import br.unb.cic.iris.i18n.MessageBundle;
 import br.unb.cic.iris.mail.EmailProvider;
 import br.unb.cic.iris.mail.EmailStatusManager;
@@ -41,7 +41,7 @@ public class EmailReceiver implements StoreListener, FolderListener {
 		session = new EmailSession(provider, encoding);
 	}
 
-	public List<IrisFolder> listFolders() throws EmailException {
+	public List<IrisFolder> listFolders() throws IrisException {
 		List<IrisFolder> folders = new ArrayList<IrisFolder>();
 		try {
 			Store store = getStore();
@@ -51,12 +51,12 @@ public class EmailReceiver implements StoreListener, FolderListener {
 				folders.add(getEntityFactory().createIrisFolder(f.getName()));
 			}
 		} catch (MessagingException e) {
-			throw new EmailException(MessageBundle.message("error.list.folder"), e);
+			throw new IrisException(MessageBundle.message("error.list.folder"), e);
 		}
 		return folders;
 	}
 
-	public List<EmailMessage> getMessages(String folderName, SearchTerm searchTerm) throws EmailException {
+	public List<EmailMessage> getMessages(String folderName, SearchTerm searchTerm) throws IrisException {
 		List<EmailMessage> messages = new ArrayList<EmailMessage>();
 		Folder folder = openFolder(folderName);
 		try {
@@ -68,24 +68,24 @@ public class EmailReceiver implements StoreListener, FolderListener {
 			}
 			messages = convertToIrisMessage(messagesRetrieved);
 		} catch (MessagingException e) {
-			throw new EmailException(e.getMessage(), e);
+			throw new IrisException(e.getMessage(), e);
 		}
 		return messages;
 	}
 
-	public List<EmailMessage> getMessages(String folderName, int begin, int end) throws EmailException {
+	public List<EmailMessage> getMessages(String folderName, int begin, int end) throws IrisException {
 		List<EmailMessage> messages = new ArrayList<EmailMessage>();
 		Folder folder = openFolder(folderName);
 		try {
 			Message messagesRetrieved[] = folder.getMessages(begin, end);
 			messages = convertToIrisMessage(messagesRetrieved);
 		} catch (MessagingException e) {
-			throw new EmailException(e.getMessage(), e);
+			throw new IrisException(e.getMessage(), e);
 		}
 		return messages;
 	}
 
-	public List<EmailMessage> getMessages(String folderName, int seqnum) throws EmailException {
+	public List<EmailMessage> getMessages(String folderName, int seqnum) throws IrisException {
 		List<EmailMessage> messages = new ArrayList<EmailMessage>();
 		Folder folder = openFolder(folderName);
 		try {
@@ -98,7 +98,7 @@ public class EmailReceiver implements StoreListener, FolderListener {
 			Message[] messagesRetrieved = toArray(messagesList);
 			messages = convertToIrisMessage(messagesRetrieved);
 		} catch (MessagingException e) {
-			throw new EmailException(e.getMessage(), e);
+			throw new IrisException(e.getMessage(), e);
 		}
 		return messages;
 	}
@@ -107,7 +107,7 @@ public class EmailReceiver implements StoreListener, FolderListener {
 		return messagesList.toArray(new Message[messagesList.size()]);
 	}
 
-	private List<EmailMessage> convertToIrisMessage(Message[] messagesRetrieved) throws EmailException {
+	private List<EmailMessage> convertToIrisMessage(Message[] messagesRetrieved) throws IrisException {
 		List<EmailMessage> messages = new ArrayList<EmailMessage>();
 		int cont = 0;
 		int total = messagesRetrieved.length;
@@ -126,24 +126,24 @@ public class EmailReceiver implements StoreListener, FolderListener {
 					EmailStatusManager.instance().notifyMessageDownloadProgress((tmp / total));
 				}
 			} catch (IOException | MessagingException e) {
-				throw new EmailException(e.getMessage(), e);
+				throw new IrisException(e.getMessage(), e);
 			}
 		}
 		System.out.println();
 		return messages;
 	}
 
-	private Folder openFolder(String folderName) throws EmailException {
+	private Folder openFolder(String folderName) throws IrisException {
 		return openFolder(folderName, Folder.READ_ONLY);
 	}
 
-	private Folder openFolder(String folderName, int openType) throws EmailException {
+	private Folder openFolder(String folderName, int openType) throws IrisException {
 		try {
 			Folder folder = getStore().getFolder(folderName);
 			folder.open(openType);
 			return folder;
-		} catch (MessagingException | EmailException e) {
-			throw new EmailException(e.getMessage(), e);
+		} catch (MessagingException | IrisException e) {
+			throw new IrisException(e.getMessage(), e);
 		}
 	}
 
@@ -215,23 +215,23 @@ public class EmailReceiver implements StoreListener, FolderListener {
 		return store;
 	}
 
-	public Store getStore() throws EmailException {
+	public Store getStore() throws IrisException {
 		if (store == null) {
 			try {
 				store = createStoreAndConnect();
 			} catch (MessagingException e) {
-				throw new EmailException(e.getMessage(), e);
+				throw new IrisException(e.getMessage(), e);
 			}
 		}
 		return store;
 	}
 
-	public Store renew() throws EmailException {
+	public Store renew() throws IrisException {
 		if (store != null) {
 			try {
 				store.close();
 			} catch (MessagingException e) {
-				throw new EmailException(e.getMessage(), e);
+				throw new IrisException(e.getMessage(), e);
 			}
 			store = null;
 		}

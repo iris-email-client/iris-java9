@@ -1,7 +1,5 @@
 package br.unb.cic.iris.addressbook.ui.gui.command.manage;
 
-import static java.awt.BorderLayout.CENTER;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -9,10 +7,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -22,12 +20,14 @@ import javax.swing.border.TitledBorder;
 
 import br.unb.cic.iris.addressbook.AddressBookManager;
 import br.unb.cic.iris.addressbook.model.AddressBookEntry;
+import br.unb.cic.iris.exception.IrisValidationException;
 import br.unb.cic.iris.gui.GuiManager;
-import br.unb.cic.iris.i18n.MessageBundle;
-import br.unb.cic.iris.persistence.PersistenceException;
+import br.unb.cic.iris.persistence.IrisPersistenceException;
+import br.unb.cic.iris.util.EmailValidator;
+import br.unb.cic.iris.util.StringUtil;
 
 public class AddressBookManagerPanel extends JPanel {
-
+	private static final long serialVersionUID = -858948301748853786L;
 	private AddressBookTableModel tableModel;
 
 	public AddressBookManagerPanel() {
@@ -37,13 +37,16 @@ public class AddressBookManagerPanel extends JPanel {
 
 	private void initData() {
 		Runnable runnable = () -> {
+			textFieldNick.setText("");
+			textFieldAddress.setText("");
 			try {
 				List<AddressBookEntry> list = AddressBookManager.instance().findAll();
-				System.out.println("LIST="+list.size());
 				tableModel.setAddressBookEntries(list);
-			} catch (PersistenceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				if (list.isEmpty()) {
+					btnDelete.setEnabled(false);
+				}
+			} catch (IrisPersistenceException e) {
+				GuiManager.instance().showException(e);
 			}
 		};
 		runnable.run();
@@ -104,19 +107,7 @@ public class AddressBookManagerPanel extends JPanel {
 
 		btnPersist = new JButton("     Persist     ");
 		btnPersist.addActionListener(al -> {
-			String nick = textFieldNick.getText();
-			String address = textFieldAddress.getText();
-			//TODO validate fields
-			try {
-				AddressBookManager.instance().save(nick, address);
-				textFieldNick.setText("");
-				textFieldAddress.setText("");
-				initData();
-			} catch (PersistenceException ex) {
-				// TODO Auto-generated catch block
-				ex.printStackTrace();
-				GuiManager.instance().showErrorMessage(String.format("%s: %s", MessageBundle.message("error"), ex.getMessage()));
-			}			
+			persistAddressBookEntry();
 		});
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.gridwidth = 2;
@@ -135,8 +126,9 @@ public class AddressBookManagerPanel extends JPanel {
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				int row = table.getSelectedRow();
-				System.out.println("row=" + row);
-				btnDelete.setEnabled(true);
+				if (row >= 0) {
+					btnDelete.setEnabled(true);
+				}
 			}
 		});
 		panelCenter.add(new JScrollPane(table), BorderLayout.CENTER);
@@ -145,8 +137,56 @@ public class AddressBookManagerPanel extends JPanel {
 		add(panelSouth, BorderLayout.SOUTH);
 
 		btnDelete = new JButton("Delete");
+		btnDelete.addActionListener(al -> {
+			deleteAddressBookEntry();
+		});
 		btnDelete.setEnabled(false);
 		panelSouth.add(btnDelete);
+	}
+
+	private void persistAddressBookEntry() {
+		String nick = textFieldNick.getText();
+		String address = textFieldAddress.getText();
+		try {
+			validateFields(nick, address);
+
+			AddressBookManager.instance().save(nick, address);
+			
+			initData();
+		} catch (IrisPersistenceException ex) {			
+			GuiManager.instance().showException(ex);
+		} catch (IrisValidationException ive) {
+			GuiManager.instance().showException(ive);
+		}
+	}
+
+	private void deleteAddressBookEntry() {
+		int row = table.getSelectedRow();
+		AddressBookEntry entry = tableModel.getAddressBookEntry(row);
+		try {
+			AddressBookManager.instance().delete(entry.getNick());			
+			initData();
+		} catch (IrisPersistenceException e) {
+			GuiManager.instance().showException(e);
+		}
+	}
+			
+
+	private void validateFields(String nick, String address) throws IrisValidationException {
+		String requiredField = "Field required: %s";
+		List<String> errors = new LinkedList<>();
+		if (StringUtil.isEmpty(nick)) {
+			errors.add(String.format(requiredField, "nick"));
+		}
+		if (StringUtil.isEmpty(address)) {
+			errors.add(String.format(requiredField, "address"));
+		} else if (!EmailValidator.validate(address)) {
+			errors.add("Invalid email: " + address);
+		}
+		
+		if (!errors.isEmpty()) {
+			throw new IrisValidationException(errors);
+		}
 	}
 
 	private JTextField textFieldNick;

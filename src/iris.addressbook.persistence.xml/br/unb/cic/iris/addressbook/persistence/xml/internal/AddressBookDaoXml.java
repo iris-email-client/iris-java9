@@ -8,13 +8,13 @@ import java.util.function.Predicate;
 import br.unb.cic.iris.addressbook.model.AddressBookEntry;
 import br.unb.cic.iris.addressbook.model.xml.internal.AddressBookEntryXml;
 import br.unb.cic.iris.addressbook.model.xml.internal.AddressBookStoreXml;
-import br.unb.cic.iris.addressbook.persistence.IAddressBookDAO;
-import br.unb.cic.iris.persistence.PersistenceException;
+import br.unb.cic.iris.addressbook.persistence.AddressBookDAO;
+import br.unb.cic.iris.persistence.IrisPersistenceException;
 
-public class AddressBookDaoXml extends AbstractAddressBookDaoXml implements IAddressBookDAO {
+public class AddressBookDaoXml extends AbstractAddressBookDaoXml implements AddressBookDAO {
 
 	@Override
-	public AddressBookEntry saveOrUpdate(AddressBookEntry entry) throws PersistenceException {
+	public AddressBookEntry saveOrUpdate(AddressBookEntry entry) throws IrisPersistenceException {
 		AddressBookStoreXml store = getXmlStore();
 		if(entry.getId() == null){
 			//save
@@ -36,20 +36,20 @@ public class AddressBookDaoXml extends AbstractAddressBookDaoXml implements IAdd
 		
 	}
 
-	private void checkExistingNick(String nick) throws PersistenceException{
+	private void checkExistingNick(String nick) throws IrisPersistenceException{
 		if(findByNick(nick) != null){
-			throw new PersistenceException("Nick '"+nick+"' already exists");
+			throw new IrisPersistenceException("Nick '"+nick+"' already exists");
 		}
 	}
 	
 	@Override
-	public AddressBookEntry findByNick(String nick) throws PersistenceException {
+	public AddressBookEntry findByNick(String nick) throws IrisPersistenceException {
 		Predicate<AddressBookEntryXml> p = getFindByNickPredicate(nick);
 		return findByPredicate(p);
 	}
 
 	@Override
-	public AddressBookEntry findById(String id) throws PersistenceException {
+	public AddressBookEntry findById(String id) throws IrisPersistenceException {
 		Predicate<AddressBookEntryXml> p = f -> id.equals(f.getId());
 		return findByPredicate(p);
 	}
@@ -59,7 +59,7 @@ public class AddressBookDaoXml extends AbstractAddressBookDaoXml implements IAdd
 	}
 
 	@Override
-	public void delete(String nick) throws PersistenceException {
+	public void delete(String nick) throws IrisPersistenceException {
 		AddressBookStoreXml store = getXmlStore();
 		boolean removeIf = store.getEntries().removeIf(getFindByNickPredicate(nick));
 		if(removeIf){
@@ -68,12 +68,12 @@ public class AddressBookDaoXml extends AbstractAddressBookDaoXml implements IAdd
 	}
 
 
-	private AddressBookEntryXml findByPredicate(Predicate<AddressBookEntryXml> p) throws PersistenceException {
+	private AddressBookEntryXml findByPredicate(Predicate<AddressBookEntryXml> p) throws IrisPersistenceException {
 		return getXmlStore().findAddressBookEntryByPredicate(p);
 	}
 
 	@Override
-	public List<AddressBookEntry> findAll() throws PersistenceException {
+	public List<AddressBookEntry> findAll() throws IrisPersistenceException {
 		AddressBookStoreXml store = getXmlStore();
 		List<AddressBookEntry> list = new ArrayList<>(store.getEntries());
 		return list;

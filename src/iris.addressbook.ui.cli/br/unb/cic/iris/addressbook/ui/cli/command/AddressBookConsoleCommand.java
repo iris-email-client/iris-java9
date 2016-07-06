@@ -6,8 +6,8 @@ import java.util.List;
 import br.unb.cic.iris.addressbook.AddressBookManager;
 import br.unb.cic.iris.addressbook.model.AddressBookEntry;
 import br.unb.cic.iris.cli.command.ConsoleAbstractMailCommand;
-import br.unb.cic.iris.exception.EmailException;
-import br.unb.cic.iris.exception.EmailUncheckedException;
+import br.unb.cic.iris.exception.IrisException;
+import br.unb.cic.iris.exception.IrisUncheckedException;
 import br.unb.cic.iris.util.EmailValidator;
 
 /***
@@ -31,7 +31,7 @@ public class AddressBookConsoleCommand extends ConsoleAbstractMailCommand {
 	}
 
 	@Override
-	protected void handleExecute() throws EmailException {
+	protected void handleExecute() throws IrisException {
 		switch (parameters.get(0)) {
 		case "list":
 			listAll();
@@ -43,11 +43,11 @@ public class AddressBookConsoleCommand extends ConsoleAbstractMailCommand {
 			delete();
 			break;
 		default:
-			throw new EmailException(parameters.get(0) + " is an invalid command");
+			throw new IrisException(parameters.get(0) + " is an invalid command");
 		}
 	}
 
-	private void listAll() throws EmailException {		
+	private void listAll() throws IrisException {		
 		List<AddressBookEntry> entries = AddressBookManager.instance().findAll();
 		System.out.println("-----------------------------------------------------");
 		System.out.println("Address Book:");
@@ -58,7 +58,7 @@ public class AddressBookConsoleCommand extends ConsoleAbstractMailCommand {
 		System.out.println("-----------------------------------------------------");
 	}
 
-	private void delete() throws EmailException {
+	private void delete() throws IrisException {
 		if (parameters.size() == 2) {
 			String name = parameters.get(1);
 			AddressBookManager.instance().delete(name);
@@ -67,12 +67,12 @@ public class AddressBookConsoleCommand extends ConsoleAbstractMailCommand {
 		}
 	}
 
-	private void add() throws EmailException {
+	private void add() throws IrisException {
 		if (parameters.size() == 3) {
 			String name = parameters.get(1);
 			String email = parameters.get(2);
 			if (!EmailValidator.validate(email)) {
-				throw new EmailUncheckedException("Invalid email: "+email);
+				throw new IrisUncheckedException("Invalid email: "+email);
 			}
 			AddressBookManager.instance().save(name, email);
 		} else {

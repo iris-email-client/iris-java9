@@ -16,8 +16,8 @@ import javax.mail.event.TransportListener;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import br.unb.cic.iris.exception.EmailException;
-import br.unb.cic.iris.exception.EmailMessageValidationException;
+import br.unb.cic.iris.exception.IrisException;
+import br.unb.cic.iris.exception.IrisValidationException;
 import br.unb.cic.iris.mail.EmailProvider;
 import br.unb.cic.iris.mail.EmailStatusManager;
 import br.unb.cic.iris.model.EmailMessage;
@@ -35,7 +35,7 @@ public class EmailSender implements TransportListener {
 		session = new EmailSession(this.provider, encoding);
 	}
 
-	public void send(EmailMessage email) throws EmailException {
+	public void send(EmailMessage email) throws IrisException {
 		List<String> errorMessages = validateEmailMessage(email);
 		if (errorMessages.isEmpty()) {
 			try {
@@ -47,12 +47,12 @@ public class EmailSender implements TransportListener {
 				transport.sendMessage(message, message.getAllRecipients());
 				transport.close();
 			} catch (final UnsupportedEncodingException e) {				
-				throw new EmailException(message("error.invalid.encoding", e.getMessage()), e);
+				throw new IrisException(message("error.invalid.encoding", e.getMessage()), e);
 			} catch (final MessagingException e) {				
-				throw new EmailException(message("error.send.email", e.getMessage()), e);
+				throw new IrisException(message("error.send.email", e.getMessage()), e);
 			}
 		} else {
-			throw new EmailMessageValidationException(errorMessages);
+			throw new IrisValidationException(errorMessages);
 		}
 	}
 
