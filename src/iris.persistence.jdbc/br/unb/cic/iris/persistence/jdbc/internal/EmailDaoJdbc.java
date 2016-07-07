@@ -57,6 +57,8 @@ public class EmailDaoJdbc extends AbstractDaoJdbc implements EmailDAO {
 			while (rs.next()) {
 				messages.add(toEmailMessage(rs));
 			}			
+			
+			rs.close();
 		} catch (SQLException e) {
 			throw new IrisPersistenceException("Could not list all folders: "+e.getMessage(), e);
 		}
@@ -73,6 +75,7 @@ public class EmailDaoJdbc extends AbstractDaoJdbc implements EmailDAO {
             if(rs.next()){
             	message = toEmailMessage(rs);
             }
+            rs.close();
         } catch (SQLException e) {
         	throw new IrisPersistenceException("Could not find message with id '"+id+"': "+e.getMessage(), e);
         }

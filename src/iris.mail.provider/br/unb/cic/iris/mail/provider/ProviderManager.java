@@ -40,13 +40,11 @@ public class ProviderManager {
 		System.out.println("Total providers found: " + manager.getAll().size());
 	}
 
-	@SuppressWarnings("boxing")
 	public void addProvider(EmailProvider provider) {
 		System.out.println("Adding provider: "+provider.getName()+" - "+provider.getDescription());
 		manager.add(provider.getName().trim(), provider);
 	}
 
-	@SuppressWarnings("boxing")
 	public EmailProvider getProvider(String name) {
 		return manager.get(name);
 	}

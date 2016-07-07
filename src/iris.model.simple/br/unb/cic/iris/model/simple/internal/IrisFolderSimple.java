@@ -25,33 +25,40 @@ public class IrisFolderSimple implements IrisFolder<EmailMessage> {
 	public IrisFolderSimple(String id, String name) {
 		this.id = id;
 		this.name = name;
-		messages = new ArrayList<EmailMessage>();
+		messages = new ArrayList<>();
 	}
 
+	@Override
 	public String getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(String id) {
 		this.id = id;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	@Override
 	public void addMessage(EmailMessage e) {
 		messages.add(e);
 	}
 
+	@Override
 	public List<EmailMessage> getMessages() {
 		return messages;
 	}
 
+	@Override
 	public EmailMessage getMessage(int index) {
 		return messages.get(index);
 	}

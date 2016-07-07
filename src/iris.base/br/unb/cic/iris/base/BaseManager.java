@@ -10,9 +10,13 @@ import java.util.Vector;
  * added by dBase
  */
 public class BaseManager<T> {
-	private Map<String, Integer> map = Collections.synchronizedMap(new HashMap<String, Integer>());
-	private List<T> list = new Vector<T>();
+	private Map<String, Integer> map;
+	private List<T> list;
 
+	public BaseManager(){
+		clear();
+	}
+	
 	public void add(String key, T value) {
 		synchronized (list) {
 			map.put(key, list.size());
@@ -30,12 +34,10 @@ public class BaseManager<T> {
 
 	public void clear() {
 		map = Collections.synchronizedMap(new HashMap<String, Integer>());
-		list = new Vector<T>();
+		list = new Vector<>();
 	}
 
 	public void print() {
-		for (T t : list) {
-			System.out.println(t);
-		}
+		list.forEach(System.out::println);
 	}
 }

@@ -96,17 +96,19 @@ public class AddressBookDaoJdbc implements AddressBookDAO {
 	}
 
 	private AddressBookEntry executeQuery(String sql, String value) throws IrisPersistenceException {
+		AddressBookEntry entry = null;
 		try (Connection conn = getDbUtil().connect(); 
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, value);
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
-				return toAddressBookEntry(rs);
+				entry = toAddressBookEntry(rs);
 			}
+			rs.close();
 		} catch (SQLException e) {
 			throw new IrisPersistenceException("Could not execute query: " + e.getMessage(), e);
 		}
-		return null;
+		return entry;
 	}
 
 	private AddressBookEntry toAddressBookEntry(ResultSet rs) throws SQLException {

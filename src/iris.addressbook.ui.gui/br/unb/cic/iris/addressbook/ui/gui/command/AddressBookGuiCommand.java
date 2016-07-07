@@ -78,9 +78,8 @@ public class AddressBookGuiCommand extends AbstractGuiMailCommand {
 			Image img = new ImageIcon(imgURL, description).getImage();
 			ImageIcon icon = new ImageIcon(img.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH));
 			return icon;
-		} else {
-			System.err.println("Couldn't find file: " + path);
-			return null;
 		}
+		System.err.println("Couldn't find file: " + path);
+		return null;
 	}
 }

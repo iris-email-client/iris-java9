@@ -27,17 +27,25 @@ public class MessageBundle {
 		
 		String defaultFile = "/MessageBundle.properties";
 		String baseName = control.toBundleName("MessageBundle", locale);
-		//String baseName = control.toBundleName("MessageBundle", Locale.ENGLISH);		
-		try {
-			String file = String.format("/%s.properties", baseName);
-			InputStream is = getClass().getResourceAsStream(file);
-			if(is == null){
+		String file = String.format("/%s.properties", baseName);	
+		InputStream is = null;
+		try  {						
+			is = getClass().getResourceAsStream(file);			
+			if(is == null){				
 				is = getClass().getResourceAsStream(defaultFile);
 			}
 			rb = new IrisGuiResourceBundle(is);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			if(is != null){
+				try {
+					is.close();
+				} catch (IOException e) {					
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 

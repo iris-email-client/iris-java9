@@ -40,15 +40,18 @@ public class IrisServiceLocator {
 	
 	
 	public Object getService(Class<?> clazz){
-		ServiceLoader<?> sl = ServiceLoader.load(clazz);
+		return getService(clazz, getClass().getModule().getClassLoader());
+	}
+	//TODO testar (usar em outro modulo carregando coisas do outro modulo, passando o classloader)
+	public Object getService(Class<?> clazz, ClassLoader loader){
+		ServiceLoader<?> sl = ServiceLoader.load(clazz, loader);
 		Iterator<?> it = sl.iterator();
 
 		if (!it.hasNext())
 			throw new IrisUncheckedException("No service implementation found for: "+clazz);
 		
-		return it.next();		
+		return it.next();	
 	}
-	
 
 	private void initEmailClient(){		
 		ServiceLoader<IEmailClient> sl = ServiceLoader.load(IEmailClient.class);

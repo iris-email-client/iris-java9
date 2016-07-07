@@ -1,16 +1,12 @@
 package br.unb.cic.iris.core;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
-
-import javax.mail.search.ComparisonTerm;
-import javax.mail.search.ReceivedDateTerm;
-import javax.mail.search.SearchTerm;
 
 import br.unb.cic.iris.core.i18n.MessageBundle;
 import br.unb.cic.iris.exception.IrisException;
@@ -54,10 +50,10 @@ public final class SystemFacade {
 		return instance;
 	}
 
-	public void defineEmailProvider(EmailProvider provider) {
+	public void defineEmailProvider(EmailProvider newProvider) {
 		setStatus(Status.NOT_CONNECTED);
-		this.provider = provider;
-		getEmailClient().setProvider(provider);
+		this.provider = newProvider;
+		getEmailClient().setProvider(newProvider);
 		setStatus(Status.CONNECTED);
 	}
 
@@ -80,9 +76,7 @@ public final class SystemFacade {
 
 	private void saveMessage(EmailMessage message, String folderName) throws IrisException {
 		EmailDAO emailDAO = getDaoFactory().createEmailDAO();
-
 		IrisFolder folder = checkFolder(folderName);
-
 		message.setFolder(folder);
 		emailDAO.saveMessage(message);
 	}
@@ -94,15 +88,10 @@ public final class SystemFacade {
 
 	public void downloadMessages(String folder) throws IrisException {
 		verifyConnection();
-		SearchTerm searchTerm = null;
 		EmailDAO dao = getDaoFactory().createEmailDAO();
 		checkFolder(folder);
 		Date lastMessageReceived = dao.lastMessageReceived(folder);
-		System.out.println("**************************** lastMessageReceived=" + lastMessageReceived);
-		if (lastMessageReceived != null) {
-			searchTerm = new ReceivedDateTerm(ComparisonTerm.GT, lastMessageReceived);
-		}
-		List<EmailMessage> messages = getEmailClient().getMessages(folder, searchTerm);
+		List<EmailMessage> messages = getEmailClient().getMessagesAfterDate(folder, lastMessageReceived);
 		for (EmailMessage message : messages) {
 			saveMessage(message, folder);
 		}
@@ -149,11 +138,11 @@ public final class SystemFacade {
 
 	private void initLocale() {
 		String language = getIrisProperties().getProperty("language");
-		if(!StringUtil.isEmpty(language)){
+		if (!StringUtil.isEmpty(language)) {
 			locale = new Locale(getIrisProperties().getProperty("language"));
-		}else{
+		} else {
 			locale = Locale.ENGLISH;
-		}		
+		}
 	}
 
 	public Locale getLocale() {
@@ -163,13 +152,10 @@ public final class SystemFacade {
 	private void initIrisProperties() {
 		String irisPropertiesFile = System.getProperty("user.home") + "/.iris/iris.properties";
 		irisProperties = new Properties();
-		try {
-			//System.out.println("str="+irisPropertiesFile);
-			//System.out.println("file="+new File(irisPropertiesFile).exists());
-			//System.out.println("IRIS_PROPERTIES="+new FileInputStream(irisPropertiesFile));
-			irisProperties.load(new FileInputStream(irisPropertiesFile));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		try (InputStream is = new FileInputStream(irisPropertiesFile)) {
+			irisProperties.load(is);
+		} catch (IOException e) {						
+			System.err.println(MessageBundle.message("Unable to read iris properties file: "+irisPropertiesFile+". "+e.getLocalizedMessage()));
 			e.printStackTrace();
 		}
 	}

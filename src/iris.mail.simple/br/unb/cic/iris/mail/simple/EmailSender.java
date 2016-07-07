@@ -43,7 +43,7 @@ public class EmailSender implements TransportListener {
 				message.saveChanges();
 				Transport transport = createTransport();
 				session.connect(transport, provider.getTransportHost(), provider.getTransportPort());
-				EmailStatusManager.instance().notifyListener(message("email.status.sender.sending"));				
+				notifyListeners(message("email.status.sender.sending"));				
 				transport.sendMessage(message, message.getAllRecipients());
 				transport.close();
 			} catch (final UnsupportedEncodingException e) {				
@@ -57,7 +57,7 @@ public class EmailSender implements TransportListener {
 	}
 
 	public static List<String> validateEmailMessage(EmailMessage message) {
-		List<String> errorMessages = new ArrayList<String>();
+		List<String> errorMessages = new ArrayList<>();
 		if (message == null) {
 			errorMessages.add(message("error.null.message"));
 		} else if (StringUtil.isEmpty(message.getFrom())) {
@@ -67,7 +67,7 @@ public class EmailSender implements TransportListener {
 	}
 
 	private Transport createTransport() throws MessagingException {
-		EmailStatusManager.instance().notifyListener(message("email.status.sender.create.transport", provider.getTransportProtocol()));		
+		notifyListeners(message("email.status.sender.create.transport", provider.getTransportProtocol()));		
 		Transport transport = session.getSession().getTransport(provider.getTransportProtocol());
 		transport.addTransportListener(this);
 		transport.addConnectionListener(session);
@@ -92,16 +92,20 @@ public class EmailSender implements TransportListener {
 
 	@Override
 	public void messageDelivered(TransportEvent e) {
-		EmailStatusManager.instance().notifyListener(message("email.status.sender.message.delivered"));
+		notifyListeners(message("email.status.sender.message.delivered"));
 	}
 
 	@Override
 	public void messageNotDelivered(TransportEvent e) {
-		EmailStatusManager.instance().notifyListener(message("email.status.sender.message.not.delivered"));
+		notifyListeners(message("email.status.sender.message.not.delivered"));
 	}
 
 	@Override
 	public void messagePartiallyDelivered(TransportEvent e) {
-		EmailStatusManager.instance().notifyListener(message("email.status.sender.message.partially.delivered"));	
+		notifyListeners(message("email.status.sender.message.partially.delivered"));	
+	}
+	
+	private void notifyListeners(String message){
+		EmailStatusManager.instance().notifyListener(message);	
 	}
 }

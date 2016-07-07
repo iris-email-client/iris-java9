@@ -43,10 +43,9 @@ public class EmailReceiver implements StoreListener, FolderListener {
 	}
 
 	public List<IrisFolder> listFolders() throws IrisException {
-		List<IrisFolder> folders = new ArrayList<IrisFolder>();
-		try {
-			Store store = getStore();
-			Folder defaultFolder = store.getDefaultFolder();
+		List<IrisFolder> folders = new ArrayList<>();
+		try {			
+			Folder defaultFolder = getStore().getDefaultFolder();
 			Folder[] externalFolders = defaultFolder.list();
 			for (Folder f : externalFolders) {
 				folders.add(getEntityFactory().createIrisFolder(f.getName()));
@@ -58,7 +57,7 @@ public class EmailReceiver implements StoreListener, FolderListener {
 	}
 
 	public List<EmailMessage> getMessages(String folderName, SearchTerm searchTerm) throws IrisException {
-		List<EmailMessage> messages = new ArrayList<EmailMessage>();
+		List<EmailMessage> messages = new ArrayList<>();
 		Folder folder = openFolder(folderName);
 		try {
 			Message messagesRetrieved[] = null;
@@ -75,7 +74,7 @@ public class EmailReceiver implements StoreListener, FolderListener {
 	}
 
 	public List<EmailMessage> getMessages(String folderName, int begin, int end) throws IrisException {
-		List<EmailMessage> messages = new ArrayList<EmailMessage>();
+		List<EmailMessage> messages = new ArrayList<>();
 		Folder folder = openFolder(folderName);
 		try {
 			Message messagesRetrieved[] = folder.getMessages(begin, end);
@@ -87,10 +86,10 @@ public class EmailReceiver implements StoreListener, FolderListener {
 	}
 
 	public List<EmailMessage> getMessages(String folderName, int seqnum) throws IrisException {
-		List<EmailMessage> messages = new ArrayList<EmailMessage>();
+		List<EmailMessage> messages = new ArrayList<>();
 		Folder folder = openFolder(folderName);
 		try {
-			List<Message> messagesList = new ArrayList<Message>();
+			List<Message> messagesList = new ArrayList<>();
 			int messageCount = folder.getMessageCount();
 			for (int i = seqnum; i <= messageCount; i++) {
 				Message message = folder.getMessage(i);
@@ -109,7 +108,7 @@ public class EmailReceiver implements StoreListener, FolderListener {
 	}
 
 	private List<EmailMessage> convertToIrisMessage(Message[] messagesRetrieved) throws IrisException {
-		List<EmailMessage> messages = new ArrayList<EmailMessage>();
+		List<EmailMessage> messages = new ArrayList<>();
 		int cont = 0;
 		int total = messagesRetrieved.length;
 		for (Message m : messagesRetrieved) {
@@ -208,11 +207,11 @@ public class EmailReceiver implements StoreListener, FolderListener {
 
 	private Store createStoreAndConnect() throws MessagingException {
 		EmailStatusManager.instance().notifyListener(message("email.status.receiver.create.store"));		
-		Store store = session.getSession().getStore(provider.getStoreProtocol());
-		store.addStoreListener(this);
-		store.addConnectionListener(session);
-		session.connect(store, provider.getStoreHost(), provider.getStorePort());
-		return store;
+		Store storeTmp = session.getSession().getStore(provider.getStoreProtocol());
+		storeTmp.addStoreListener(this);
+		storeTmp.addConnectionListener(session);
+		session.connect(storeTmp, provider.getStoreHost(), provider.getStorePort());
+		return storeTmp;
 	}
 
 	public Store getStore() throws IrisException {

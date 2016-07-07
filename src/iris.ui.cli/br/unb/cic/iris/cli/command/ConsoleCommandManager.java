@@ -67,7 +67,7 @@ public class ConsoleCommandManager extends AbstractCommandManager {
 	}
 
 	private static List<String> getParameters(String[] split) {
-		List<String> parameters = new ArrayList<String>();
+		List<String> parameters = new ArrayList<>();
 		for (int i = 1; i < split.length; i++) {
 			parameters.add(split[i].trim());
 		}

@@ -23,16 +23,15 @@ public class AddressBookDaoXml extends AbstractAddressBookDaoXml implements Addr
 			store.getEntries().add((AddressBookEntryXml)entry);
 			persistStore(store);
 			return entry;
-		}else{
-			//update			
-			AddressBookEntry addressBookEntry = findById(entry.getId());
-			addressBookEntry.setNick(entry.getNick());
-			addressBookEntry.setAddress(entry.getAddress());
-			//TODO
-			
-			
-			return null;
 		}
+		//update			
+		AddressBookEntry addressBookEntry = findById(entry.getId());
+		addressBookEntry.setNick(entry.getNick());
+		addressBookEntry.setAddress(entry.getAddress());
+		//TODO
+		
+		
+		return null;
 		
 	}
 

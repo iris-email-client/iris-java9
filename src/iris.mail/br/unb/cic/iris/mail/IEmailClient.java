@@ -1,5 +1,6 @@
 package br.unb.cic.iris.mail;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.mail.search.SearchTerm;
@@ -19,6 +20,8 @@ public interface IEmailClient {
 	public List<IrisFolder> listFolders() throws IrisException;
 
 	public List<EmailMessage> getMessages(String folder, SearchTerm searchTerm) throws IrisException;
+	
+	public List<EmailMessage> getMessagesAfterDate(String folder, Date lastMessageReceived) throws IrisException;
 
 	public List<EmailMessage> getMessages(String folder) throws IrisException;
 

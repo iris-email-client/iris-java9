@@ -32,6 +32,7 @@ public abstract class AbstractDAO<T> {
 			this.result = result;
 		}
 
+		@Override
 		public void tryCollect(int doc) throws Exception {
 			Document d = searcher.doc(doc);
 			result.add(fromDocument(d));
@@ -40,7 +41,7 @@ public abstract class AbstractDAO<T> {
 
 
 	public List<T> findAll() throws IrisPersistenceException {
-		List<T> result = new ArrayList<T>();
+		List<T> result = new ArrayList<>();
 		try {
 			Query query = new TermQuery(new Term("type", type));
 			IndexSearcher searcher = IndexManager.getSearcher();
@@ -109,7 +110,7 @@ public abstract class AbstractDAO<T> {
 	}
 
 	public List<T> findByTerms(Query[] queries) throws IrisPersistenceException {
-		List<T> result = new ArrayList<T>();
+		List<T> result = new ArrayList<>();
 		try {
 			BooleanQuery query = new BooleanQuery();
 			Query typeQuery = new TermQuery(new Term("type", type));

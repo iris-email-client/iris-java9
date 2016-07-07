@@ -28,8 +28,7 @@ public abstract class AbstractDaoXml {
 			} catch (IrisPersistenceException e) {				
 				throw new IrisUncheckedException("Error while creating XML store file: "+e.getMessage(), e);
 			}
-		}
-		
+		}		
 		daoFactory = new DaoFactoryXml();
 	}
 
@@ -42,7 +41,7 @@ public abstract class AbstractDaoXml {
 		return daoFactory.createFolderDAO();
 	}
 
-	public File getXmlFile() throws IrisPersistenceException {
+	public File getXmlFile() {
 		return XML_FILE;
 	}
 	

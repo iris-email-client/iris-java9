@@ -30,8 +30,9 @@ public class IrisFolderXml implements IrisFolder<EmailMessageXml> {
 	public IrisFolderXml(String id, String name) {
 		this.id = id;
 		this.name = name;
-		messages = new ArrayList<EmailMessageXml>();
+		messages = new ArrayList<>();
 	}
+
 
 	public String getId() {
 		return id;

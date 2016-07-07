@@ -120,16 +120,15 @@ public class SendPanel extends JPanel implements EmailStatusListener {
 		final SendPanel panel = this;
 		EmailMessage m = createMessage();
 		
-		new Thread(new Runnable() {
-			public void run() {
-				try {
-					SystemFacade.instance().send(m, panel);
-				} catch (IrisException e) {
-					//GuiManager.instance().showErrorMessage("Error while sending message: "+e.getMessage());
-					throw new IrisUncheckedException("Error while sending message: "+e.getMessage(), e);
-				}
+		Runnable runnable = () -> {
+			try {
+				SystemFacade.instance().send(m, panel);
+			} catch (IrisException e) {
+				//GuiManager.instance().showErrorMessage("Error while sending message: "+e.getMessage());
+				throw new IrisUncheckedException("Error while sending message: "+e.getMessage(), e);
 			}
-		}).start();	
+		};
+		runnable.run();	
 	}
 
 	private EmailMessage createMessage() {
@@ -156,7 +155,6 @@ public class SendPanel extends JPanel implements EmailStatusListener {
 		return gridBagConstraints;
 	}
 
-	//TODO use swingworker ... but not in the scope of this prototype
 	@Override
 	public void statusChanged(String message) {
 		GuiManager.instance().appendStatusText(message);

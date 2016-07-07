@@ -1,7 +1,7 @@
 package br.unb.cic.iris.exception;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /***
@@ -9,7 +9,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 public class IrisValidationException extends IrisException {
-	private List<String> messages = new ArrayList<String>();
+	private List<String> messages = new LinkedList<>();
 
 	public IrisValidationException(String message) {
 		this(message, null);

@@ -1,7 +1,10 @@
 package br.unb.cic.iris.mail.simple;
 
+import java.util.Date;
 import java.util.List;
 
+import javax.mail.search.ComparisonTerm;
+import javax.mail.search.ReceivedDateTerm;
 import javax.mail.search.SearchTerm;
 
 import br.unb.cic.iris.exception.IrisException;
@@ -21,15 +24,18 @@ public class EmailClient implements IEmailClient {
 	public EmailClient() {
 	}
 
+	@Override
 	public void setProvider(EmailProvider provider) {
 		setProvider(provider, CHARACTER_ENCODING);
 	}
 
+	@Override
 	public void setProvider(EmailProvider provider, String encoding) {		
 		sender = new EmailSender(provider, encoding);
 		receiver = new EmailReceiver(provider, encoding);
 	}
 
+	@Override
 	public void send(EmailMessage email) throws IrisException {		
 		sender.send(email);
 	}
@@ -60,9 +66,18 @@ public class EmailClient implements IEmailClient {
 		return receiver.getMessages(folder, begin, end);
 	}
 
-	//TODO refactoring candidate. suggestion: throw EmailMessageValidationException whith messages instead
+	//TODO refactoring candidate. suggestion: throw EmailMessageValidationException whith messages instead of a list
 	@Override
 	public List<String> validateEmailMessage(EmailMessage message) {
 		return EmailSender.validateEmailMessage(message);
+	}
+
+	@Override
+	public List<EmailMessage> getMessagesAfterDate(String folder, Date lastMessageReceived) throws IrisException {
+		SearchTerm searchTerm = null;
+		if (lastMessageReceived != null) {
+			searchTerm = new ReceivedDateTerm(ComparisonTerm.GT, lastMessageReceived);
+		}
+		return getMessages(folder, searchTerm);
 	}
 }
