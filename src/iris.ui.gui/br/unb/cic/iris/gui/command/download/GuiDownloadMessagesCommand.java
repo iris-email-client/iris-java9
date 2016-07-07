@@ -29,7 +29,7 @@ public class GuiDownloadMessagesCommand extends AbstractGuiMailCommand {
 		
 		Runnable runnable = () -> {
 			try {
-				List<IrisFolder> folders = SystemFacade.instance().listRemoteFolders(panel);
+				List<IrisFolder> folders = SystemFacade.instance().listRemoteFolders();
 				panel.setFolders(folders);
 			} catch (IrisException e) {
 				throw new IrisUncheckedException("Error while listing remote folders: "+e.getMessage(), e);
