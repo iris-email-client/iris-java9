@@ -1,6 +1,6 @@
 package br.unb.cic.iris.gui;
 
-import static br.unb.cic.iris.core.i18n.MessageBundle.message;
+import static br.unb.cic.iris.gui.i18n.MessageBundle.message;
 
 import java.awt.BorderLayout;
 import java.awt.Component;

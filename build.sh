@@ -16,10 +16,10 @@ echo Java: $JAVA_BIN
 
 ############### BASIC CONFIG ###################
 #interface: gui/cli
-INTERFACE=cli
+INTERFACE=gui
 
 #persistence: xml/lucene/relational
-PERSISTENCE=xml
+PERSISTENCE=relational
 
 #adb: true/false
 ADDRESS_BOOK=true

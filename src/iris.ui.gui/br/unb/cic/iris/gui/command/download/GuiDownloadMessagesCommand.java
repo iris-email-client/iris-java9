@@ -1,13 +1,17 @@
 package br.unb.cic.iris.gui.command.download;
 
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.exception.IrisException;
+import br.unb.cic.iris.exception.IrisUncheckedException;
 import br.unb.cic.iris.gui.GuiManager;
 import br.unb.cic.iris.gui.command.AbstractGuiMailCommand;
+import br.unb.cic.iris.model.IrisFolder;
 
 public class GuiDownloadMessagesCommand extends AbstractGuiMailCommand {
 	public static final String COMMAND_NAME = "Download";
@@ -18,8 +22,21 @@ public class GuiDownloadMessagesCommand extends AbstractGuiMailCommand {
 	}
 
 	@Override
-	public void handleExecute() throws IrisException {
-		showInfoMessage("Not yet implemented");
+	public void handleExecute() throws IrisException {		
+		DownloadPanel panel = new DownloadPanel();		
+		GuiManager.instance().setCenterPanel(panel);
+		GuiManager.instance().setStatusText("Downloading emails");
+		
+		Runnable runnable = () -> {
+			try {
+				List<IrisFolder> folders = SystemFacade.instance().listRemoteFolders(panel);
+				panel.setFolders(folders);
+			} catch (IrisException e) {
+				throw new IrisUncheckedException("Error while listing remote folders: "+e.getMessage(), e);
+			}
+		};
+		runnable.run();
+		
 	}
 
 

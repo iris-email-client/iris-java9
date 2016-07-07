@@ -81,6 +81,10 @@ public final class SystemFacade {
 		emailDAO.saveMessage(message);
 	}
 
+	public List<IrisFolder> listRemoteFolders(EmailStatusListener listener) throws IrisException {
+		EmailStatusManager.instance().setListener(listener);
+		return listRemoteFolders();
+	}
 	public List<IrisFolder> listRemoteFolders() throws IrisException {
 		verifyConnection();
 		return getEmailClient().listFolders();
