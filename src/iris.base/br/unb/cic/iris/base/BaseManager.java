@@ -25,9 +25,16 @@ public class BaseManager<T> {
 	}
 
 	public T get(String key) {
-		return list.get(map.get(key));
+		if(exists(key)){
+			return list.get(map.get(key));
+		}
+		return null;
 	}
 
+	public boolean exists(String key){
+		return map.get(key) != null;
+	}
+	
 	public List<T> getAll() {
 		return Collections.unmodifiableList(list);
 	}

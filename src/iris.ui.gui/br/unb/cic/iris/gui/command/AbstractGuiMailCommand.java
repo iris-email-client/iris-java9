@@ -16,11 +16,11 @@ public abstract class AbstractGuiMailCommand implements GuiMailCommand {
 	protected abstract void handleExecute() throws IrisException;
 
 	// TODO i18n ...
-	public void execute() {	
+	public void execute() {
 		try {
 			handleExecute();
-		}  catch (IrisUncheckedException iue) {
-			GuiManager.instance().showException(iue);			
+		} catch (IrisUncheckedException iue) {
+			GuiManager.instance().showException(iue);
 		} catch (IrisValidationException ive) {
 			GuiManager.instance().showException(ive);
 		} catch (IrisPersistenceException pe) {
@@ -38,6 +38,14 @@ public abstract class AbstractGuiMailCommand implements GuiMailCommand {
 		return MessageBundle.message(key);
 	}
 
+	protected String message(String key, String param) {
+		return MessageBundle.message(key, param);
+	}
+
+	protected String message(String key, String... params) {
+		return MessageBundle.message(key, params);
+	}
+
 	protected void showErrorMessage(String message) {
 		GuiManager.instance().showErrorMessage(message);
 	}
@@ -46,7 +54,7 @@ public abstract class AbstractGuiMailCommand implements GuiMailCommand {
 		GuiManager.instance().showInfoMessage(message);
 	}
 
-	protected ImageIcon createImageIcon(String path, String description) {		
+	protected ImageIcon createImageIcon(String path, String description) {
 		java.net.URL imgURL = getClass().getResource(path);
 		if (imgURL != null) {
 			Image img = new ImageIcon(imgURL, description).getImage();

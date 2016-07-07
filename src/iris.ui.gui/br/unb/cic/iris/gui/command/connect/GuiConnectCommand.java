@@ -6,10 +6,12 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.gui.GuiManager;
 import br.unb.cic.iris.gui.command.AbstractGuiMailCommand;
 import br.unb.cic.iris.mail.EmailProvider;
 import br.unb.cic.iris.mail.provider.ProviderManager;
+import br.unb.cic.iris.model.Status;
 
 public class GuiConnectCommand extends AbstractGuiMailCommand {
 	public static final String COMMAND_NAME = "Connect";
@@ -25,6 +27,11 @@ public class GuiConnectCommand extends AbstractGuiMailCommand {
 		ConnectPanel panel = new ConnectPanel(providers);
 		GuiManager.instance().setCenterPanel(panel);
 		GuiManager.instance().setStatusText(message("command.connect.status"));
+		
+		if(SystemFacade.instance().getStatus() == Status.CONNECTED){
+			EmailProvider provider = SystemFacade.instance().getProvider();			
+			GuiManager.instance().appendStatusText(message("command.connect.already.connected", provider.getName(), provider.getUsername()));
+		}
 	}
 
 	@Override

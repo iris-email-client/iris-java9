@@ -45,7 +45,7 @@ public class ProviderManager {
 		manager.add(provider.getName().trim(), provider);
 	}
 
-	public EmailProvider getProvider(String name) {
+	public EmailProvider getProvider(String name) {		
 		return manager.get(name);
 	}
 

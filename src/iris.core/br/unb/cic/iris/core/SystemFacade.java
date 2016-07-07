@@ -44,6 +44,8 @@ public final class SystemFacade {
 
 		IrisServiceLocator.instance();
 		ProviderManager.instance();
+		
+		initDefaultProvider();
 	}
 
 	public static SystemFacade instance() {
@@ -51,6 +53,7 @@ public final class SystemFacade {
 	}
 
 	public void defineEmailProvider(EmailProvider newProvider) {
+		System.out.println("Defining email provider: "+newProvider.getName()+", user="+newProvider.getUsername());
 		setStatus(Status.NOT_CONNECTED);
 		this.provider = newProvider;
 		getEmailClient().setProvider(newProvider);
@@ -167,4 +170,21 @@ public final class SystemFacade {
 	public Properties getIrisProperties() {
 		return irisProperties;
 	}
+	
+	private void initDefaultProvider(){
+		if(getIrisProperties().containsKey("provider")){
+			String providerStr = getIrisProperties().getProperty("provider");
+			EmailProvider defaultProvider = ProviderManager.instance().getProvider(providerStr.trim());
+			if(defaultProvider != null){
+				String username = getIrisProperties().getProperty("username").trim();
+				String password = getIrisProperties().getProperty("password").trim();
+				if(StringUtil.notEmpty(username) && StringUtil.notEmpty(password)){
+					defaultProvider.setUsername(username);
+					defaultProvider.setPassword(password);
+					defineEmailProvider(defaultProvider);
+				}
+			}
+		}
+	}
+	
 }

@@ -69,15 +69,19 @@ public class MessageBundle {
 	}
 
 	public static String message(String key) {
-		return MessageBundle.instance().getMessage(key);
+		return instance().getMessage(key);
 	}
 
 	public static String message(String key, String param) {
-		return MessageBundle.instance().getMessage(key, param);
+		return instance().getMessage(key, param);
+	}
+	
+	public static String message(String key, String... params) {
+		return instance().getMessage(key, params);
 	}
 
 	public static String message(String key, Object[] args) {
-		return MessageBundle.instance().getMessage(key, args);
+		return instance().getMessage(key, args);
 	}
 	public ResourceBundle getBundle(){
 		return rb;
