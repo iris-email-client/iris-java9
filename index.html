@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Iris-java9 by iris-email-client</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Iris-java9</h1>
+      <h2 class="project-tagline">IRIS Email Client using Java 9 modular system</h2>
+      <a href="https://github.com/iris-email-client/iris-java9" class="btn">View on GitHub</a>
+      <a href="https://github.com/iris-email-client/iris-java9/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/iris-email-client/iris-java9/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="iris-java9" class="anchor" href="#iris-java9" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>iris-java9</h1>
+
+<p>IRIS Email Client using Java 9 modular system.</p>
+
+<p>The IRIS project intention is to study software modularization techniques. We are building versions of the same project using java9 modular system (interfaces), aspectj (aspect-oriented programming) and deltaj (delta-oriented programming).</p>
+
+<h2>
+<a id="pre-requisites" class="anchor" href="#pre-requisites" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Pre requisites</h2>
+
+<p>Install a Java Early Access Release. You have basically two options:</p>
+
+<ul>
+<li>Download the JDK manually:</li>
+</ul>
+
+<p><a href="https://jdk9.java.net/jigsaw/">JDK 9 Early Access with Project Jigsaw</a></p>
+
+<ul>
+<li>Use a package manager (ubuntu):</li>
+</ul>
+
+<pre><code>sudo add-apt-repository ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get install oracle-java9-installer
+</code></pre>
+
+<h3>
+<a id="about-java-9" class="anchor" href="#about-java-9" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>about java 9</h3>
+
+<p>Here are few links to get started:</p>
+
+<ul>
+<li>Articles:</li>
+</ul>
+
+<p><a href="http://openjdk.java.net/projects/jigsaw/">Project Jigsaw</a></p>
+
+<p><a href="http://openjdk.java.net/projects/jigsaw/quick-start">Project Jigsaw: Module System Quick-Start Guide</a></p>
+
+<p><a href="http://openjdk.java.net/projects/jigsaw/exploratory-phase">Project Jigsaw: Exploratory Phase</a></p>
+
+<p><a href="http://openjdk.java.net/projects/jigsaw/spec/sotms/">The State of the Module System</a></p>
+
+<p><a href="http://openjdk.java.net/jeps/200">JEP 200: The Modular JDK</a></p>
+
+<p><a href="https://www.infoq.com/articles/Latest-Project-Jigsaw-Usage-Tutorial">Programming with Modularity and Project Jigsaw</a></p>
+
+<p><a href="https://hbr.org/1997/09/managing-in-an-age-of-modularity/ar/1">Managing in an Age of Modularity</a></p>
+
+<p><a href="http://njbartlett.name/2015/11/13/osgi-jigsaw.html">OSGi and Java 9 Modules Working Together</a></p>
+
+<p><a href="http://blog.osgi.org/2015/10/java-9-module-system.html">Java 9 Module System</a></p>
+
+<p><a href="http://www.javaworld.com/article/2878952/java-platform/modularity-in-java-9.html">Modularity in Java 9</a></p>
+
+<ul>
+<li>Videos: </li>
+</ul>
+
+<p><a href="https://www.youtube.com/watch?v=KZfbRuvv5qc">Devoxx - Prepare for JDK 9! by Mark Reinhold/Alan Bateman</a> or <a href="https://www.youtube.com/watch?v=nBAUaOoBdGU">JavaOne - CON5107 Prepare for JDK 9</a></p>
+
+<p><a href="https://www.youtube.com/watch?v=a99RmjgG5Eo">JavaOne - CON5118 Introduction to Modular Development</a> or <a href="https://www.youtube.com/watch?v=qr4O4SbzihQ">Devoxx - Introduction to Modular Development by Mark Reinhold/Alan Bateman</a></p>
+
+<p><a href="https://www.youtube.com/watch?v=YPQ2V-hQb8w">JavaOne - CON6821 Advanced Modular Development</a></p>
+
+<p><a href="https://www.youtube.com/watch?v=xswtIp730Ho">JavaOne - CON6823 Project Jigsaw Under the Hood</a></p>
+
+<p><a href="https://www.youtube.com/watch?v=jAL72EhLTXo">JavaOne - CON6826 Ask the Architects</a></p>
+
+<p><a href="https://www.youtube.com/watch?v=r2DeuDCCywM">JavaOne - TUT6825 Project Jigsaw Hack Session</a></p>
+
+<h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>dependencies</h2>
+
+<p>Dependencies, for now, will be downloaded 'manually', as declared on pom.xml</p>
+
+<p>The dependencies should be selected/declared manually according to your modules selection</p>
+
+<p>Then run:</p>
+
+<p><code>mvn package</code></p>
+
+<p>to download jar libs to a specific folder, that will be used as an automatic module.</p>
+
+<p>Example: ... </p>
+
+<h2>
+<a id="build" class="anchor" href="#build" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>build</h2>
+
+<p><code>build.sh</code></p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>usage</h2>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/iris-email-client/iris-java9">Iris-java9</a> is maintained by <a href="https://github.com/iris-email-client">iris-email-client</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
