@@ -12,7 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
@@ -22,13 +21,15 @@ import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.exception.IrisException;
 import br.unb.cic.iris.exception.IrisUncheckedException;
 import br.unb.cic.iris.gui.GuiManager;
+import br.unb.cic.iris.gui.screen.IrisFolderCellRenderer;
+import br.unb.cic.iris.gui.screen.IrisFolderComboBoxModel;
 import br.unb.cic.iris.mail.EmailStatusListener;
 import br.unb.cic.iris.mail.EmailStatusManager;
 import br.unb.cic.iris.model.IrisFolder;
 
 public class DownloadPanel extends JPanel implements PropertyChangeListener {
 		
-	private DownloadComboBoxModel model;
+	private IrisFolderComboBoxModel model;
 	private JPanel progressPanel;
 	private final JProgressBar progressBar = new JProgressBar();
 	private JButton btnDownloadMessages;
@@ -53,7 +54,7 @@ public class DownloadPanel extends JPanel implements PropertyChangeListener {
 		selectFoldersPanel.add(lblNewLabel);
 		
 		JComboBox comboBox = new JComboBox();
-		model = new DownloadComboBoxModel();
+		model = new IrisFolderComboBoxModel();
 		comboBox.setModel(model);
 		comboBox.setRenderer(new IrisFolderCellRenderer());
 		selectFoldersPanel.add(comboBox);

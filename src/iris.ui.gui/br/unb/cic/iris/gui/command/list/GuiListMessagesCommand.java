@@ -19,7 +19,9 @@ public class GuiListMessagesCommand extends AbstractGuiMailCommand {
 
 	@Override
 	public void handleExecute() throws IrisException {
-		showInfoMessage("Not yet implemented");
+		ListMessagesPanel panel = new ListMessagesPanel();		
+		GuiManager.instance().setCenterPanel(panel);
+		GuiManager.instance().setStatusText("List local/downloaded emails");
 	}
 
 

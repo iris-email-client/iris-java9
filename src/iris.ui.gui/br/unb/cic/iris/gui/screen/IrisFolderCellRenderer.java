@@ -1,4 +1,4 @@
-package br.unb.cic.iris.gui.command.download;
+package br.unb.cic.iris.gui.screen;
 
 import java.awt.Component;
 
