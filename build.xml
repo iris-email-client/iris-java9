@@ -103,7 +103,13 @@
 			<param name="persistence.type" value="${persistence.type}" />
 		</antcall>
 
-		<!--<input message="Would you like to add Tagging feature (yes/no)?" validargs="yes,no" addproperty="tag.enabled" />-->
+		<input message="Would you like to add Tagging feature (yes/no)?" validargs="yes,no" addproperty="tag.enabled" />
+		<antcall target="create_tag_module">
+			<param name="tag.enabled" value="${tag.enabled}" />
+			<param name="interface.type" value="${interface.type}" />
+			<param name="persistence.type" value="${persistence.type}" />
+		</antcall>
+
 		<!--
 		<input message="Would you like to create a Runtime Image (yes/no)?" validargs="yes,no" addproperty="jlink.enabled" />
 		<antcall target="create_runtime_image">
@@ -131,6 +137,48 @@
 		</antcall>
 	</target>
 
+	<!-- TODO: not yet imlpemented -->
+	<target name="create_tag_module">
+		<if>
+			<equals arg1="${tag.enabled}" arg2="yes" />
+			<then>
+				<antcall target="create_module">
+					<param name="module.name" value="iris.tag.api" />
+				</antcall>
+				<switch value="${persistence.type}">
+					<case value="relational">
+						<antcall target="create_modules">
+							<param name="list" value="iris.tag.model.simple,iris.tag.persistence.jdbc" />
+						</antcall>
+					</case>
+					<case value="lucene">						
+						<fail message="Not yet implemented: iris.tag.persistence.lucene" />
+					</case>
+					<default>
+						<antcall target="create_module">
+							<param name="module.name" value="iris.tag.persistence.xml" />
+						</antcall>
+					</default>
+				</switch>
+				<switch value="${interface.type}">
+					<case value="gui">
+						<mkdir dir="${build.dir}/iris.tag.ui.gui/images" />
+						<copy todir="${build.dir}/iris.tag.ui.gui/images">
+							<fileset dir="${src.dir}/iris.tag.ui.gui/images" />
+						</copy>
+						<antcall target="create_module">
+							<param name="module.name" value="iris.tag.ui.gui" />
+						</antcall>
+					</case>
+					<default>
+						<antcall target="create_module">
+							<param name="module.name" value="iris.tag.ui.cli" />
+						</antcall>
+					</default>
+				</switch>
+			</then>
+		</if>
+	</target>
 	<target name="create_addressbook_module">
 		<if>
 			<equals arg1="${addressbook.enabled}" arg2="yes" />
@@ -378,7 +426,7 @@
 			<arg value="${java_home}/jmods:${modules.dir}:${libs.dir}" />
 			<arg value="-modulesourcepath" />
 			<arg value="${src.dir}" />
-			<arg value="${converted}" />			
+			<arg value="${converted}" />
 		</exec>
 	</target>
 
