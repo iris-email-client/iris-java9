@@ -76,7 +76,32 @@ Example: ...
 
 ## build
 
+run the bash script (set specific variables before using) to build and run:
+
 `build.sh`
+
+or run ant script (set java_home before):
+
+`ant`
 
 
 ## usage
+
+Create 'iris.properties' file in $USER_HOME/.iris (follow the example in root folder)
+
+Example:
+
+```
+language = 
+
+provider = gmail
+username = XXX@gmail.com
+password = XXX
+```
+
+Run the main module created:
+
+`
+$JAVA_BIN/java -mp mlib:libs -m iris.ui.gui
+`
+
