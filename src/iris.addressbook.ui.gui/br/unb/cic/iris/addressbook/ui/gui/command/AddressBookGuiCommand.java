@@ -15,9 +15,6 @@ import br.unb.cic.iris.exception.IrisException;
 import br.unb.cic.iris.gui.GuiManager;
 import br.unb.cic.iris.gui.command.AbstractGuiMailCommand;
 
-/***
- * added by dAddressBookConsole
- */
 public class AddressBookGuiCommand extends AbstractGuiMailCommand {
 	public static final String COMMAND_NAME = "Address Book";
 

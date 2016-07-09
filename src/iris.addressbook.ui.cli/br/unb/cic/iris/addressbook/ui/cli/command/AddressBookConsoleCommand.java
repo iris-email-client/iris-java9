@@ -21,7 +21,7 @@ public class AddressBookConsoleCommand extends ConsoleAbstractMailCommand {
 		StringBuilder sb = new StringBuilder();
 		sb.append("(adb add <name> <email>) - add an address book entry (name=email)");
 		sb.append("\n(adb list) - show the address book entries");
-		sb.append("\n(adb delete <name> - delete an address book entry\n");
+		sb.append("\n(adb delete <name> - delete an address book entry \n");
 		return sb.toString();
 	}
 

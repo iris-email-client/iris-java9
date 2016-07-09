@@ -76,6 +76,6 @@ public class AddressBookManager {
 			throw new IrisUncheckedException("No AddressBook DAO Factory found!");
 
 		daoFactory = it.next();
-		System.out.println("DAO Factory: " + daoFactory.getClass().getCanonicalName());
+		System.out.println("AddressBook DAO Factory: " + daoFactory.getClass().getCanonicalName());
 	}
 }

@@ -35,6 +35,9 @@ public class GuiListMessagesCommand extends AbstractGuiMailCommand {
 		ImageIcon icon = createImageIcon("/images/list.png", getCommandName());
 
 		JButton btn = new JButton(icon);
+		//btn.setVerticalTextPosition(SwingConstants.BOTTOM);
+	    //btn.setHorizontalTextPosition(SwingConstants.CENTER);
+	    //btn.setText(getCommandName());
 		btn.addActionListener(this);
 		btn.setToolTipText(getCommandName() + " - " + explain());
 

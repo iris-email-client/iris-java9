@@ -16,13 +16,16 @@ echo Java: $JAVA_BIN
 
 ############### BASIC CONFIG ###################
 #interface: gui/cli
-INTERFACE=gui
+INTERFACE=cli
 
 #persistence: xml/lucene/relational
 PERSISTENCE=relational
 
 #adb: true/false
 ADDRESS_BOOK=true
+
+#tags: true/false
+TAGS=true
 ################################################
 
 
@@ -93,6 +96,7 @@ else
 	$JAVA_BIN/jar --create --file mlib/iris.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.persistence.xml .
 fi
 
+# Address Book Feature
 if [ $ADDRESS_BOOK = true ]; then
 	echo Creating Module: IrisAddressBookAPI
 	$JAVA_BIN/jar --create --file mlib/iris.addressbook.api@1.0.jar --module-version 1.0 -C build/iris.addressbook.api .
@@ -121,6 +125,37 @@ if [ $ADDRESS_BOOK = true ]; then
 		$JAVA_BIN/jar --create --file mlib/iris.addressbook.ui.cli@1.0.jar --module-version 1.0 -C build/iris.addressbook.ui.cli .
 	fi
 fi #end_of if [ $ADDRESS_BOOK = true ]
+
+
+# Tag Feature
+if [ $TAGS = true ]; then
+	echo Creating Module: IrisTagAPI
+	$JAVA_BIN/jar --create --file mlib/iris.tag.api@1.0.jar --module-version 1.0 -C build/iris.tag.api .
+	
+	if [ $PERSISTENCE = "relational" ] || [ $PERSISTENCE = "lucene" ]; then
+		echo Creating Module: IrisTagModelSimple
+		$JAVA_BIN/jar --create --file mlib/iris.tag.model.simple@1.0.jar --module-version 1.0 -C build/iris.tag.model.simple .
+	fi
+	
+	if [ $PERSISTENCE = "relational" ]; then
+		echo Creating Module: IrisTagPersistenceJDBC
+		$JAVA_BIN/jar --create --file mlib/iris.tag.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.tag.persistence.jdbc .
+	elif [ $PERSISTENCE = "lucene" ]; then
+		echo Creating Module: IrisTagPersistenceLucene NOT YET IMPLEMENTED!!!!!!!!!!!		
+	else
+		echo Creating Module: IrisTagPersistenceXml
+		$JAVA_BIN/jar --create --file mlib/iris.tag.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.tag.persistence.xml .
+	fi
+	
+	if [ $INTERFACE = "gui" ]; then
+		echo Creating Module: IrisTagGUI
+		cp -Rf src/iris.tag.ui.gui/images build/iris.tag.ui.gui
+		$JAVA_BIN/jar --create --file mlib/iris.tag.ui.gui@1.0.jar --module-version 1.0 -C build/iris.tag.ui.gui .
+	else
+		echo Creating Module: IrisTagCLI
+		$JAVA_BIN/jar --create --file mlib/iris.tag.ui.cli@1.0.jar --module-version 1.0 -C build/iris.tag.ui.cli .
+	fi
+fi #end_of if [ $TAGS = true ]
 
 
 if [ $INTERFACE = "gui" ]; then
