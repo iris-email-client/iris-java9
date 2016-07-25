@@ -8,7 +8,7 @@
 	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="IRIS" default="choose-products">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="IRIS" default="execute">
 	<!-- this build file is a self contained project: it doesn't require anything 
 		else that ant 1.6.2 or greater and java 1.4 or greater properly installed. 
 		It is used to showcase how easy and straightforward it can be to use Ivy. 
@@ -43,6 +43,7 @@
 	<property name="java.mail.version" value="1.5.5" />
 	<property name="lucene.version" value="4.10.2" />
 	<property name="sqlite.version" value="3.8.11.2" />
+	<property name="bouncycastle.version" value="1.51"/>
 
 	<!-- ================================= CLEAN ================================= -->
 	<target name="clean" description="Basic cleaning">
@@ -68,6 +69,49 @@
 
 
 	<!-- ================================= IRIS ================================= -->
+	<target name="execute" description="Create pre-selected product" depends="clean,_iris_basic_modules">
+		<property name="persistence.type" value="relational" />
+		<property name="interface.type" value="gui" />
+		<property name="addressbook.enabled" value="no" />
+		<property name="tag.enabled" value="no" />
+		<property name="search.enabled" value="yes" />
+
+		<antcall target="create_module">
+			<param name="module.name" value="iris.mail.simple" />
+		</antcall>
+		<antcall target="create_mail_providers">
+			<param name="provider.gmail" value="yes" />
+			<param name="provider.outlook" value="yes" />
+			<param name="provider.yahoo" value="yes" />
+		</antcall>
+		
+		
+		<antcall target="create_persistence_module">
+			<param name="persistence.type" value="${persistence.type}" />
+		</antcall>
+		<antcall target="create_interface_module">
+			<param name="interface.type" value="${interface.type}" />
+		</antcall>
+		<antcall target="create_addressbook_module">
+			<param name="addressbook.enabled" value="${addressbook.enabled}" />
+			<param name="interface.type" value="${interface.type}" />
+			<param name="persistence.type" value="${persistence.type}" />
+		</antcall>
+		<antcall target="create_tag_module">
+			<param name="tag.enabled" value="${tag.enabled}" />
+			<param name="interface.type" value="${interface.type}" />
+			<param name="persistence.type" value="${persistence.type}" />
+		</antcall>
+		<antcall target="create_search_module">
+			<param name="search.enabled" value="${search.enabled}" />
+			<param name="interface.type" value="${interface.type}" />
+			<param name="persistence.type" value="${persistence.type}" />
+		</antcall>
+		<antcall target="run_info">
+			<param name="interface.type" value="${interface.type}" />
+		</antcall>
+	</target>
+	
 	<target name="choose-products" description="Choose the product to be generated" depends="clean,_iris_basic_modules">
 		<echo>Choose the product to be generated ...</echo>
 
@@ -106,6 +150,13 @@
 		<input message="Would you like to add Tagging feature (yes/no)?" validargs="yes,no" addproperty="tag.enabled" />
 		<antcall target="create_tag_module">
 			<param name="tag.enabled" value="${tag.enabled}" />
+			<param name="interface.type" value="${interface.type}" />
+			<param name="persistence.type" value="${persistence.type}" />
+		</antcall>
+
+		<input message="Would you like to add Search feature (yes/no)?" validargs="yes,no" addproperty="search.enabled" />
+		<antcall target="create_search_module">
+			<param name="search.enabled" value="${search.enabled}" />
 			<param name="interface.type" value="${interface.type}" />
 			<param name="persistence.type" value="${persistence.type}" />
 		</antcall>
@@ -151,7 +202,7 @@
 							<param name="list" value="iris.tag.model.simple,iris.tag.persistence.jdbc" />
 						</antcall>
 					</case>
-					<case value="lucene">						
+					<case value="lucene">
 						<fail message="Not yet implemented: iris.tag.persistence.lucene" />
 					</case>
 					<default>
@@ -215,6 +266,63 @@
 					<default>
 						<antcall target="create_module">
 							<param name="module.name" value="iris.addressbook.ui.cli" />
+						</antcall>
+					</default>
+				</switch>
+			</then>
+		</if>
+	</target>
+	<target name="create_search_module">
+		<if>
+			<equals arg1="${search.enabled}" arg2="yes" />
+			<then>
+				<antcall target="create_module">
+					<param name="module.name" value="iris.search.api" />
+				</antcall>
+				<switch value="${persistence.type}">
+					<case value="relational">
+						<antcall target="create_module">
+							<param name="module.name" value="iris.search.persistence.jdbc" />
+						</antcall>
+					</case>
+					<case value="lucene">
+						<antcall target="create_module">
+							<param name="module.name" value="iris.search.persistence.lucene" />
+						</antcall>
+					</case>
+					<default>
+						<antcall target="create_module">
+							<param name="module.name" value="iris.search.persistence.xml" />
+						</antcall>
+					</default>
+				</switch>
+				<switch value="${interface.type}">
+					<case value="gui">
+						<mkdir dir="${build.dir}/iris.search.ui.gui" />
+						<copy todir="${build.dir}/iris.search.ui.gui">
+							<fileset dir="${src.dir}/iris.search.ui.gui">
+								<include name="**/*.properties" />
+								<exclude name="**/*.java" />
+							</fileset>
+						</copy>
+						<mkdir dir="${build.dir}/iris.search.ui.gui/images" />
+						<copy todir="${build.dir}/iris.search.ui.gui/images">
+							<fileset dir="${src.dir}/iris.search.ui.gui/images" />
+						</copy>
+						<antcall target="create_module">
+							<param name="module.name" value="iris.search.ui.gui" />
+						</antcall>
+					</case>
+					<default>
+						<mkdir dir="${build.dir}/iris.search.ui.cli" />
+						<copy todir="${build.dir}/iris.search.ui.cli">
+							<fileset dir="${src.dir}/iris.search.ui.cli">
+								<include name="**/*.properties" />
+								<exclude name="**/*.java" />
+							</fileset>
+						</copy>
+						<antcall target="create_module">
+							<param name="module.name" value="iris.search.ui.cli" />
 						</antcall>
 					</default>
 				</switch>
@@ -430,8 +538,25 @@
 		</exec>
 	</target>
 
-
-
+	
+	<target name="download-secure-mail" depends="install-ivy" unless="skip.download">
+		<ivy:retrieve pattern="${libs.pattern}">
+			<!-- TODO: testar o download do repositorio do github (ver pom.xml) -->
+			<dependency org="net.suberic.crypto" name="javamail-crypto" rev="1.0" />
+			<dependency org="net.suberic.crypto" name="javamail-crypto-cryptix-openpgp" rev="1.0" />
+			<dependency org="cryptix" name="cryptix-jce-provider" rev="1.0" />
+			<dependency org="cryptix" name="cryptix-message-api" rev="1.0" />
+			<dependency org="cryptix" name="cryptix-openpgp-provider" rev="1.0" />
+			<dependency org="cryptix" name="cryptix-pki-api" rev="1.0" />
+			
+			<!-- BC eh necessario? -->
+			<dependency org="org.bouncycastle" name="bcprov-jdk15on" rev="${bouncycastle.version}" />
+			<dependency org="org.bouncycastle" name="bcprov-ext-jdk15on" rev="${bouncycastle.version}" />
+			<dependency org="org.bouncycastle" name="bcpg-jdk15on" rev="${bouncycastle.version}" />
+			<exclude org="*" ext="*" type="source" />
+			<exclude org="*" ext="*" type="javadoc" />
+		</ivy:retrieve>
+	</target>
 	<target name="download-lucene" depends="install-ivy" unless="skip.download">
 		<ivy:retrieve pattern="${libs.pattern}">
 			<dependency org="org.apache.lucene" name="lucene-core" rev="${lucene.version}" />
