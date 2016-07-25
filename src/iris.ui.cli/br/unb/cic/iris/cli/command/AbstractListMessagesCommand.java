@@ -1,4 +1,4 @@
-package br.unb.cic.iris.command;
+package br.unb.cic.iris.cli.command;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -6,11 +6,7 @@ import java.util.List;
 
 import br.unb.cic.iris.model.EmailMessage;
 
-/***
- * added by dBaseCommand
- */
-//TODO alterar, pois so pode ser usada pelo cliente CLI
-public abstract class AbstractListMessagesCommand extends AbstractMailCommand {
+public abstract class AbstractListMessagesCommand extends ConsoleAbstractMailCommand {
 	DateFormat formatter = new SimpleDateFormat("dd/MMM/yy 'at' HH:mm");
 
 	protected void print(List<EmailMessage> messages) {

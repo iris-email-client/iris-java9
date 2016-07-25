@@ -1,5 +1,4 @@
 module iris.addressbook.ui.gui {
-	requires java.desktop;
 	requires iris.core;
 	requires iris.addressbook.api;	
 	requires iris.ui.gui;	

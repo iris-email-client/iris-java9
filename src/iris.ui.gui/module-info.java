@@ -1,5 +1,5 @@
 module iris.ui.gui {
-	requires java.desktop;
+	requires public java.desktop;
 	
 	requires iris.core;		
 	

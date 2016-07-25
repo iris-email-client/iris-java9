@@ -26,6 +26,9 @@ ADDRESS_BOOK=true
 
 #tags: true/false
 TAGS=true
+
+#search: true/false
+SEARCH=true
 ################################################
 
 
@@ -156,6 +159,36 @@ if [ $TAGS = true ]; then
 		$JAVA_BIN/jar --create --file mlib/iris.tag.ui.cli@1.0.jar --module-version 1.0 -C build/iris.tag.ui.cli .
 	fi
 fi #end_of if [ $TAGS = true ]
+
+
+# Search Feature
+if [ $SEARCH = true ]; then
+	echo Creating Module: IrisSearchAPI
+	$JAVA_BIN/jar --create --file mlib/iris.search.api@1.0.jar --module-version 1.0 -C build/iris.search.api .
+	
+	if [ $PERSISTENCE = "relational" ]; then
+		echo Creating Module: IrisSearchPersistenceJDBC
+		$JAVA_BIN/jar --create --file mlib/iris.search.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.search.persistence.jdbc .
+	elif [ $PERSISTENCE = "lucene" ]; then
+		echo Creating Module: IrisSearchPersistenceLucene
+		$JAVA_BIN/jar --create --file mlib/iris.search.persistence.lucene@1.0.jar --module-version 1.0 -C build/iris.search.persistence.lucene .	
+	else
+		echo Creating Module: IrisSearchPersistenceXml
+		$JAVA_BIN/jar --create --file mlib/iris.search.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.search.persistence.xml .
+	fi
+
+	if [ $INTERFACE = "gui" ]; then
+		echo Creating Module: IrisSearchGUI
+		cp src/iris.search.ui.gui/*.properties build/iris.search.ui.gui
+		cp -Rf src/iris.search.ui.gui/images build/iris.search.ui.gui
+		$JAVA_BIN/jar --create --file mlib/iris.search.ui.gui@1.0.jar --module-version 1.0 -C build/iris.search.ui.gui .			
+	else
+		echo Creating Module: IrisSearchCLI
+		cp src/iris.search.ui.cli/*.properties build/iris.search.ui.cli
+		$JAVA_BIN/jar --create --file mlib/iris.search.ui.cli@1.0.jar --module-version 1.0 -C build/iris.search.ui.cli .
+	fi
+
+fi #end_of if [ $SEARCH = true ]
 
 
 if [ $INTERFACE = "gui" ]; then

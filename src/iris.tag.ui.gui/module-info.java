@@ -1,5 +1,4 @@
 module iris.tag.ui.gui {
-	requires java.desktop;
 	requires iris.core;
 	requires iris.tag.api;	
 	requires iris.ui.gui;	
