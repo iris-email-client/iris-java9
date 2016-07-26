@@ -19,7 +19,7 @@ echo Java: $JAVA_BIN
 INTERFACE=cli
 
 #persistence: xml/lucene/relational
-PERSISTENCE=relational
+PERSISTENCE=lucene
 
 #adb: true/false
 ADDRESS_BOOK=true
@@ -113,7 +113,8 @@ if [ $ADDRESS_BOOK = true ]; then
 		echo Creating Module: IrisAddressBookPersistenceJDBC
 		$JAVA_BIN/jar --create --file mlib/iris.addressbook.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.addressbook.persistence.jdbc .
 	elif [ $PERSISTENCE = "lucene" ]; then
-		echo Creating Module: IrisAddressBookPersistenceLucene NOT YET IMPLEMENTED!!!!!!!!!!!		
+		echo Creating Module: IrisAddressBookPersistenceLucene
+		$JAVA_BIN/jar --create --file mlib/iris.addressbook.persistence.lucene@1.0.jar --module-version 1.0 -C build/iris.addressbook.persistence.lucene .
 	else
 		echo Creating Module: IrisAddressBookPersistenceXml
 		$JAVA_BIN/jar --create --file mlib/iris.addressbook.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.addressbook.persistence.xml .
@@ -144,7 +145,8 @@ if [ $TAGS = true ]; then
 		echo Creating Module: IrisTagPersistenceJDBC
 		$JAVA_BIN/jar --create --file mlib/iris.tag.persistence.jdbc@1.0.jar --module-version 1.0 -C build/iris.tag.persistence.jdbc .
 	elif [ $PERSISTENCE = "lucene" ]; then
-		echo Creating Module: IrisTagPersistenceLucene NOT YET IMPLEMENTED!!!!!!!!!!!		
+		echo Creating Module: IrisTagPersistenceLucene
+		$JAVA_BIN/jar --create --file mlib/iris.tag.persistence.lucene@1.0.jar --module-version 1.0 -C build/iris.tag.persistence.lucene .
 	else
 		echo Creating Module: IrisTagPersistenceXml
 		$JAVA_BIN/jar --create --file mlib/iris.tag.persistence.xml@1.0.jar --module-version 1.0 -C build/iris.tag.persistence.xml .

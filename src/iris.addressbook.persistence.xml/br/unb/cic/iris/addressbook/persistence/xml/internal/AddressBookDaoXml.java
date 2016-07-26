@@ -14,7 +14,7 @@ import br.unb.cic.iris.persistence.IrisPersistenceException;
 public class AddressBookDaoXml extends AbstractAddressBookDaoXml implements AddressBookDAO {
 
 	@Override
-	public AddressBookEntry saveOrUpdate(AddressBookEntry entry) throws IrisPersistenceException {
+	public AddressBookEntry persist(AddressBookEntry entry) throws IrisPersistenceException {
 		AddressBookStoreXml store = getXmlStore();
 		if(entry.getId() == null){
 			//save

@@ -60,7 +60,7 @@ public final class SystemFacade {
 		setStatus(Status.CONNECTED);
 	}
 
-	// TODO refactoring candidate
+	// TODO refactoring candidate (listener)
 	public void send(EmailMessage message, EmailStatusListener listener) throws IrisException {
 		EmailStatusManager.instance().setListener(listener);
 		send(message);

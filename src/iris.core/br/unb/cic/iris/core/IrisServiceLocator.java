@@ -1,6 +1,7 @@
 package br.unb.cic.iris.core;
 
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.ServiceLoader;
 
 import br.unb.cic.iris.exception.IrisUncheckedException;
@@ -39,52 +40,46 @@ public class IrisServiceLocator {
 	}
 	
 	
-	public Object getService(Class<?> clazz){
+	private Optional<?> getService(Class<?> clazz){		
 		return getService(clazz, getClass().getModule().getClassLoader());
 	}
 	//TODO testar (usar em outro modulo carregando coisas do outro modulo, passando o classloader)
-	public Object getService(Class<?> clazz, ClassLoader loader){
+	public static Optional<?> getService(Class<?> clazz, ClassLoader loader){
 		ServiceLoader<?> sl = ServiceLoader.load(clazz, loader);
 		Iterator<?> it = sl.iterator();
 
-		if (!it.hasNext())
-			throw new IrisUncheckedException("No service implementation found for: "+clazz);
+		Optional<?> op = Optional.empty();		
+		if (it.hasNext()){
+			op = Optional.of(it.next());
+		}
 		
-		return it.next();	
+		return op;	
 	}
 
-	private void initEmailClient(){		
-		ServiceLoader<IEmailClient> sl = ServiceLoader.load(IEmailClient.class);
-		Iterator<IEmailClient> it = sl.iterator();
 
-		if (!it.hasNext())
-			throw new IrisUncheckedException("No mail client found!");
-		
-		client = it.next();
+	private void initEmailClient(){		
+		client = (IEmailClient) getService(IEmailClient.class)
+				.orElseThrow(() -> new IrisUncheckedException("No mail client found!"));
 		System.out.println("Email client: "+client.getClass().getCanonicalName());
 	}
 	
 	private void initEntityFactory(){		
-		ServiceLoader<EntityFactory> sl = ServiceLoader.load(EntityFactory.class);
-		Iterator<EntityFactory> it = sl.iterator();
-
-		if (!it.hasNext())
-			throw new IrisUncheckedException("No entity factory found!");
-		
-		entityFactory = it.next();
+		entityFactory = (EntityFactory) getService(EntityFactory.class)
+				.orElseThrow(() -> new IrisUncheckedException("No entity factory found!"));
 		System.out.println("Entity Factory: "+entityFactory.getClass().getCanonicalName());
 	}
 	
 	private void initDaoFactory() {		
-		ServiceLoader<DAOFactory> sl = ServiceLoader.load(DAOFactory.class);
+		daoFactory = (DAOFactory) getService(DAOFactory.class)
+				.orElseThrow(() -> new IrisUncheckedException("No DAO factory found!"));
+		System.out.println("DAO Factory: "+daoFactory.getClass().getCanonicalName());
+		/*ServiceLoader<DAOFactory> sl = ServiceLoader.load(DAOFactory.class);
 		Iterator<DAOFactory> it = sl.iterator();
 
 		if (!it.hasNext())
 			throw new IrisUncheckedException("No DAO factory found!");
 		
-		daoFactory = it.next();
-		System.out.println("DAO Factory: "+daoFactory.getClass().getCanonicalName());
+		daoFactory = it.next();*/		
 	}
-	
-	
+		
 }

@@ -5,16 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ServiceLoader;
 import java.util.UUID;
 
-import br.unb.cic.iris.addressbook.model.AddressBookEntityFactory;
+import br.unb.cic.iris.addressbook.AddressBookManager;
 import br.unb.cic.iris.addressbook.model.AddressBookEntry;
 import br.unb.cic.iris.addressbook.persistence.AddressBookDAO;
-import br.unb.cic.iris.exception.IrisUncheckedException;
 import br.unb.cic.iris.persistence.IrisPersistenceException;
 import br.unb.cic.iris.persistence.jdbc.DbUtil;
 
@@ -26,36 +23,31 @@ public class AddressBookDaoJdbc implements AddressBookDAO {
 	private static final String INSERT = "INSERT INTO addressbook (id, nick, address) VALUES (?,?,?)";
 	private static final String DELETE = "DELETE FROM addressbook WHERE nick = ?";
 
-	private AddressBookEntityFactory entityFactory;
-	
-	
 	private AddressBookDaoJdbc() throws IrisPersistenceException {
 		getDbUtil().execute(CREATE_TABLE);
 	}
-	
-	public static AddressBookDaoJdbc instance() throws IrisPersistenceException{
-		if(instance == null){
+
+	public static AddressBookDaoJdbc instance() throws IrisPersistenceException {
+		if (instance == null) {
 			instance = new AddressBookDaoJdbc();
 		}
 		return instance;
 	}
-	
 
 	@Override
-	public AddressBookEntry saveOrUpdate(AddressBookEntry entry) throws IrisPersistenceException {
+	public AddressBookEntry persist(AddressBookEntry entry) throws IrisPersistenceException {
 		// TODO Auto-generated method stub
-		entry.setId(UUID.randomUUID().toString());		
-		
-		try (Connection conn = getDbUtil().connect();
-                PreparedStatement pstmt = conn.prepareStatement(INSERT)) {
-            pstmt.setString(1, entry.getId());
-            pstmt.setString(2, entry.getNick());
-            pstmt.setString(3, entry.getAddress());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-        	throw new IrisPersistenceException("Could not create address book entry: "+e.getMessage(), e);
-        }
-		
+		entry.setId(UUID.randomUUID().toString());
+
+		try (Connection conn = getDbUtil().connect(); PreparedStatement pstmt = conn.prepareStatement(INSERT)) {
+			pstmt.setString(1, entry.getId());
+			pstmt.setString(2, entry.getNick());
+			pstmt.setString(3, entry.getAddress());
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new IrisPersistenceException("Could not create address book entry: " + e.getMessage(), e);
+		}
+
 		return entry;
 	}
 
@@ -74,31 +66,30 @@ public class AddressBookDaoJdbc implements AddressBookDAO {
 		List<AddressBookEntry> entries = new LinkedList<>();
 		try (Connection conn = getDbUtil().connect();
 				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(SELECT_ALL)) {			
+				ResultSet rs = stmt.executeQuery(SELECT_ALL)) {
 			while (rs.next()) {
 				entries.add(toAddressBookEntry(rs));
 			}
 		} catch (SQLException e) {
-			throw new IrisPersistenceException("Could not list all address book entries: "+e.getMessage(), e);
+			throw new IrisPersistenceException("Could not list all address book entries: " + e.getMessage(), e);
 		}
 		return entries;
 	}
 
 	@Override
 	public void delete(String nick) throws IrisPersistenceException {
-		try (Connection conn = getDbUtil().connect(); 
-				PreparedStatement pstmt = conn.prepareStatement(DELETE)) {
+		try (Connection conn = getDbUtil().connect(); PreparedStatement pstmt = conn.prepareStatement(DELETE)) {
 			pstmt.setString(1, nick);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
-			throw new IrisPersistenceException("Could not delete address book entry ("+nick+"): " + e.getMessage(), e);
+			throw new IrisPersistenceException("Could not delete address book entry (" + nick + "): " + e.getMessage(),
+					e);
 		}
 	}
 
 	private AddressBookEntry executeQuery(String sql, String value) throws IrisPersistenceException {
 		AddressBookEntry entry = null;
-		try (Connection conn = getDbUtil().connect(); 
-				PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try (Connection conn = getDbUtil().connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, value);
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
@@ -112,10 +103,10 @@ public class AddressBookDaoJdbc implements AddressBookDAO {
 	}
 
 	private AddressBookEntry toAddressBookEntry(ResultSet rs) throws SQLException {
-		AddressBookEntry addressBookEntry = getEntityFactory().createAddressBook();
+		AddressBookEntry addressBookEntry = AddressBookManager.instance().createAddressBookEntity();
 		addressBookEntry.setId(rs.getString("id"));
 		addressBookEntry.setNick(rs.getString("nick"));
-		addressBookEntry.setAddress(rs.getString("address"));		
+		addressBookEntry.setAddress(rs.getString("address"));
 		return addressBookEntry;
 	}
 
@@ -123,25 +114,6 @@ public class AddressBookDaoJdbc implements AddressBookDAO {
 		return DbUtil.instance();
 	}
 
-	private AddressBookEntityFactory getEntityFactory() {		
-		if (entityFactory == null) {
-			ServiceLoader<AddressBookEntityFactory> sl = ServiceLoader.load(AddressBookEntityFactory.class);
-			Iterator<AddressBookEntityFactory> it = sl.iterator();
-
-			if (!it.hasNext())
-				throw new IrisUncheckedException("No address book entity factory found!");
-			
-			entityFactory = it.next();
-			System.out.println("Address Book Entity Factory: "+entityFactory.getClass().getCanonicalName());
-		}
-		return entityFactory;
-	}
-	
-	
-	private static final String CREATE_TABLE = 
-		"CREATE TABLE IF NOT EXISTS addressbook ("
-		+"  id    TEXT PRIMARY KEY," 
-		+"  nick  TEXT UNIQUE,"
-		+"  address  TEXT NOT NULL"
-		+");";
+	private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS addressbook (" + "  id    TEXT PRIMARY KEY,"
+			+ "  nick  TEXT UNIQUE," + "  address  TEXT NOT NULL" + ");";
 }

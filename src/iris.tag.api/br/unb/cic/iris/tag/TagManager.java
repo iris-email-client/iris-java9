@@ -46,8 +46,8 @@ public final class TagManager {
 		return getTagDAO().findAll();
 	}
 
-	public void saveOrUpdate(Tag tag) throws IrisPersistenceException {
-		getTagDAO().saveOrUpdate(tag);
+	public void persist(Tag tag) throws IrisPersistenceException {
+		getTagDAO().persist(tag);
 	}
 
 	public void delete(Tag tag) throws IrisPersistenceException {

@@ -42,7 +42,7 @@ public class TagDaoJdbc implements TagDAO {
 	}
 
 	@Override
-	public Tag saveOrUpdate(Tag tag) throws IrisPersistenceException {
+	public Tag persist(Tag tag) throws IrisPersistenceException {
 		// TODO Auto-generated method stub
 		return null;
 	}

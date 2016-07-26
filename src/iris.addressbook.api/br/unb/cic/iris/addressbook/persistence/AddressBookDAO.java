@@ -6,7 +6,7 @@ import br.unb.cic.iris.addressbook.model.AddressBookEntry;
 import br.unb.cic.iris.persistence.IrisPersistenceException;
 
 public interface AddressBookDAO {
-	public AddressBookEntry saveOrUpdate(AddressBookEntry entry) throws IrisPersistenceException;
+	public AddressBookEntry persist(AddressBookEntry entry) throws IrisPersistenceException;
 
 	public AddressBookEntry findByNick(String nick) throws IrisPersistenceException;
 

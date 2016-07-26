@@ -1,6 +1,5 @@
 package br.unb.cic.iris.persistence.lucene.internal;
 
-import java.text.ParseException;
 import java.util.List;
 
 import org.apache.lucene.document.Document;
@@ -15,6 +14,7 @@ import br.unb.cic.iris.exception.IrisUncheckedException;
 import br.unb.cic.iris.model.IrisFolder;
 import br.unb.cic.iris.persistence.FolderDAO;
 import br.unb.cic.iris.persistence.IrisPersistenceException;
+import br.unb.cic.iris.persistence.lucene.AbstractDAO;
 
 /***
  * added by dPersistenceLucene
@@ -63,14 +63,14 @@ public class FolderDAOLucene extends AbstractDAO<IrisFolder> implements FolderDA
 		return findByTerms(new Query[] { nameQuery });
 	}
 
-	protected IrisFolder fromDocument(Document d) throws ParseException {
+	protected IrisFolder fromDocument(Document d) throws IrisPersistenceException {
 		IrisFolder f = IrisServiceLocator.instance().getEntityFactory().createIrisFolder();
 		f.setId(d.get("id"));
 		f.setName(d.get("name"));
 		return f;
 	}
 
-	protected Document toDocument(IrisFolder f) throws Exception {
+	protected Document toDocument(IrisFolder f) throws IrisPersistenceException {
 		Document doc = new Document();
 		doc.add(new StringField("id", String.valueOf(f.getId()), Store.YES));
 		doc.add(new StringField("name", f.getName(), Store.YES));

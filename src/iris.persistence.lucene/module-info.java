@@ -1,7 +1,7 @@
 module iris.persistence.lucene {	
-	requires lucene.core;
-	requires lucene.analyzers.common;	
-	requires lucene.queryparser;
+	requires public lucene.core;
+	requires public lucene.analyzers.common;	
+	requires public lucene.queryparser;
 	
 	requires iris.core;
 	requires iris.model.simple;

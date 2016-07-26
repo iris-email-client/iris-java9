@@ -24,6 +24,7 @@ import br.unb.cic.iris.model.EmailMessage;
 import br.unb.cic.iris.model.IrisFolder;
 import br.unb.cic.iris.persistence.EmailDAO;
 import br.unb.cic.iris.persistence.IrisPersistenceException;
+import br.unb.cic.iris.persistence.lucene.AbstractDAO;
 
 /***
  * added by dPersistenceLucene
@@ -57,9 +58,7 @@ public final class EmailDAOLucene extends AbstractDAO<EmailMessage> implements E
 				Document doc = searcher.doc(docs.scoreDocs[0].doc);
 				date = DateTools.stringToDate(doc.get("date"));
 			}
-		} catch (IOException e) {
-			throw new IrisPersistenceException("An error occurred while retrieving last message received: "+e.getMessage(), e);
-		} catch (ParseException e) {
+		} catch (IOException | ParseException e) {
 			throw new IrisPersistenceException("An error occurred while retrieving last message received"+e.getMessage(), e);
 		}
 		return date;
@@ -70,7 +69,7 @@ public final class EmailDAOLucene extends AbstractDAO<EmailMessage> implements E
 		return findByTerms(new Query[] { folderQuery });
 	}
 
-	protected Document toDocument(EmailMessage m) throws Exception {
+	protected Document toDocument(EmailMessage m) throws IrisPersistenceException {
 		Document doc = new Document();
 		doc.add(new StringField("id", String.valueOf(m.getId()), Store.YES));
 		doc.add(new TextField("from", m.getFrom(), Store.YES));
@@ -84,7 +83,7 @@ public final class EmailDAOLucene extends AbstractDAO<EmailMessage> implements E
 		return doc;
 	}
 
-	protected EmailMessage fromDocument(Document d) throws ParseException {
+	protected EmailMessage fromDocument(Document d) throws IrisPersistenceException {
 		EmailMessage m = IrisServiceLocator.instance().getEntityFactory().createEmailMessage();
 		m.setId(d.get("id"));
 		m.setFrom(d.get("from"));
@@ -93,7 +92,11 @@ public final class EmailDAOLucene extends AbstractDAO<EmailMessage> implements E
 		m.setBcc(d.get("bcc"));
 		m.setSubject(d.get("subject"));
 		m.setMessage(d.get("message"));
-		m.setDate(DateTools.stringToDate(d.get("date")));
+		try {
+			m.setDate(DateTools.stringToDate(d.get("date")));
+		} catch (ParseException e) {
+			throw new IrisPersistenceException("DateString is not in the expected format: "+d.get("date"), e);
+		}
 		IrisFolder f = IrisServiceLocator.instance().getEntityFactory().createIrisFolder();
 		f.setId(d.get("folderId"));
 		m.setFolder(f);

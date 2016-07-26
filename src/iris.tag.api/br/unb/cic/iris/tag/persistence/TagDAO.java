@@ -10,7 +10,7 @@ public interface TagDAO {
 
 	public java.util.List<Tag> findAll() throws IrisPersistenceException;
 
-	public Tag saveOrUpdate(Tag tag) throws IrisPersistenceException;
+	public Tag persist(Tag tag) throws IrisPersistenceException;
 
 	public Tag save(Tag tag, String messageId) throws IrisPersistenceException;
 

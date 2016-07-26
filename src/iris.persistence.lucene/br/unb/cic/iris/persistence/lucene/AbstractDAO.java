@@ -1,4 +1,4 @@
-package br.unb.cic.iris.persistence.lucene.internal;
+package br.unb.cic.iris.persistence.lucene;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +16,8 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 
 import br.unb.cic.iris.persistence.IrisPersistenceException;
+import br.unb.cic.iris.persistence.lucene.internal.AbstractCollector;
+import br.unb.cic.iris.persistence.lucene.internal.IndexManager;
 
 /***
  * added by dPersistenceLucene
@@ -61,9 +63,9 @@ public abstract class AbstractDAO<T> {
 		return result.iterator().next();
 	}
 
-	public void saveOrUpdate(T t) throws IrisPersistenceException {
+	public Document saveOrUpdate(T t) throws IrisPersistenceException {
 		try {
-			saveDocument(toDocument(t));
+			return saveDocument(toDocument(t));
 		} catch (Exception e) {
 			throw new IrisPersistenceException("An error occurred while saving " + type + ".", e);
 		}
@@ -101,6 +103,7 @@ public abstract class AbstractDAO<T> {
 			 * Note that this may be a costly operation, so, try to re-use a
 			 * single writer instead of closing and opening a new one.
 			 */
+			//TODO
 			//writer.close();
 			//IndexManager.closeIndex();
 			return doc;
@@ -127,7 +130,7 @@ public abstract class AbstractDAO<T> {
 	}
 
 	// TODO PersistenceException
-	protected abstract T fromDocument(Document doc) throws Exception;
+	protected abstract T fromDocument(Document doc) throws IrisPersistenceException;
 
-	protected abstract Document toDocument(T t) throws Exception;
+	protected abstract Document toDocument(T t) throws IrisPersistenceException;
 }

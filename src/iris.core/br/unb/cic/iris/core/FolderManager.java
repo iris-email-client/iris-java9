@@ -17,7 +17,7 @@ public class FolderManager {
 	private IrisFolder currentFolder;
 	private List<EmailMessage> currentMessages;
 
-	private FolderManager() {	
+	private FolderManager() {
 		currentFolder = getEntityFactory().createIrisFolder(ROOT_FOLDER);
 		currentMessages = new java.util.ArrayList<>();
 	}
@@ -48,9 +48,10 @@ public class FolderManager {
 
 	public List<EmailMessage> listFolderMessages() throws IrisException {
 		if (currentFolder == null || currentFolder.getId() == null) {
-			return new java.util.ArrayList<>();
+			currentMessages = new java.util.ArrayList<>();
+		} else {
+			currentMessages = getEmailDAO().listMessages(currentFolder.getId());
 		}
-		currentMessages = getEmailDAO().listMessages(currentFolder.getId());
 		return currentMessages;
 	}
 

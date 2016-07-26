@@ -28,7 +28,11 @@ public class SearchManager {
 	}
 	
 	
-	private void initDaoFactory() {
+	private void initDaoFactory() {		
+		//daoFactory = (SearchDAOFactory) IrisServiceLocator.instance().getService(SearchDAOFactory.class, getClass().getModule().getClassLoader());
+		//daoFactory = (SearchDAOFactory) IrisServiceLocator.getService2(SearchDAOFactory.class, getClass().getClassLoader()).get();
+				//.orElseThrow(() -> new IrisUncheckedException("No Search DAO Factory found!"));
+		
 		ServiceLoader<SearchDAOFactory> sl = ServiceLoader.load(SearchDAOFactory.class);
 		Iterator<SearchDAOFactory> it = sl.iterator();
 

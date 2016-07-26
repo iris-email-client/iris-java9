@@ -27,7 +27,7 @@ public abstract class AbstractCollector extends Collector {
 		}
 	}
 
-	abstract void tryCollect(int doc) throws Exception;
+	protected abstract void tryCollect(int doc) throws Exception;
 
 	public void setNextReader(AtomicReaderContext context) throws IOException {
 		this.base = context.docBase;

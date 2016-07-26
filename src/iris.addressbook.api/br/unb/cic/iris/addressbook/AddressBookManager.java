@@ -26,11 +26,11 @@ public class AddressBookManager {
 	}
 
 	public void save(String nick, String address) throws IrisPersistenceException {
-		daoFactory.createAddressBookDAO().saveOrUpdate(createAddressBookEntity(nick, address));
+		daoFactory.createAddressBookDAO().persist(createAddressBookEntity(nick, address));
 	}
 
 	public void saveOrUpdate(AddressBookEntry entry) throws IrisPersistenceException {
-		daoFactory.createAddressBookDAO().saveOrUpdate(entry);
+		daoFactory.createAddressBookDAO().persist(entry);
 	}
 
 	public List<AddressBookEntry> findAll() throws IrisPersistenceException {
