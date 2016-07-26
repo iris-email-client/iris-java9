@@ -25,6 +25,7 @@ public class EmailDaoXml extends AbstractDaoXml implements EmailDAO {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Date lastMessageReceived(String folderName) throws IrisPersistenceException {
 		IrisFolder<EmailMessageXml> folder = getFolderDAO().findByName(folderName);
 		return folder.getMessages().stream()
@@ -33,6 +34,7 @@ public class EmailDaoXml extends AbstractDaoXml implements EmailDAO {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<EmailMessage> listMessages(String idFolder) throws IrisPersistenceException {
 		IrisFolder folder = getFolderDAO().findById(idFolder);
 		if (folder == null) {

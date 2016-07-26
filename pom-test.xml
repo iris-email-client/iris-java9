@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>br.unb.cic</groupId>
+	<artifactId>iris</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	
+	<description>POM used only to download the necessary dependencies for test purposes.</description>
+
+	<organization>
+		<name>Universidade de Brasília</name>
+		<url>http://www.cic.unb.br/</url>
+	</organization>
+
+	<properties>
+		<java.mail.version>1.5.5</java.mail.version>		
+		<lucene.version>4.10.2</lucene.version>
+		<!-- <bouncycastle.version>1.51</bouncycastle.version> -->
+	</properties>
+
+	<dependencies>
+		<!-- java mail api -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>javax.mail-api</artifactId>
+			<version>${java.mail.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>${java.mail.version}</version>
+		</dependency>
+
+		<!-- sqlite driver -->
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.8.11.2</version>
+		</dependency>		
+		
+		<!-- Lucene -->
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>${lucene.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-common</artifactId>
+			<version>${lucene.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-queryparser</artifactId>
+			<version>${lucene.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-codecs</artifactId>
+			<version>${lucene.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<!-- <defaultGoal>dependency:copy-dependencies</defaultGoal> -->
+		<!-- http://maven.apache.org/plugins/maven-dependency-plugin/copy-dependencies-mojo.html -->
+		<plugins>
+      		<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.basedir}/modules/test-tmp</outputDirectory>	
+							<overWriteIfNewer>true</overWriteIfNewer>					 							
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+   	 	</plugins>
+		
+	</build>
+	
+	<repositories>
+		<!-- iris repository on github -->
+		<repository>
+			<id>git-iris-email-client</id>
+			<name>iris-email-client's Git based repo</name>
+			<url>https://github.com/iris-email-client/mvn-repo/raw/master/</url>
+		</repository>
+		<repository>
+			<id>repo2</id>
+			<url>http://repo2.maven.org/maven2/</url>
+		</repository>
+	</repositories>
+
+</project>
