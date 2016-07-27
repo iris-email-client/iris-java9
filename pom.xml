@@ -70,6 +70,14 @@
 			<version>${lucene.version}</version>
 		</dependency>
 		
+		<!-- JUnit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		
 		<!-- Log4j		
 <dependency>
     <groupId>org.apache.logging.log4j</groupId>
