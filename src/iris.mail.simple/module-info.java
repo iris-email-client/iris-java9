@@ -1,10 +1,5 @@
-module iris.mail.simple {
-	//requires javax.mail;
-	//requires java.activation;
-	
+module iris.mail.simple {	
 	requires public iris.mail;
-	//requires public iris.mail;
-	//requires iris.mail.provider;
 	
 	provides br.unb.cic.iris.mail.IEmailClient with br.unb.cic.iris.mail.simple.EmailClient;
 }

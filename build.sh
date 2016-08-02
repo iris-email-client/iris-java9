@@ -19,19 +19,19 @@ echo Java: $JAVA_BIN
 INTERFACE=cli
 
 #email_type: simple/smime/pgp
-EMAIL_TYPE=smime
+EMAIL_TYPE=simple
 
 #persistence: xml/lucene/relational
-PERSISTENCE=lucene
+PERSISTENCE=xml
 
 #adb: true/false
-ADDRESS_BOOK=true
+ADDRESS_BOOK=false
 
 #tags: true/false
-TAGS=true
+TAGS=false
 
 #search: true/false
-SEARCH=true
+SEARCH=false
 ################################################
 
 
@@ -71,11 +71,11 @@ $JAVA_BIN/jar --create --file mlib/iris.mail.provider@1.0.jar --module-version 1
 echo Creating Module: IrisMailProviderGmail
 $JAVA_BIN/jar --create --file mlib/iris.mail.provider.gmail@1.0.jar --module-version 1.0 -C build/iris.mail.provider.gmail .
 
-echo Creating Module: IrisMailProviderOutlook
-$JAVA_BIN/jar --create --file mlib/iris.mail.provider.outlook@1.0.jar --module-version 1.0 -C build/iris.mail.provider.outlook .
+#echo Creating Module: IrisMailProviderOutlook
+#$JAVA_BIN/jar --create --file mlib/iris.mail.provider.outlook@1.0.jar --module-version 1.0 -C build/iris.mail.provider.outlook .
 
-echo Creating Module: IrisMailProviderYahoo
-$JAVA_BIN/jar --create --file mlib/iris.mail.provider.yahoo@1.0.jar --module-version 1.0 -C build/iris.mail.provider.yahoo .
+#echo Creating Module: IrisMailProviderYahoo
+#$JAVA_BIN/jar --create --file mlib/iris.mail.provider.yahoo@1.0.jar --module-version 1.0 -C build/iris.mail.provider.yahoo .
 
 echo Creating Module: IrisPersistence
 $JAVA_BIN/jar --create --file mlib/iris.persistence@1.0.jar --module-version 1.0 -C build/iris.persistence .
