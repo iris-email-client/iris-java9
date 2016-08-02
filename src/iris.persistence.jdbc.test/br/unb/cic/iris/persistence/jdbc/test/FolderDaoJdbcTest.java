@@ -12,9 +12,7 @@ import java.io.InputStream;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import br.com.phtcosta.media.movie.exception.MoviePersistenceException;
-import br.com.phtcosta.media.movie.model.Movie;
-import br.com.phtcosta.media.movie.nfo.NfoParser;
+
 import br.unb.cic.iris.persistence.FolderDAO;
 
 public class FolderDaoJdbcTest {
@@ -22,7 +20,7 @@ public class FolderDaoJdbcTest {
 
 	@BeforeClass
 	public static void runOnceBeforeClass() {
-		parser = new NfoParser();
+		//parser = new NfoParser();
 	}
 
 	@Test

@@ -8,11 +8,12 @@
 	<classpathentry kind="src" path="src/iris.mail.provider.outlook"/>
 	<classpathentry kind="src" path="src/iris.mail.provider.yahoo"/>
 	<classpathentry kind="src" path="src/iris.mail.simple"/>
+	<classpathentry kind="src" path="src/iris.mail.secure"/>
+	<classpathentry kind="src" path="src/iris.mail.secure.smime"/>
 	<classpathentry kind="src" path="src/iris.model"/>
 	<classpathentry kind="src" path="src/iris.model.simple"/>
 	<classpathentry kind="src" path="src/iris.persistence"/>
 	<classpathentry kind="src" path="src/iris.persistence.jdbc"/>
-	<classpathentry kind="src" path="src/iris.persistence.jdbc.test"/>
 	<classpathentry kind="src" path="src/iris.persistence.lucene"/>
 	<classpathentry kind="src" path="src/iris.persistence.xml"/>
 	<classpathentry kind="src" path="src/iris.ui.cli"/>
@@ -36,7 +37,7 @@
 	<classpathentry kind="src" path="src/iris.search.persistence.lucene"/>
 	<classpathentry kind="src" path="src/iris.search.persistence.xml"/>
 	<classpathentry kind="src" path="src/iris.search.ui.cli"/>
-	<classpathentry kind="src" path="src/iris.search.ui.gui"/>
+	<classpathentry kind="src" path="src/iris.search.ui.gui"/>	
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-9"/>
 	<classpathentry kind="lib" path="libs/javax.mail-1.5.5.jar"/>
 	<classpathentry kind="lib" path="libs/javax.mail-api-1.5.5.jar"/>
@@ -46,6 +47,8 @@
 	<classpathentry kind="lib" path="libs/lucene-queries-4.10.2.jar"/>
 	<classpathentry kind="lib" path="libs/lucene-queryparser-4.10.2.jar"/>
 	<classpathentry kind="lib" path="libs/lucene-sandbox-4.10.2.jar"/>
-	<classpathentry kind="lib" path="libs/junit-4.12.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/bouncycastle/bcprov-jdk15on/1.54/bcprov-jdk15on-1.54.jar" sourcepath="M2_REPO/org/bouncycastle/bcprov-jdk15on/1.54/bcprov-jdk15on-1.54-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/bouncycastle/bcpkix-jdk15on/1.54/bcpkix-jdk15on-1.54.jar" sourcepath="M2_REPO/org/bouncycastle/bcpkix-jdk15on/1.54/bcpkix-jdk15on-1.54-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/bouncycastle/bcmail-jdk15on/1.54/bcmail-jdk15on-1.54.jar" sourcepath="M2_REPO/org/bouncycastle/bcmail-jdk15on/1.54/bcmail-jdk15on-1.54-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

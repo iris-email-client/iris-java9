@@ -18,6 +18,9 @@ echo Java: $JAVA_BIN
 #interface: gui/cli
 INTERFACE=cli
 
+#email_type: simple/smime/pgp
+EMAIL_TYPE=smime
+
 #persistence: xml/lucene/relational
 PERSISTENCE=lucene
 
@@ -59,10 +62,20 @@ cp src/iris.core/*.properties build/iris.core
 $JAVA_BIN/jar --create --file mlib/iris.core@1.0.jar --module-version 1.0 -C build/iris.core .
 
 echo Creating Module: IrisMail
+cp src/iris.mail/*.properties build/iris.mail
 $JAVA_BIN/jar --create --file mlib/iris.mail@1.0.jar --module-version 1.0 -C build/iris.mail .
 
 echo Creating Module: IrisMailProvider
 $JAVA_BIN/jar --create --file mlib/iris.mail.provider@1.0.jar --module-version 1.0 -C build/iris.mail.provider .
+
+echo Creating Module: IrisMailProviderGmail
+$JAVA_BIN/jar --create --file mlib/iris.mail.provider.gmail@1.0.jar --module-version 1.0 -C build/iris.mail.provider.gmail .
+
+echo Creating Module: IrisMailProviderOutlook
+$JAVA_BIN/jar --create --file mlib/iris.mail.provider.outlook@1.0.jar --module-version 1.0 -C build/iris.mail.provider.outlook .
+
+echo Creating Module: IrisMailProviderYahoo
+$JAVA_BIN/jar --create --file mlib/iris.mail.provider.yahoo@1.0.jar --module-version 1.0 -C build/iris.mail.provider.yahoo .
 
 echo Creating Module: IrisPersistence
 $JAVA_BIN/jar --create --file mlib/iris.persistence@1.0.jar --module-version 1.0 -C build/iris.persistence .
@@ -73,18 +86,21 @@ if [ $PERSISTENCE = "relational" ] || [ $PERSISTENCE = "lucene" ]; then
 	$JAVA_BIN/jar --create --file mlib/iris.model.simple@1.0.jar --module-version 1.0 -C build/iris.model.simple .
 fi
 
-echo Creating Module: IrisMailSimple
-$JAVA_BIN/jar --create --file mlib/iris.mail.simple@1.0.jar --module-version 1.0 -C build/iris.mail.simple .
 
+#Email Type
+if [ $EMAIL_TYPE = "smime" ] || [ $EMAIL_TYPE = "pgp" ]; then
+	echo Creating Module: IrisMailSecure
+	$JAVA_BIN/jar --create --file mlib/iris.mail.secure@1.0.jar --module-version 1.0 -C build/iris.mail.secure .
+fi
 
-echo Creating Module: IrisMailProviderGmail
-$JAVA_BIN/jar --create --file mlib/iris.mail.provider.gmail@1.0.jar --module-version 1.0 -C build/iris.mail.provider.gmail .
-
-echo Creating Module: IrisMailProviderOutlook
-$JAVA_BIN/jar --create --file mlib/iris.mail.provider.outlook@1.0.jar --module-version 1.0 -C build/iris.mail.provider.outlook .
-
-echo Creating Module: IrisMailProviderYahoo
-$JAVA_BIN/jar --create --file mlib/iris.mail.provider.yahoo@1.0.jar --module-version 1.0 -C build/iris.mail.provider.yahoo .
+if [ $EMAIL_TYPE = "smime" ]; then
+	echo Creating Module: IrisMailSecureSmime NOT YET IMPLEMENTED!!!!!!!		
+elif [ $EMAIL_TYPE = "pgp" ]; then
+	echo Creating Module: IrisMailSecurePGP NOT YET IMPLEMENTED!!!!!!!	
+else
+	echo Creating Module: IrisMailSimple
+	$JAVA_BIN/jar --create --file mlib/iris.mail.simple@1.0.jar --module-version 1.0 -C build/iris.mail.simple .
+fi
 
 
 # Persistence

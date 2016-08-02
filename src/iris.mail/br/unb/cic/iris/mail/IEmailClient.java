@@ -10,6 +10,8 @@ import br.unb.cic.iris.model.EmailMessage;
 import br.unb.cic.iris.model.IrisFolder;
 
 public interface IEmailClient {
+	public static final String CHARACTER_ENCODING = "UTF-8";
+	
 	public void setProvider(EmailProvider provider);
 
 	public void setProvider(EmailProvider provider, String encoding);

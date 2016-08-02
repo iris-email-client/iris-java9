@@ -1,6 +1,6 @@
-package br.unb.cic.iris.mail.simple;
+package br.unb.cic.iris.mail.internal;
 
-import static br.unb.cic.iris.core.i18n.MessageBundle.message;
+import static br.unb.cic.iris.mail.i18n.MessageBundle.message;
 
 import java.util.Properties;
 
@@ -14,6 +14,7 @@ import javax.mail.event.ConnectionListener;
 
 import br.unb.cic.iris.mail.EmailProvider;
 import br.unb.cic.iris.mail.EmailStatusManager;
+import br.unb.cic.iris.mail.IEmailClient;
 
 /***
  * added by dBaseMail
@@ -24,7 +25,7 @@ public class EmailSession implements ConnectionListener {
 	private final EmailProvider provider;
 
 	public EmailSession(EmailProvider provider) {
-		this(provider, EmailClient.CHARACTER_ENCODING);
+		this(provider, IEmailClient.CHARACTER_ENCODING);
 	}
 
 	public EmailSession(EmailProvider provider, String encoding) {
@@ -51,15 +52,15 @@ public class EmailSession implements ConnectionListener {
 		service.connect(host, port, getProvider().getUsername(), getProvider().getPassword());
 	}
 
-	protected Session getSession() {
+	public Session getSession() {
 		return session;
 	}
 
-	protected EmailProvider getProvider() {
+	public EmailProvider getProvider() {
 		return provider;
 	}
 
-	protected String getEncoding() {
+	public String getEncoding() {
 		return encoding;
 	}
 

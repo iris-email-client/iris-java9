@@ -18,7 +18,7 @@
 	<properties>
 		<java.mail.version>1.5.5</java.mail.version>		
 		<lucene.version>4.10.2</lucene.version>
-		<!-- <bouncycastle.version>1.51</bouncycastle.version> -->
+		<bouncycastle.version>1.54</bouncycastle.version>
 	</properties>
 
 	<dependencies>
@@ -76,6 +76,23 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 			<scope>test</scope>
+		</dependency>
+				
+		<!--bouncy castle -->
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
+			<version>${bouncycastle.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcpkix-jdk15on</artifactId>
+			<version>${bouncycastle.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcmail-jdk15on</artifactId>
+			<version>${bouncycastle.version}</version>
 		</dependency>
 		
 		<!-- Log4j		

@@ -1,50 +1,49 @@
-package br.unb.cic.iris.mail.simple;
+package br.unb.cic.iris.mail.internal;
 
-import static br.unb.cic.iris.core.i18n.MessageBundle.message;
+import static br.unb.cic.iris.mail.i18n.MessageBundle.message;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ServiceLoader;
 
 import javax.mail.Address;
-import javax.mail.BodyPart;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.Store;
 import javax.mail.event.FolderEvent;
-import javax.mail.event.FolderListener;
 import javax.mail.event.StoreEvent;
-import javax.mail.event.StoreListener;
 import javax.mail.internet.MimeMessage;
 import javax.mail.search.SearchTerm;
 
-import br.unb.cic.iris.core.IrisServiceLocator;
 import br.unb.cic.iris.exception.IrisException;
+import br.unb.cic.iris.exception.IrisUncheckedException;
 import br.unb.cic.iris.mail.EmailProvider;
+import br.unb.cic.iris.mail.EmailReceiver;
 import br.unb.cic.iris.mail.EmailStatusManager;
 import br.unb.cic.iris.model.EmailMessage;
 import br.unb.cic.iris.model.EntityFactory;
 import br.unb.cic.iris.model.IrisFolder;
 
-/***
- * added by dBaseMail
- */
-public class EmailReceiver implements StoreListener, FolderListener {
+public abstract class AbstractEmailReceiver implements EmailReceiver {
 	private Store store;
 	private EmailSession session;
-	private EmailProvider provider;	
+	private EmailProvider provider;
+	private EntityFactory entityFactory;
 
-	public EmailReceiver(EmailProvider provider, String encoding) {		
+	public AbstractEmailReceiver(EmailProvider provider, String encoding) {
 		this.provider = provider;
 		session = new EmailSession(provider, encoding);
+		initEntityFactory();
 	}
 
+	protected abstract String getText(Object obj) throws Exception;
+	
 	public List<IrisFolder> listFolders() throws IrisException {
 		List<IrisFolder> folders = new ArrayList<>();
-		try {			
+		try {
 			Folder defaultFolder = getStore().getDefaultFolder();
 			Folder[] externalFolders = defaultFolder.list();
 			for (Folder f : externalFolders) {
@@ -112,21 +111,17 @@ public class EmailReceiver implements StoreListener, FolderListener {
 		int cont = 0;
 		int total = messagesRetrieved.length;
 		for (Message m : messagesRetrieved) {
-			try {
-				//TODO
-				messages.add(convertToIrisMessage(m));
-				if (total != 0) {
-					for (int i = 0; i < 15; i++) {
-						System.out.print('\b');
-					}
-					cont++;
-					int tmp = 100 * cont;
-					System.out.print(message("email.receiver.download.progress", (tmp / total)));
-					
-					EmailStatusManager.instance().notifyMessageDownloadProgress((tmp / total));
+			// TODO
+			messages.add(convertToIrisMessage(m));
+			if (total != 0) {
+				for (int i = 0; i < 15; i++) {
+					System.out.print('\b');
 				}
-			} catch (IOException | MessagingException e) {
-				throw new IrisException(e.getMessage(), e);
+				cont++;
+				int tmp = 100 * cont;
+				System.out.print(message("email.receiver.download.progress", (tmp / total)));
+
+				EmailStatusManager.instance().notifyMessageDownloadProgress((tmp / total));
 			}
 		}
 		System.out.println();
@@ -147,52 +142,24 @@ public class EmailReceiver implements StoreListener, FolderListener {
 		}
 	}
 
-	private EmailMessage convertToIrisMessage(Message message) throws IOException, MessagingException {
+	private EmailMessage convertToIrisMessage(Message message) throws IrisException {
 		MimeMessage m = (MimeMessage) message;
 		EmailMessage msg = getEntityFactory().createEmailMessage();
-		msg.setBcc(convertAddressToString(m.getRecipients(RecipientType.BCC)));
-		msg.setCc(convertAddressToString(m.getRecipients(RecipientType.CC)));
-		msg.setTo(convertAddressToString(m.getRecipients(RecipientType.TO)));
-		msg.setFrom(convertAddressToString(m.getFrom()));
-		msg.setMessage(getText(m));
-		msg.setSubject(m.getSubject());
-		msg.setDate(m.getReceivedDate());
-		return msg;
-	}
 
-	private String getText(Message message) throws IOException, MessagingException {
-		String result = message.getContent().toString();
-		if (message instanceof MimeMessage) {
-			MimeMessage m = (MimeMessage) message;
-			Object contentObject = m.getContent();
-			if (contentObject instanceof Multipart) {
-				BodyPart clearTextPart = null;
-				BodyPart htmlTextPart = null;
-				Multipart content = (Multipart) contentObject;
-				int count = content.getCount();
-				for (int i = 0; i < count; i++) {
-					BodyPart part = content.getBodyPart(i);
-					if (part.isMimeType("text/plain")) {
-						clearTextPart = part;
-						break;
-					} else if (part.isMimeType("text/html")) {
-						htmlTextPart = part;
-					}
-				}
-				if (clearTextPart != null) {
-					result = (String) clearTextPart.getContent();
-				} else if (htmlTextPart != null) {
-					String html = (String) htmlTextPart.getContent();
-					result = html;
-				}
-			} else if (contentObject instanceof String) {
-				result = (String) contentObject;
-			} else {				
-				System.err.println(message("email.receiver.invalid.body", message.toString()));
-				result = null;
-			}
+		try {
+			msg.setBcc(convertAddressToString(m.getRecipients(RecipientType.BCC)));
+			msg.setCc(convertAddressToString(m.getRecipients(RecipientType.CC)));
+			msg.setTo(convertAddressToString(m.getRecipients(RecipientType.TO)));
+			msg.setFrom(convertAddressToString(m.getFrom()));
+			msg.setMessage(getText(m));
+			msg.setSubject(m.getSubject());
+			msg.setDate(m.getReceivedDate());
+		} catch (Exception e) {
+			// TODO i18n
+			throw new IrisException("error ....", e);
 		}
-		return result;
+
+		return msg;
 	}
 
 	private String convertAddressToString(Address[] recipients) {
@@ -206,7 +173,7 @@ public class EmailReceiver implements StoreListener, FolderListener {
 	}
 
 	private Store createStoreAndConnect() throws MessagingException {
-		EmailStatusManager.instance().notifyListener(message("email.status.receiver.create.store"));		
+		EmailStatusManager.instance().notifyListener(message("email.status.receiver.create.store"));
 		Store storeTmp = session.getSession().getStore(provider.getStoreProtocol());
 		storeTmp.addStoreListener(this);
 		storeTmp.addConnectionListener(session);
@@ -239,7 +206,7 @@ public class EmailReceiver implements StoreListener, FolderListener {
 
 	@Override
 	public void notification(StoreEvent e) {
-		EmailStatusManager.instance().notifyListener(message("email.status.receiver.notification", e.getMessage()));		
+		EmailStatusManager.instance().notifyListener(message("email.status.receiver.notification", e.getMessage()));
 	}
 
 	@Override
@@ -253,8 +220,20 @@ public class EmailReceiver implements StoreListener, FolderListener {
 	@Override
 	public void folderRenamed(FolderEvent e) {
 	}
-	
+
 	private EntityFactory getEntityFactory() {
-		return IrisServiceLocator.instance().getEntityFactory();
+		return entityFactory;
 	}
+
+	private void initEntityFactory() {
+		ServiceLoader<EntityFactory> sl = ServiceLoader.load(EntityFactory.class);
+		Iterator<EntityFactory> it = sl.iterator();
+
+		if (!it.hasNext())
+			throw new IrisUncheckedException("No Entity Factory found!");
+
+		entityFactory = it.next();
+		System.out.println("Entity Factory: " + entityFactory.getClass().getCanonicalName());
+	}
+
 }
