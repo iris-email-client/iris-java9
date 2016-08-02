@@ -44,7 +44,7 @@ mkdir mlib
 
 # compile
 echo Compiling ...
-$JAVA_BIN/javac -mp libs -d build -modulesourcepath src $(find src -name "*.java")
+$JAVA_BIN/javac -mp libs -cp libs -d build -modulesourcepath src $(find src -name "*.java")
 #$JAVA_BIN/javac -mp libs -cp lib/javax.mail-1.5.5.jar -d build -modulesourcepath src $(find src -name "*.java")
 
 
@@ -94,7 +94,8 @@ if [ $EMAIL_TYPE = "smime" ] || [ $EMAIL_TYPE = "pgp" ]; then
 fi
 
 if [ $EMAIL_TYPE = "smime" ]; then
-	echo Creating Module: IrisMailSecureSmime NOT YET IMPLEMENTED!!!!!!!		
+	echo Creating Module: IrisMailSecureSmime
+	$JAVA_BIN/jar --create --file mlib/iris.mail.secure.smime@1.0.jar --module-version 1.0 -C build/iris.mail.secure.smime .	
 elif [ $EMAIL_TYPE = "pgp" ]; then
 	echo Creating Module: IrisMailSecurePGP NOT YET IMPLEMENTED!!!!!!!	
 else

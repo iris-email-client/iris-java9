@@ -8,7 +8,6 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
-import java.security.Security;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
@@ -17,6 +16,7 @@ import java.util.Enumeration;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import br.unb.cic.iris.base.Configuration;
 import br.unb.cic.iris.exception.IrisException;
 
 public class SmimeKeyManager {
@@ -24,11 +24,10 @@ public class SmimeKeyManager {
 
 	private static SmimeKeyManager instance;
 
-	String pkcs12Keystore = "/home/pedro/desenvolvimento/workspace-java9/criptografia/CA/keystore.pkcs12";
-	String keystorePassword = "123456";
-	String keyAlias = "iris";
+	private String pkcs12Keystore = Configuration.IRIS_HOME+"/keystore.pkcs12";
+	private String keystorePassword = "123456";
 
-	KeyStore keystore;
+	private KeyStore keystore;
 
 	private SmimeKeyManager() throws Exception {
 		// Security.addProvider(new BouncyCastleProvider());
@@ -80,7 +79,7 @@ public class SmimeKeyManager {
 		// TODO eh a chave do alias ... nao do keystore????
 		PrivateKey privateKey = (PrivateKey) keystore.getKey(keyAlias, keystorePassword.toCharArray());
 		if (privateKey == null) {
-			throw new IrisException("cannot find private key for alias: " + keyAlias);
+			throw new IrisException("Cannot find private key for alias: " + keyAlias);
 		}
 		return privateKey;
 	}
@@ -92,30 +91,6 @@ public class SmimeKeyManager {
 
 	public PrivateKey getPrivateKeyByCertificate(Certificate certificate) throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, IrisException {
 		return getPrivateKey(keystore.getCertificateAlias(certificate));
-	}
-
-	public void test() throws Exception {
-		System.out.println("contains iris=" + keystore.containsAlias("iris"));
-		Enumeration<String> aliases = keystore.aliases();
-		while (aliases.hasMoreElements()) {
-			String alias = aliases.nextElement();
-			System.out.println("ALIAS: " + alias);
-			System.out.println("isKeyEntry: "+keystore.isKeyEntry(keyAlias));
-			X509Certificate certificate = getCertificate(alias);
-			String name = certificate.getSubjectDN().getName();
-			System.out.println(" - " + name);
-			System.out.println(" - " + name.substring(name.lastIndexOf("E=") + 2));
-		}
-	}
-
-	public static void main(String[] args) {
-		Security.addProvider(new BouncyCastleProvider());
-		try {
-			SmimeKeyManager.instance().test();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 }

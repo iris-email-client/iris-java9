@@ -71,5 +71,4 @@ create_client_cert () {
 ########### EXECUTE ############
 create_CA
 create_client_cert "br.unb.cic.iris@gmail.com" "/C=BR/ST=DistritoFederal/L=Brasilia/O=UNB/OU=CIC/CN=iris/emailAddress=br.unb.cic.iris@gmail.com"
-create_client_cert "phtcosta.judo@gmail.com" "/C=BR/ST=DistritoFederal/L=Brasilia/O=UNB/OU=CIC/CN=phtcosta/emailAddress=phtcosta.judo@gmail.com"
 keytool -list -storetype $KEYSTORE_TYPE -storepass $KEYSTORE_PASSWORD -keystore $KEYSTORE

@@ -1,10 +1,9 @@
-module iris.mail.secure.smime {
-	//requires javax.mail;
-	//requires java.activation;
+module iris.mail.secure.smime {	
+	requires bcprov.jdk15on;
+	requires bcpkix.jdk15on;
+	requires bcmail.jdk15on;
 	
-	requires public iris.mail;
-	//requires public iris.mail;
-	//requires iris.mail.provider;
+	requires iris.mail.secure;	
 	
-	//provides br.unb.cic.iris.mail.IEmailClient with br.unb.cic.iris.mail.simple.EmailClient;
+	provides br.unb.cic.iris.mail.IEmailClient with br.unb.cic.iris.mail.secure.smime.EmailClientSmime;
 }

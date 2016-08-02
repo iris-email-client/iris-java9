@@ -6,6 +6,7 @@ module iris.mail.secure {
 	//requires public iris.mail;
 	//requires iris.mail.provider;
 	
+	exports br.unb.cic.iris.mail.secure;
 	exports br.unb.cic.iris.mail.secure.internal to iris.mail.secure.smime;
 	
 	//provides br.unb.cic.iris.mail.IEmailClient with br.unb.cic.iris.mail.simple.EmailClient;

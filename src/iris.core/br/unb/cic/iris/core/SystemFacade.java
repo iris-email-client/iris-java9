@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
+import br.unb.cic.iris.base.Configuration;
 import br.unb.cic.iris.core.i18n.MessageBundle;
 import br.unb.cic.iris.exception.IrisException;
 import br.unb.cic.iris.exception.IrisUncheckedException;
@@ -39,9 +40,7 @@ public final class SystemFacade {
 
 	private SystemFacade() {
 		System.out.println("Starting system ...");
-		initIrisProperties();
-		initLocale();
-
+		
 		IrisServiceLocator.instance();
 		ProviderManager.instance();
 		
@@ -143,32 +142,12 @@ public final class SystemFacade {
 		return IrisServiceLocator.instance().getDaoFactory();
 	}
 
-	private void initLocale() {
-		String language = getIrisProperties().getProperty("language");
-		if (!StringUtil.isEmpty(language)) {
-			locale = new Locale(getIrisProperties().getProperty("language"));
-		} else {
-			locale = Locale.ENGLISH;
-		}
-	}
-
 	public Locale getLocale() {
-		return locale;
-	}
-
-	private void initIrisProperties() {
-		String irisPropertiesFile = System.getProperty("user.home") + "/.iris/iris.properties";
-		irisProperties = new Properties();
-		try (InputStream is = new FileInputStream(irisPropertiesFile)) {
-			irisProperties.load(is);
-		} catch (IOException e) {						
-			System.err.println(MessageBundle.message("Unable to read iris properties file: "+irisPropertiesFile+". "+e.getLocalizedMessage()));
-			e.printStackTrace();
-		}
+		return Configuration.instance().getLocale();
 	}
 
 	public Properties getIrisProperties() {
-		return irisProperties;
+		return Configuration.instance().getIrisProperties();
 	}
 	
 	private void initDefaultProvider(){
