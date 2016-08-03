@@ -1,5 +1,10 @@
 package br.unb.cic.iris.mail.secure.smime.internal;
 
+import static br.unb.cic.iris.mail.MessageUtils.MIME_MULTIPART_SIGNED;
+import static br.unb.cic.iris.mail.MessageUtils.MIME_SMIME;
+import static br.unb.cic.iris.mail.MessageUtils.MIME_SMIME_2;
+import static br.unb.cic.iris.mail.MessageUtils.getEmail;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.security.PrivateKey;
@@ -13,15 +18,13 @@ import java.util.List;
 
 import javax.activation.CommandMap;
 import javax.activation.MailcapCommandMap;
-import javax.mail.Address;
 import javax.mail.Message;
-import javax.mail.Part;
 import javax.mail.Session;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeMessage.RecipientType;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimePart;
 
 import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.cms.AttributeTable;
@@ -83,126 +86,6 @@ private static final String BC = BouncyCastleProvider.PROVIDER_NAME;
 		return instance;
 	}
 	
-	public Object decrypt(MimeMessage msg) throws Exception {
-
-		//
-		// find the certificate for the private key and generate a
-		// suitable recipient identifier.
-		//
-		//TODO eh TO
-		String to = getEmail(msg.getRecipients(RecipientType.TO));
-		System.out.println("DESTINATARIO: "+to);
-		//X509Certificate certificate = SmimeKeyManager.instance().getCertificateByEmail(to);
-		X509Certificate certificate = SmimeKeyManager.instance().getCertificate(to);
-		System.out.println("CERTIFICATE: "+certificate.getSubjectDN().getName());
-		PrivateKey privateKey = SmimeKeyManager.instance().getPrivateKeyByCertificate(certificate);
-		System.out.println("PRIVATE_KEY: "+privateKey.getAlgorithm());
-		
-		//X509Certificate cert = (X509Certificate) ks.getCertificate(keyAlias);
-		RecipientId recId = new JceKeyTransRecipientId(certificate);
-
-		SMIMEEnveloped m = new SMIMEEnveloped(msg);
-
-		RecipientInformationStore recipients = m.getRecipientInfos();
-		RecipientInformation recipient = recipients.get(recId);
-
-		MimeBodyPart res = SMIMEUtil.toMimeBodyPart(recipient.getContent(new JceKeyTransEnvelopedRecipient(privateKey).setProvider(BC)));
-
-//		System.out.println("Message Contents");
-//		System.out.println("----------------");
-//		System.out.println(res.getContent());
-		
-		return res.getContent();
-	}
-
-	public void verify(Message msg) throws Exception {
-		//
-		// make sure this was a multipart/signed message - there should be
-		// two parts as we have one part for the content that was signed and
-		// one part for the actual signature.
-		//
-		if (msg.isMimeType("multipart/signed")) {
-			SMIMESigned s = new SMIMESigned((MimeMultipart) msg.getContent());
-			verify(s);
-		} else if (msg.isMimeType("application/pkcs7-mime") || msg.isMimeType("application/x-pkcs7-mime")) {
-			//
-			// in this case the content is wrapped in the signature block.
-			//
-			SMIMESigned s = new SMIMESigned(msg);
-
-			verify(s);
-		} else {
-			//TODO
-			System.err.println("Not a signed message!");
-		}
-	}
-
-	
-
-	/**
-	 * verify the signature (assuming the cert is contained in the message)
-	 */
-	public void verify(SMIMESigned s) throws Exception {
-		//
-		// extract the information to verify the signatures.
-		//
-
-		//
-		// certificates and crls passed in the signature
-		//
-		Store certs = s.getCertificates();
-
-		//
-		// SignerInfo blocks which contain the signatures
-		//
-		SignerInformationStore signers = s.getSignerInfos();
-
-		Collection c = signers.getSigners();
-		Iterator it = c.iterator();
-
-		//
-		// check each signer
-		//
-		while (it.hasNext()) {
-			SignerInformation signer = (SignerInformation) it.next();
-			Collection certCollection = certs.getMatches(signer.getSID());
-
-			Iterator certIt = certCollection.iterator();
-			X509Certificate cert = new JcaX509CertificateConverter().setProvider(BC).getCertificate((X509CertificateHolder) certIt.next());
-
-			//
-			// verify that the sig is correct and that it was generated
-			// when the certificate was current
-			//
-			if (signer.verify(new JcaSimpleSignerInfoVerifierBuilder().setProvider(BC).build(cert))) {
-				System.out.println("signature verified");
-			} else {
-				System.out.println("signature failed!");
-				throw new IrisException("Invalid signature");
-			}
-		}
-	}
-
-	@Override
-	public void verifySignature(Part msg) throws Exception {
-		if (msg.isMimeType("multipart/signed")) {			
-			verifySignature((MimeMultipart) msg.getContent());
-		} else if (msg.isMimeType("application/pkcs7-mime") || msg.isMimeType("application/x-pkcs7-mime")) {
-			//
-			// in this case the content is wrapped in the signature block.
-			//
-			SMIMESigned s = new SMIMESigned(msg);
-			verify(s);
-		} else {
-			System.err.println("Not a signed message!");
-		}
-	}
-
-	@Override
-	public void verifySignature(MimeMultipart multi) throws Exception {
-		verify(new SMIMESigned(multi));
-	}
-
 	@Override
 	public MimeMessage encrypt(Session mailSession, MimeMessage message) throws Exception {
 		System.out.println("Encrypting message ...");
@@ -242,6 +125,37 @@ private static final String BC = BouncyCastleProvider.PROVIDER_NAME;
 		}
 
 		return encryptedMessage;
+	}
+
+	@Override
+	public MimeMessage encrypt(MimeMessage message) throws Exception {		
+		return encrypt(message.getSession(), message);
+	}
+
+	@Override
+	public Object decrypt(Session mailSession, MimeMessage msg) throws Exception {		
+		return decrypt(msg);
+	}
+
+	@Override
+	public Object decrypt(MimeMessage msg) throws Exception {
+		String to = getEmail(msg.getRecipients(RecipientType.TO));
+		System.out.println("DESTINATARIO: "+to);
+		X509Certificate certificate = SmimeKeyManager.instance().getCertificate(to);
+		System.out.println("CERTIFICATE: "+certificate.getSubjectDN().getName());
+		PrivateKey privateKey = SmimeKeyManager.instance().getPrivateKeyByCertificate(certificate);
+		System.out.println("PRIVATE_KEY: "+privateKey.getAlgorithm());
+		
+		RecipientId recId = new JceKeyTransRecipientId(certificate);
+
+		SMIMEEnveloped m = new SMIMEEnveloped(msg);
+
+		RecipientInformationStore recipients = m.getRecipientInfos();
+		RecipientInformation recipient = recipients.get(recId);
+
+		MimeBodyPart res = SMIMEUtil.toMimeBodyPart(recipient.getContent(new JceKeyTransEnvelopedRecipient(privateKey).setProvider(BC)));
+
+		return res.getContent();
 	}
 
 	@Override
@@ -290,10 +204,110 @@ private static final String BC = BouncyCastleProvider.PROVIDER_NAME;
 
 		return signedMessage;
 	}
+
+	@Override
+	public MimeMessage sign(MimeMessage message) throws Exception {		
+		return sign(message.getSession(), message);
+	}
+
+	@Override
+	public void verifySignature(MimeMessage msg) throws Exception {
+		verify(msg);
+	}
+
+	@Override
+	public void verifySignature(MimePart msg, String from) throws Exception {
+		if (msg.isMimeType(MIME_MULTIPART_SIGNED)) {			
+			verifySignature((MimeMultipart) msg.getContent(), from);
+		} else if (msg.isMimeType(MIME_SMIME) || msg.isMimeType(MIME_SMIME_2)) {
+			//
+			// in this case the content is wrapped in the signature block.
+			//
+			SMIMESigned s = new SMIMESigned(msg);
+			verify(s);
+		} else {
+			System.err.println("Not a signed message!");
+		}
+	}
+
+	@Override
+	public void verifySignature(MimeMultipart multi, String from) throws Exception {
+		verify(new SMIMESigned(multi));
+	}
+
 	
 	
-	private String getEmail(Address[] addresses){
-		return addresses == null ? null : ((InternetAddress) addresses[0]).getAddress();
+	
+	
+	
+	
+	
+	
+	
+	public void verify(Message msg) throws Exception {
+		//
+		// make sure this was a multipart/signed message - there should be
+		// two parts as we have one part for the content that was signed and
+		// one part for the actual signature.
+		//
+		if (msg.isMimeType(MIME_MULTIPART_SIGNED)) {
+			SMIMESigned s = new SMIMESigned((MimeMultipart) msg.getContent());
+			verify(s);
+		} else if (msg.isMimeType(MIME_SMIME) || msg.isMimeType(MIME_SMIME_2)) {
+			//
+			// in this case the content is wrapped in the signature block.
+			//
+			SMIMESigned s = new SMIMESigned(msg);
+			verify(s);
+		} else {
+			System.err.println("Not a signed message!");
+		}
+	}
+
+	
+
+	/**
+	 * verify the signature (assuming the cert is contained in the message)
+	 */
+	public void verify(SMIMESigned s) throws Exception {
+		//
+		// extract the information to verify the signatures.
+		//
+
+		//
+		// certificates and crls passed in the signature
+		//
+		Store certs = s.getCertificates();
+
+		//
+		// SignerInfo blocks which contain the signatures
+		//
+		SignerInformationStore signers = s.getSignerInfos();
+
+		Collection c = signers.getSigners();
+		Iterator it = c.iterator();
+
+		//
+		// check each signer
+		//
+		while (it.hasNext()) {
+			SignerInformation signer = (SignerInformation) it.next();
+			Collection certCollection = certs.getMatches(signer.getSID());
+
+			Iterator certIt = certCollection.iterator();
+			X509Certificate cert = new JcaX509CertificateConverter().setProvider(BC).getCertificate((X509CertificateHolder) certIt.next());
+
+			//
+			// verify that the sig is correct and that it was generated
+			// when the certificate was current
+			//
+			if (signer.verify(new JcaSimpleSignerInfoVerifierBuilder().setProvider(BC).build(cert))) {
+				System.out.println("signature verified");
+			} else {
+				System.out.println("signature failed!");
+				throw new IrisException("Invalid signature");
+			}
+		}
 	}
 
 }

@@ -30,6 +30,7 @@ public abstract class EmailReceiverSecure extends AbstractEmailReceiver {
 	
 	protected abstract EmailSecurityManager getEmailSecurityManager();
 	
+	private String from = "";
 	
 	protected String getText(Object content) throws Exception {
 		try {
@@ -58,6 +59,7 @@ public abstract class EmailReceiverSecure extends AbstractEmailReceiver {
 	
 	protected String getText(MimeMessage msg) throws Exception {
 		System.out.println("EmailReceiverSmime_MimeMessage: "+msg.getContentType());
+		from = MessageUtils.getFrom(msg);
 		if(msg.isMimeType(MIME_MULTIPART_ENCRYPTED) 
 				|| msg.isMimeType(MIME_SMIME) 
 				|| msg.isMimeType(MIME_SMIME_2)){
@@ -73,7 +75,7 @@ public abstract class EmailReceiverSecure extends AbstractEmailReceiver {
 		System.out.println("EmailReceiverSmime_MimeMultipart: "+multi.getContentType());
 		String contentType = MessageUtils.getMimeType(multi.getContentType());
 		if (contentType.contains(MIME_MULTIPART_SIGNED)) {
-			getEmailSecurityManager().verifySignature(multi);			
+			getEmailSecurityManager().verifySignature(multi, from);			
 		}
 		return getText((Multipart) multi);	
 	}

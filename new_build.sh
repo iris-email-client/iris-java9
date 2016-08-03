@@ -39,8 +39,8 @@ MODS_TEST_CLASSPATH_DIR=modules/test-libs
 MODS_TEST_TMP_DIR=modules/test-tmp
 
 
-echo Compiling ...
-$JAVA_BIN/javac -Xlint:unchecked -mp $MODS_GENERATED_DIR:$MODS_TMP_LIBS_DIR -cp $MODS_TMP_LIBS_DIR -d build -modulesourcepath src $(find src -name "*.java")
+#echo Compiling ...
+#$JAVA_BIN/javac -Xlint:unchecked -mp $MODS_GENERATED_DIR:$MODS_TMP_LIBS_DIR -cp $MODS_TMP_LIBS_DIR -d build -modulesourcepath src $(find src -name "*.java")
 
 
 ### TODO rever os clean

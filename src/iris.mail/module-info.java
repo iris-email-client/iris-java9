@@ -6,7 +6,7 @@ module iris.mail {
 	
 	exports br.unb.cic.iris.mail;
 	exports br.unb.cic.iris.mail.i18n;
-	exports br.unb.cic.iris.mail.internal to iris.mail.simple, iris.mail.secure, iris.mail.secure.smime;
+	exports br.unb.cic.iris.mail.internal;// to iris.mail.simple, iris.mail.secure, iris.mail.secure.smime;
 	
 	uses br.unb.cic.iris.model.EntityFactory;
 		

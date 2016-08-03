@@ -50,6 +50,10 @@ public class Configuration {
 		}
 	}
 
+	public static String getProperty(String key){
+		return Configuration.instance().getIrisProperties().getProperty(key);
+	}
+	
 	public Properties getIrisProperties() {
 		return irisProperties;
 	}

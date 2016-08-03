@@ -29,7 +29,7 @@ public abstract class EmailSenderSecure extends AbstractEmailSender {
 	}
 	
 	protected MimeMessage createMessage(EmailMessage email) throws MessagingException, UnsupportedEncodingException {
-		System.out.println("EmailSenderSmime: creating message ...");
+		System.out.println("EmailSenderSecure: creating message ...");
 		MimeMessage message = super.createMessage(email);
 		try {
 			return encrypt(sign(message));

@@ -19,7 +19,7 @@ echo Java: $JAVA_BIN
 INTERFACE=cli
 
 #email_type: simple/smime/pgp
-EMAIL_TYPE=simple
+EMAIL_TYPE=pgp
 
 #persistence: xml/lucene/relational
 PERSISTENCE=xml
@@ -94,10 +94,11 @@ if [ $EMAIL_TYPE = "smime" ] || [ $EMAIL_TYPE = "pgp" ]; then
 fi
 
 if [ $EMAIL_TYPE = "smime" ]; then
-	echo Creating Module: IrisMailSecureSmime
+	echo Creating Module: IrisMailSecureSMIME
 	$JAVA_BIN/jar --create --file mlib/iris.mail.secure.smime@1.0.jar --module-version 1.0 -C build/iris.mail.secure.smime .	
 elif [ $EMAIL_TYPE = "pgp" ]; then
-	echo Creating Module: IrisMailSecurePGP NOT YET IMPLEMENTED!!!!!!!	
+	echo Creating Module: IrisMailSecurePGP
+	$JAVA_BIN/jar --create --file mlib/iris.mail.secure.pgp@1.0.jar --module-version 1.0 -C build/iris.mail.secure.pgp .	
 else
 	echo Creating Module: IrisMailSimple
 	$JAVA_BIN/jar --create --file mlib/iris.mail.simple@1.0.jar --module-version 1.0 -C build/iris.mail.simple .

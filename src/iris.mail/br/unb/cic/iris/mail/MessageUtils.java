@@ -5,6 +5,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
+
+import javax.mail.Address;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Message.RecipientType;
+import javax.mail.internet.InternetAddress;
 /*** added by dSecurityBaseMail
  */
 public class MessageUtils {
@@ -50,5 +56,18 @@ public class MessageUtils {
 			}
 		}
 		return sb.toString();
+	}
+	
+	
+	public static String getFrom(Message msg) throws MessagingException{
+		return getEmail(msg.getFrom());
+	}
+	
+	public static String getTo(Message msg) throws MessagingException{
+		return getEmail(msg.getRecipients(RecipientType.TO));
+	}
+	
+	public static String getEmail(Address[] addresses){
+		return addresses == null ? null : ((InternetAddress) addresses[0]).getAddress();
 	}
 }
