@@ -12,6 +12,7 @@ import org.apache.lucene.search.TermQuery;
 import br.unb.cic.iris.core.IrisServiceLocator;
 import br.unb.cic.iris.exception.IrisUncheckedException;
 import br.unb.cic.iris.model.IrisFolder;
+import br.unb.cic.iris.persistence.EntityValidator;
 import br.unb.cic.iris.persistence.FolderDAO;
 import br.unb.cic.iris.persistence.IrisPersistenceException;
 import br.unb.cic.iris.persistence.lucene.AbstractDAO;
@@ -79,8 +80,8 @@ public class FolderDAOLucene extends AbstractDAO<IrisFolder> implements FolderDA
 
 	@Override
 	public IrisFolder createFolder(String folderName) throws IrisPersistenceException {
-		IrisFolder folder = IrisServiceLocator.instance().getEntityFactory().createIrisFolder();
-		folder.setName(folderName);
+		EntityValidator.checkFolderBeforeCreate(this, folderName);
+		IrisFolder folder = IrisServiceLocator.instance().getEntityFactory().createIrisFolder(folderName);		
 		instance.saveOrUpdate(folder);
 		System.out.println(String.format("%s folder created.", folderName));
 		return folder;

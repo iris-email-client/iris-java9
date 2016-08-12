@@ -76,7 +76,7 @@ public class FolderDaoJdbc extends AbstractDaoJdbc implements FolderDAO {
 	            	return toFolder(rs);
 	            }
             } catch (SQLException e) {
-            	throw new IrisPersistenceException("Could not execute query: "+e.getMessage(), e);
+            	throw e;//new IrisPersistenceException("Could not execute query: "+e.getMessage(), e);
             }
         } catch (SQLException e) {
         	throw new IrisPersistenceException("Could not execute query: "+e.getMessage(), e);

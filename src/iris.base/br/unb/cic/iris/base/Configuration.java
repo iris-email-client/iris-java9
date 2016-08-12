@@ -58,7 +58,4 @@ public class Configuration {
 		return irisProperties;
 	}
 
-	public static void main(String[] args) {
-		System.out.println(IRIS_HOME + FILE_SEPARATOR + "iris.properties");
-	}
 }

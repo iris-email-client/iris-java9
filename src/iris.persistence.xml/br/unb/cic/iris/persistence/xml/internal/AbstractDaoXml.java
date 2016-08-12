@@ -26,7 +26,7 @@ public abstract class AbstractDaoXml {
 			try {
 				persistIrisStore(new IrisMessageStoreXml());
 			} catch (IrisPersistenceException e) {				
-				throw new IrisUncheckedException("Error while creating XML store file: "+e.getMessage(), e);
+				throw new IrisUncheckedException("Error while creating XML file: "+e.getMessage(), e);
 			}
 		}		
 		daoFactory = new DaoFactoryXml();
@@ -41,28 +41,25 @@ public abstract class AbstractDaoXml {
 		return daoFactory.createFolderDAO();
 	}
 
-	public File getXmlFile() {
-		return XML_FILE;
-	}
 	
-	public IrisMessageStoreXml getIrisXmlStore() throws IrisPersistenceException {
+	static IrisMessageStoreXml getIrisXmlStore() throws IrisPersistenceException {
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(IrisMessageStoreXml.class);
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			return (IrisMessageStoreXml) jaxbUnmarshaller.unmarshal(getXmlFile());
+			return (IrisMessageStoreXml) jaxbUnmarshaller.unmarshal(XML_FILE);
 		} catch (JAXBException e) {
 			throw new IrisPersistenceException("Error reading XML file", e);
 		}
 	}
 
-	public void persistIrisStore(IrisMessageStoreXml store) throws IrisPersistenceException {
+	static void persistIrisStore(IrisMessageStoreXml store) throws IrisPersistenceException {
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(IrisMessageStoreXml.class);
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
-			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-			jaxbMarshaller.marshal(store, getXmlFile());
+			jaxbMarshaller.marshal(store, XML_FILE);
 		} catch (JAXBException e) {
 			throw new IrisPersistenceException("Error writing XML file", e);
 		}

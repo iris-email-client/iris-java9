@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 import br.unb.cic.iris.model.IrisFolder;
 import br.unb.cic.iris.model.xml.internal.IrisFolderXml;
 import br.unb.cic.iris.model.xml.internal.IrisMessageStoreXml;
+import br.unb.cic.iris.persistence.EntityValidator;
 import br.unb.cic.iris.persistence.FolderDAO;
 import br.unb.cic.iris.persistence.IrisPersistenceException;
 
@@ -38,9 +39,7 @@ public class FolderDaoXml extends AbstractDaoXml implements FolderDAO {
 
 	@Override
 	public IrisFolderXml createFolder(String folderName) throws IrisPersistenceException {
-		if(findByName(folderName) != null){
-			throw new IrisPersistenceException("Folder '"+folderName+"' already exists");
-		}
+		EntityValidator.checkFolderBeforeCreate(this, folderName);
 		
 		IrisFolderXml folder = new IrisFolderXml(folderName);
 		folder.setId(UUID.randomUUID().toString());
