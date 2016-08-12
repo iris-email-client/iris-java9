@@ -1,6 +1,9 @@
 #!/bin/bash
 
 ############### BASIC CONFIG ###################
+# test: true/false
+TEST=true
+
 #interface: gui/cli
 INTERFACE=gui
 
@@ -8,7 +11,7 @@ INTERFACE=gui
 EMAIL_TYPE=simple
 
 #persistence: xml/lucene/relational
-PERSISTENCE=xml
+PERSISTENCE=relational
 
 #adb: true/false
 ADDRESS_BOOK=true
@@ -27,6 +30,7 @@ echo Java: $JAVA_BIN
 
 
 SRC_DIR=src
+TEST_DIR=test
 BUILD_DIR=build
 MODS_TMP_LIBS_DIR=modules/tmp
 MODS_GENERATED_DIR=modules/generated
@@ -35,7 +39,7 @@ MODS_CLASSPATH_DIR=modules/libs
 MODS_TEST_GENERATED_DIR=modules/test
 MODS_TEST_AUTOMATIC_DIR=modules/test-automatic
 MODS_TEST_CLASSPATH_DIR=modules/test-libs
-MODS_TEST_TMP_DIR=modules/test-tmp
+#MODS_TEST_TMP_DIR=modules/test-tmp
 
 # copy maven dependencies
 mvn -f pom.xml -Dlibs.dest.dir=$MODS_TMP_LIBS_DIR package
@@ -103,10 +107,14 @@ copy_secure_pgp_libs () {
 	cp $MODS_TMP_LIBS_DIR/javamail-crypto-cryptix-openpgp-1.0.jar $MODS_CLASSPATH_DIR
 }
 #      bcprov-ext-jdk15on-1.54.jar   cryptix-openpgp-provider-1.0.jar    
-#bcmail-jdk15on-1.54.jar    cryptix-pki-api-1.0.jar           javax.mail-1.5.5.jar                    
-#   cryptix-jce-provider-1.0.jar  hamcrest-core-1.3.jar             javax.mail-api-1.5.5.jar              
+#bcmail-jdk15on-1.54.jar    cryptix-pki-api-1.0.jar                        
+#   cryptix-jce-provider-1.0.jar  hamcrest-core-1.3.jar                   
 #bcpkix-jdk15on-1.54.jar  cryptix-message-api-1.0.jar              junit-4.12.jar                         
 
+copy_test_libs () {
+	cp $MODS_TMP_LIBS_DIR/junit-4.12.jar $MODS_TEST_AUTOMATIC_DIR	
+	cp $MODS_TMP_LIBS_DIR/hamcrest-core-1.3.jar $MODS_TEST_CLASSPATH_DIR	
+}
 
 
 
@@ -123,10 +131,18 @@ create_jar_module () {
 	$JAVA_BIN/jar --create --file $MODS_GENERATED_DIR/$MODULE_NAME@1.0.jar --module-version 1.0  -C $BUILD_DIR/$MODULE_NAME .	
 }
 
+_create_main_jar_module () {
+	DEST_DIR=$1
+	MODULE_NAME=$2
+	MAIN_CLASS=$3
+	$JAVA_BIN/jar --create --file $DEST_DIR/$MODULE_NAME@1.0.jar --module-version 1.0 --main-class $MAIN_CLASS -C $BUILD_DIR/$MODULE_NAME .
+}
+
 create_main_jar_module () {
-	MODULE_NAME=$1
-	MAIN_CLASS=$2
-	$JAVA_BIN/jar --create --file $MODS_GENERATED_DIR/$MODULE_NAME@1.0.jar --module-version 1.0 --main-class $MAIN_CLASS -C $BUILD_DIR/$MODULE_NAME .
+	_create_main_jar_module $MODS_GENERATED_DIR $1 $2
+	#MODULE_NAME=$1
+	#MAIN_CLASS=$2
+	#$JAVA_BIN/jar --create --file $MODS_GENERATED_DIR/$MODULE_NAME@1.0.jar --module-version 1.0 --main-class $MAIN_CLASS -C $BUILD_DIR/$MODULE_NAME .
 }
 
 create_module () {
@@ -142,6 +158,14 @@ create_module_main () {
 	echo Creating main module: $MODULE
     compile_module $MODULE
     create_main_jar_module $MODULE $MAIN_CLASS
+}
+
+create_module_test () {
+	MODULE=$1
+	MAIN_CLASS=$2
+	echo Creating test module: $MODULE
+    compile_module $MODULE
+    _create_main_jar_module $MODS_TEST_GENERATED_DIR $MODULE $MAIN_CLASS
 }
 
 create_modules () {	
@@ -197,6 +221,15 @@ create_persistence_modules () {
 		MODULE="iris.persistence.lucene"	
 	fi
 	create_module $MODULE
+	
+	
+	#pequeno teste antes de uma versao malehor para tests
+	if [ $TEST = "true" ]; then
+		copy_test_libs
+		create_module_test "iris.persistence.jdbc.test" "br.unb.cic.iris.persistence.jdbc.test.TestRunner"
+		run_test "iris.persistence.jdbc.test"
+	fi
+	
 }
 
 copy_images () {
@@ -319,7 +352,13 @@ run () {
 	$JAVA_BIN/java -mp $MODS_GENERATED_DIR:$MODS_AUTOMATIC_DIR -cp $MODS_CLASSPATH_DIR -m $MODULE_NAME
 }
 
+run_test () {
+	MODULE=$1
+	echo Testing: $MODULE 	
+	$JAVA_BIN/java -mp $MODS_GENERATED_DIR:$MODS_AUTOMATIC_DIR:$MODS_TEST_GENERATED_DIR:$MODS_TEST_AUTOMATIC_DIR -cp $MODS_TEST_CLASSPATH_DIR/hamcrest-core-1.3.jar -m $MODULE
+}
+
 ################### EXECUTE ###################
 clean_all
 create_iris_modules
-run
+#run

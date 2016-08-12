@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 import br.unb.cic.iris.model.IrisFolder;
+import br.unb.cic.iris.persistence.EntityValidator;
 import br.unb.cic.iris.persistence.FolderDAO;
 import br.unb.cic.iris.persistence.IrisPersistenceException;
 
@@ -21,6 +22,8 @@ public class FolderDaoJdbc extends AbstractDaoJdbc implements FolderDAO {
 
 	@Override
 	public IrisFolder<?> createFolder(String folderName) throws IrisPersistenceException {
+		EntityValidator.checkFolderBeforeCreate(this, folderName);
+		
 		IrisFolder<?> folder = getEntityFactory().createIrisFolder();
 		folder.setId(UUID.randomUUID().toString());
 		folder.setName(folderName);
@@ -68,9 +71,12 @@ public class FolderDaoJdbc extends AbstractDaoJdbc implements FolderDAO {
 		try (Connection conn = getDbUtil().connect();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, value);            
-            ResultSet rs = pstmt.executeQuery();
-            if(rs.next()){
-            	return toFolder(rs);
+            try(ResultSet rs = pstmt.executeQuery()){
+	            if(rs.next()){
+	            	return toFolder(rs);
+	            }
+            } catch (SQLException e) {
+            	throw new IrisPersistenceException("Could not execute query: "+e.getMessage(), e);
             }
         } catch (SQLException e) {
         	throw new IrisPersistenceException("Could not execute query: "+e.getMessage(), e);

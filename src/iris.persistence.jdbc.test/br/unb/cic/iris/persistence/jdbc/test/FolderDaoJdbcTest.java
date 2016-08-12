@@ -1,67 +1,38 @@
 package br.unb.cic.iris.persistence.jdbc.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import static org.junit.Assert.*;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-
+import br.unb.cic.iris.core.IrisServiceLocator;
+import br.unb.cic.iris.model.EntityFactory;
+import br.unb.cic.iris.model.IrisFolder;
 import br.unb.cic.iris.persistence.FolderDAO;
+import br.unb.cic.iris.persistence.IrisPersistenceException;
 
 public class FolderDaoJdbcTest {
 	private static FolderDAO dao;
+	private static EntityFactory entityFactory;
 
 	@BeforeClass
 	public static void runOnceBeforeClass() {
-		//parser = new NfoParser();
+		dao = IrisServiceLocator.instance().getDaoFactory().createFolderDAO();
+		entityFactory = IrisServiceLocator.instance().getEntityFactory();
+		assertNotNull("Folder DAO shouldn't be null", dao);
 	}
 
 	@Test
-	public void testReadNfoFile(){
-//		File arquivo = getResourceAsFile("/nfo/movie.nfo");
-//		Movie movie = parser.read(arquivo);
-//		assertNotNull("Movie shouldn't be null",movie);		
-//		assertEquals("Matrix", movie.getTitle());		
+	public void testSaveFolder() throws IrisPersistenceException{
+		IrisFolder folder = dao.createFolder(IrisFolder.INBOX);
+		assertNotNull("Folder shouldn't be null", folder);
+		assertNotNull("Folder ID shouldn't be null", folder.getId());
 	}
-/*	
-	@Test(expected=MoviePersistenceException.class)
-	public void testReadNfoFileFail() throws MoviePersistenceException {
-		File arquivo = new File("/nfo/inexistent.nfo");
-		Movie movie = parser.read(arquivo);
-		assertNull("Movie should be null",movie);				
-	}*/
-
-
-
-	private static File getResourceAsFile(String resourcePath) {
-		try {
-			InputStream in = FolderDaoJdbcTest.class.getResourceAsStream(resourcePath);
-			if (in == null) {
-				return null;
-			}
-
-			File tempFile = File.createTempFile(String.valueOf(in.hashCode()), ".tmp");
-			tempFile.deleteOnExit();
-
-			try (FileOutputStream out = new FileOutputStream(tempFile)) {
-				byte[] buffer = new byte[1024];
-				int bytesRead;
-				while ((bytesRead = in.read(buffer)) != -1) {
-					out.write(buffer, 0, bytesRead);
-				}
-			}
-			return tempFile;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+	
+	@Test(expected=IrisPersistenceException.class)
+	public void testSaveFolderFailNullName() throws IrisPersistenceException{
+		IrisFolder folder = dao.createFolder(null);
+		assertNull("Folder should be null", folder);		
 	}
 
 }

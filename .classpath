@@ -39,6 +39,7 @@
 	<classpathentry kind="src" path="src/iris.search.persistence.xml"/>
 	<classpathentry kind="src" path="src/iris.search.ui.cli"/>
 	<classpathentry kind="src" path="src/iris.search.ui.gui"/>
+	<classpathentry kind="src" path="src/iris.persistence.jdbc.test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-9"/>
 	<classpathentry kind="lib" path="libs/javax.mail-1.5.5.jar"/>
 	<classpathentry kind="lib" path="libs/javax.mail-api-1.5.5.jar"/>
@@ -59,5 +60,6 @@
 	<classpathentry kind="lib" path="libs/cryptix-pki-api-1.0.jar"/>
 	<classpathentry kind="lib" path="libs/javamail-crypto-1.0.jar"/>
 	<classpathentry kind="lib" path="libs/javamail-crypto-cryptix-openpgp-1.0.jar"/>
+	<classpathentry kind="lib" path="libs/junit-4.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
