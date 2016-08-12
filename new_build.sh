@@ -1,22 +1,17 @@
 #!/bin/bash
 
-export JAVA_HOME=/usr/lib/jvm/java-9-oracle
-
-JAVA_BIN=$JAVA_HOME/bin
-echo Java: $JAVA_BIN
-
 ############### BASIC CONFIG ###################
 #interface: gui/cli
-INTERFACE=cli
+INTERFACE=gui
 
 #email_type: simple/smime/pgp
-EMAIL_TYPE=smime
+EMAIL_TYPE=simple
 
 #persistence: xml/lucene/relational
 PERSISTENCE=xml
 
 #adb: true/false
-ADDRESS_BOOK=false
+ADDRESS_BOOK=true
 
 #tags: true/false
 TAGS=true
@@ -25,7 +20,11 @@ TAGS=true
 SEARCH=true
 ################################################
 
-mvn -f pom.xml package
+export JAVA_HOME=/usr/lib/jvm/java-9-oracle
+
+JAVA_BIN=$JAVA_HOME/bin
+echo Java: $JAVA_BIN
+
 
 SRC_DIR=src
 BUILD_DIR=build
@@ -38,9 +37,8 @@ MODS_TEST_AUTOMATIC_DIR=modules/test-automatic
 MODS_TEST_CLASSPATH_DIR=modules/test-libs
 MODS_TEST_TMP_DIR=modules/test-tmp
 
-
-#echo Compiling ...
-#$JAVA_BIN/javac -Xlint:unchecked -mp $MODS_GENERATED_DIR:$MODS_TMP_LIBS_DIR -cp $MODS_TMP_LIBS_DIR -d build -modulesourcepath src $(find src -name "*.java")
+# copy maven dependencies
+mvn -f pom.xml -Dlibs.dest.dir=$MODS_TMP_LIBS_DIR package
 
 
 ### TODO rever os clean
@@ -74,41 +72,61 @@ clean_all () {
 }
 
 copy_mail_libs () {
-	cp $MODS_TEST_TMP_DIR/javax.mail-1.5.5.jar $MODS_AUTOMATIC_DIR
-	cp $MODS_TEST_TMP_DIR/javax.mail-api-1.5.5.jar $MODS_CLASSPATH_DIR
-	cp $MODS_TEST_TMP_DIR/activation-1.1.jar $MODS_CLASSPATH_DIR
+	cp $MODS_TMP_LIBS_DIR/javax.mail-1.5.5.jar $MODS_AUTOMATIC_DIR
+	cp $MODS_TMP_LIBS_DIR/javax.mail-api-1.5.5.jar $MODS_CLASSPATH_DIR
+	cp $MODS_TMP_LIBS_DIR/activation-1.1.jar $MODS_CLASSPATH_DIR
 } 
 
 copy_persistence_relational_libs () {
-	cp $MODS_TEST_TMP_DIR/sqlite-jdbc-3.8.11.2.jar $MODS_AUTOMATIC_DIR	
+	cp $MODS_TMP_LIBS_DIR/sqlite-jdbc-3.8.11.2.jar $MODS_AUTOMATIC_DIR	
 }
 
 copy_persistence_lucene_libs () {
-	cp $MODS_TEST_TMP_DIR/lucene-core-4.10.2.jar $MODS_AUTOMATIC_DIR
-	cp $MODS_TEST_TMP_DIR/lucene-analyzers-common-4.10.2.jar $MODS_AUTOMATIC_DIR
-	cp $MODS_TEST_TMP_DIR/lucene-queryparser-4.10.2.jar $MODS_AUTOMATIC_DIR
-	cp $MODS_TEST_TMP_DIR/lucene-queries-4.10.2.jar $MODS_CLASSPATH_DIR
-	cp $MODS_TEST_TMP_DIR/lucene-sandbox-4.10.2.jar $MODS_CLASSPATH_DIR	
-	cp $MODS_TEST_TMP_DIR/lucene-codecs-4.10.2.jar $MODS_CLASSPATH_DIR	
+	cp $MODS_TMP_LIBS_DIR/lucene-core-4.10.2.jar $MODS_AUTOMATIC_DIR
+	cp $MODS_TMP_LIBS_DIR/lucene-analyzers-common-4.10.2.jar $MODS_AUTOMATIC_DIR
+	cp $MODS_TMP_LIBS_DIR/lucene-queryparser-4.10.2.jar $MODS_AUTOMATIC_DIR
+	cp $MODS_TMP_LIBS_DIR/lucene-queries-4.10.2.jar $MODS_CLASSPATH_DIR
+	cp $MODS_TMP_LIBS_DIR/lucene-sandbox-4.10.2.jar $MODS_CLASSPATH_DIR	
+	cp $MODS_TMP_LIBS_DIR/lucene-codecs-4.10.2.jar $MODS_CLASSPATH_DIR	
 }
 
 copy_secure_smime_libs () {
-	cp $MODS_TEST_TMP_DIR/bcmail-jdk15on-1.54.jar $MODS_AUTOMATIC_DIR
-	cp $MODS_TEST_TMP_DIR/bcpkix-jdk15on-1.54.jar $MODS_AUTOMATIC_DIR
-	cp $MODS_TEST_TMP_DIR/bcprov-jdk15on-1.54.jar $MODS_AUTOMATIC_DIR
+	cp $MODS_TMP_LIBS_DIR/bcmail-jdk15on-1.54.jar $MODS_AUTOMATIC_DIR
+	cp $MODS_TMP_LIBS_DIR/bcpkix-jdk15on-1.54.jar $MODS_AUTOMATIC_DIR
+	cp $MODS_TMP_LIBS_DIR/bcprov-jdk15on-1.54.jar $MODS_AUTOMATIC_DIR
 }
+
+copy_secure_pgp_libs () {
+	cp $MODS_TMP_LIBS_DIR/bcprov-jdk15on-1.54.jar $MODS_AUTOMATIC_DIR
+	cp $MODS_TMP_LIBS_DIR/bcpg-jdk15on-1.54.jar $MODS_AUTOMATIC_DIR
+	cp $MODS_TMP_LIBS_DIR/javamail-crypto-1.0.jar $MODS_AUTOMATIC_DIR	
+	cp $MODS_TMP_LIBS_DIR/javamail-crypto-cryptix-openpgp-1.0.jar $MODS_CLASSPATH_DIR
+}
+#      bcprov-ext-jdk15on-1.54.jar   cryptix-openpgp-provider-1.0.jar    
+#bcmail-jdk15on-1.54.jar    cryptix-pki-api-1.0.jar           javax.mail-1.5.5.jar                    
+#   cryptix-jce-provider-1.0.jar  hamcrest-core-1.3.jar             javax.mail-api-1.5.5.jar              
+#bcpkix-jdk15on-1.54.jar  cryptix-message-api-1.0.jar              junit-4.12.jar                         
+
+
+
+
 
 compile_module () {	
 	MODULE_NAME=$1
-	#echo " - Compiling module: $MODULE_NAME"
-	#$JAVA_BIN/javac -mp $MODS_GENERATED_DIR:$MODS_AUTOMATIC_DIR:$MODS_TEST_AUTOMATIC_DIR -cp $MODS_CLASSPATH_DIR -d $BUILD_DIR/$MODULE_NAME -sourcepath $SRC_DIR/$MODULE_NAME $(find $SRC_DIR/$MODULE_NAME -name "*.java")	
-	$JAVA_BIN/javac -Xlint:unchecked -mp $MODS_GENERATED_DIR:$MODS_AUTOMATIC_DIR:$MODS_TEST_AUTOMATIC_DIR -cp $MODS_CLASSPATH_DIR -d $BUILD_DIR/$MODULE_NAME -sourcepath $SRC_DIR/$MODULE_NAME $(find $SRC_DIR/$MODULE_NAME -name "*.java")	
+	#echo " - Compiling module: $MODULE_NAME"	
+	$JAVA_BIN/javac -mp $MODS_GENERATED_DIR:$MODS_AUTOMATIC_DIR:$MODS_TEST_AUTOMATIC_DIR -cp $MODS_CLASSPATH_DIR -d $BUILD_DIR/$MODULE_NAME -sourcepath $SRC_DIR/$MODULE_NAME $(find $SRC_DIR/$MODULE_NAME -name "*.java")
 }
-
+ 
 create_jar_module () {	
 	MODULE_NAME=$1
 	#echo " - Creating jar module: $MODULE_NAME"	
 	$JAVA_BIN/jar --create --file $MODS_GENERATED_DIR/$MODULE_NAME@1.0.jar --module-version 1.0  -C $BUILD_DIR/$MODULE_NAME .	
+}
+
+create_main_jar_module () {
+	MODULE_NAME=$1
+	MAIN_CLASS=$2
+	$JAVA_BIN/jar --create --file $MODS_GENERATED_DIR/$MODULE_NAME@1.0.jar --module-version 1.0 --main-class $MAIN_CLASS -C $BUILD_DIR/$MODULE_NAME .
 }
 
 create_module () {
@@ -116,6 +134,14 @@ create_module () {
 	echo Creating module: $MODULE
     compile_module $MODULE
     create_jar_module $MODULE
+}
+
+create_module_main () {
+	MODULE=$1
+	MAIN_CLASS=$2
+	echo Creating main module: $MODULE
+    compile_module $MODULE
+    create_main_jar_module $MODULE $MAIN_CLASS
 }
 
 create_modules () {	
@@ -127,10 +153,14 @@ create_modules () {
 }
 
 create_basic_modules () {
-	echo Creating basic modules ...
 	copy_mail_libs
-	BASE_MODULES=(iris.model iris.base iris.mail iris.mail.provider iris.persistence iris.core)
+	BASE_MODULES=(iris.model iris.base iris.mail iris.mail.provider iris.persistence)
 	create_modules "${BASE_MODULES[@]}"
+	
+	MODULE="iris.core"
+	mkdir $BUILD_DIR/$MODULE
+	cp $SRC_DIR/$MODULE/*.properties $BUILD_DIR/$MODULE
+	create_module $MODULE
 }
 
 create_email_providers () {
@@ -147,7 +177,8 @@ create_email_module () {
 		copy_secure_smime_libs	
 		create_module "iris.mail.secure.smime"
 	elif [ $EMAIL_TYPE = "pgp" ]; then
-		echo iris.mail.secure.pgp PGP NOT YET IMPLEMENTED!!!!!!!	
+		copy_secure_pgp_libs
+		create_module "iris.mail.secure.pgp"
 	else		
 		create_module "iris.mail.simple"
 	fi
@@ -168,17 +199,127 @@ create_persistence_modules () {
 	create_module $MODULE
 }
 
+copy_images () {
+	MODULE=$1
+	SRC=$2
+	DEST=$3
+	mkdir -p $DEST/$MODULE/images
+	cp $SRC/$MODULE/images/* $DEST/$MODULE/images	 
+}
+
+create_ui_modules () {
+	MODULE_NAME="iris.ui.cli"
+	MAIN_CLASS="br.unb.cic.iris.cli.MainProgram"
+	if [ $INTERFACE = "gui" ]; then
+		MODULE_NAME="iris.ui.gui"
+		MAIN_CLASS="br.unb.cic.iris.gui.MainProgram"
+		copy_images $MODULE_NAME $SRC_DIR $BUILD_DIR	 	   		
+	fi
+	cp $SRC_DIR/$MODULE_NAME/*.properties $BUILD_DIR/$MODULE_NAME		
+	create_module_main $MODULE_NAME $MAIN_CLASS
+}
+
+create_addressbook_modules () {
+	if [ $ADDRESS_BOOK = true ]; then
+		create_module "iris.addressbook.api"
+
+		if [ $PERSISTENCE = "relational" ] || [ $PERSISTENCE = "lucene" ]; then			
+			create_module "iris.addressbook.model.simple"
+		fi
+		
+		MODULE="iris.addressbook.persistence.xml"
+		if [ $PERSISTENCE = "relational" ]; then
+			MODULE="iris.addressbook.persistence.jdbc"
+		elif [ $PERSISTENCE = "lucene" ]; then
+			MODULE="iris.addressbook.persistence.lucene"		
+		fi
+		create_module $MODULE
+			
+		MODULE="iris.addressbook.ui.cli"
+		if [ $INTERFACE = "gui" ]; then			
+			MODULE="iris.addressbook.ui.gui"
+			copy_images $MODULE $SRC_DIR $BUILD_DIR			
+		fi
+		create_module $MODULE
+	fi
+}
+
+create_tagging_modules () {
+	if [ $TAGS = true ]; then		
+		create_module "iris.tag.api"
+		
+		if [ $PERSISTENCE = "relational" ] || [ $PERSISTENCE = "lucene" ]; then			
+			create_module "iris.tag.model.simple"
+		fi
+		
+		if [ $PERSISTENCE = "relational" ]; then
+			create_module "iris.tag.persistence.jdbc"
+		elif [ $PERSISTENCE = "lucene" ]; then
+			create_module "iris.tag.persistence.lucene"
+		else
+			create_module "iris.tag.persistence.xml"
+		fi
+		
+		MODULE="iris.tag.ui.cli"
+		if [ $INTERFACE = "gui" ]; then
+			MODULE="iris.tag.ui.gui"
+			copy_images $MODULE $SRC_DIR $BUILD_DIR			
+		fi
+		create_module $MODULE
+	fi
+}
+
+create_search_modules () {
+	if [ $SEARCH = true ]; then
+		create_module "iris.search.api"
+		
+		if [ $PERSISTENCE = "relational" ]; then
+			create_module "iris.search.persistence.jdbc"
+		elif [ $PERSISTENCE = "lucene" ]; then
+			create_module "iris.search.persistence.lucene"
+		else
+			create_module "iris.search.persistence.xml"
+		fi
+	
+		MODULE="iris.search.ui.cli"
+		if [ $INTERFACE = "gui" ]; then
+			MODULE="iris.search.ui.gui"			
+			copy_images $MODULE $SRC_DIR $BUILD_DIR						
+		fi
+		cp $SRC_DIR/$MODULE/*.properties $BUILD_DIR/$MODULE
+		create_module $MODULE
+	fi
+}
+
+
 create_iris_modules () {
+	start=`date +%s`
 	echo Creating modules ...
 	create_basic_modules
 	create_email_module
 	create_email_providers	
 	create_persistence_modules
+	create_ui_modules
+	create_addressbook_modules
+	create_tagging_modules
+	create_search_modules	
+	end=`date +%s`
+	runtime=$((end-start))
+	echo Modules created in $runtime seconds.
 }
 
 
+run () {
+	echo Executing ...
+	MODULE_NAME="iris.ui.cli"
+	if [ $INTERFACE = "gui" ]; then
+	 	MODULE_NAME="iris.ui.gui"
+	fi
 
+	$JAVA_BIN/java -mp $MODS_GENERATED_DIR:$MODS_AUTOMATIC_DIR -cp $MODS_CLASSPATH_DIR -m $MODULE_NAME
+}
 
 ################### EXECUTE ###################
 clean_all
 create_iris_modules
+run

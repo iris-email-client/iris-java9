@@ -158,6 +158,7 @@ private static final String BC = BouncyCastleProvider.PROVIDER_NAME;
 		return res.getContent();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public MimeMessage sign(Session mailSession, MimeMessage message) throws Exception {
 		System.out.println("Signing message ...");
@@ -269,6 +270,7 @@ private static final String BC = BouncyCastleProvider.PROVIDER_NAME;
 	/**
 	 * verify the signature (assuming the cert is contained in the message)
 	 */
+	@SuppressWarnings("unchecked")
 	public void verify(SMIMESigned s) throws Exception {
 		//
 		// extract the information to verify the signatures.

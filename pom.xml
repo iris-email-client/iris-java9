@@ -16,6 +16,7 @@
 	</organization>
 
 	<properties>
+		<libs.dest.dir>${project.basedir}/libs</libs.dest.dir>
 		<java.mail.version>1.5.5</java.mail.version>		
 		<lucene.version>4.10.2</lucene.version>
 		<bouncycastle.version>1.54</bouncycastle.version>
@@ -157,7 +158,7 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.basedir}/libs</outputDirectory>	
+							<outputDirectory>${libs.dest.dir}</outputDirectory>	
 							<overWriteIfNewer>true</overWriteIfNewer>					 							
 						</configuration>
 					</execution>

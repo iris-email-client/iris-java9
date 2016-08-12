@@ -34,6 +34,7 @@ public class ListMessagesPanel extends JPanel {
 		initData();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void initComponents() {
 		setLayout(new BorderLayout());
 				

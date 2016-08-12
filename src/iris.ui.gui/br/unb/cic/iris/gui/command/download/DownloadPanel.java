@@ -38,6 +38,7 @@ public class DownloadPanel extends JPanel implements PropertyChangeListener {
 		initComponents();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void initComponents() {
 		setLayout(new BorderLayout());
 		
