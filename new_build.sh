@@ -11,16 +11,16 @@ INTERFACE=gui
 EMAIL_TYPE=simple
 
 #persistence: xml/lucene/relational
-PERSISTENCE=relational
+PERSISTENCE=xml
 
 #adb: true/false
-ADDRESS_BOOK=true
+ADDRESS_BOOK=false
 
 #tags: true/false
-TAGS=true
+TAGS=false
 
 #search: true/false
-SEARCH=true
+SEARCH=false
 ################################################
 
 export JAVA_HOME=/usr/lib/jvm/java-9-oracle
@@ -122,13 +122,18 @@ copy_test_libs () {
 compile_module () {	
 	MODULE_NAME=$1
 	#echo " - Compiling module: $MODULE_NAME"	
-	$JAVA_BIN/javac -mp $MODS_GENERATED_DIR:$MODS_AUTOMATIC_DIR:$MODS_TEST_AUTOMATIC_DIR -cp $MODS_CLASSPATH_DIR -d $BUILD_DIR/$MODULE_NAME -sourcepath $SRC_DIR/$MODULE_NAME $(find $SRC_DIR/$MODULE_NAME -name "*.java")
+	$JAVA_BIN/javac -mp $MODS_GENERATED_DIR:$MODS_AUTOMATIC_DIR:$MODS_TEST_GENERATED_DIR:$MODS_TEST_AUTOMATIC_DIR -cp $MODS_CLASSPATH_DIR -d $BUILD_DIR/$MODULE_NAME -sourcepath $SRC_DIR/$MODULE_NAME $(find $SRC_DIR/$MODULE_NAME -name "*.java")
 }
  
-create_jar_module () {	
-	MODULE_NAME=$1
+_create_jar_module () {	
+	DEST_DIR=$1
+	MODULE_NAME=$2
 	#echo " - Creating jar module: $MODULE_NAME"	
-	$JAVA_BIN/jar --create --file $MODS_GENERATED_DIR/$MODULE_NAME@1.0.jar --module-version 1.0  -C $BUILD_DIR/$MODULE_NAME .	
+	$JAVA_BIN/jar --create --file $DEST_DIR/$MODULE_NAME@1.0.jar --module-version 1.0  -C $BUILD_DIR/$MODULE_NAME .	
+}
+
+create_jar_module () {	
+	_create_jar_module $MODS_GENERATED_DIR $1
 }
 
 _create_main_jar_module () {
@@ -139,10 +144,7 @@ _create_main_jar_module () {
 }
 
 create_main_jar_module () {
-	_create_main_jar_module $MODS_GENERATED_DIR $1 $2
-	#MODULE_NAME=$1
-	#MAIN_CLASS=$2
-	#$JAVA_BIN/jar --create --file $MODS_GENERATED_DIR/$MODULE_NAME@1.0.jar --module-version 1.0 --main-class $MAIN_CLASS -C $BUILD_DIR/$MODULE_NAME .
+	_create_main_jar_module $MODS_GENERATED_DIR $1 $2	
 }
 
 create_module () {
@@ -161,6 +163,13 @@ create_module_main () {
 }
 
 create_module_test () {
+	MODULE=$1	
+	echo Creating test module: $MODULE
+    compile_module $MODULE
+    _create_jar_module $MODS_TEST_GENERATED_DIR $MODULE
+}
+
+create_module_test_main () {
 	MODULE=$1
 	MAIN_CLASS=$2
 	echo Creating test module: $MODULE
@@ -212,6 +221,7 @@ create_persistence_modules () {
 	if [ $PERSISTENCE = "relational" ] || [ $PERSISTENCE = "lucene" ]; then
 		create_module "iris.model.simple"
 	fi
+
 	MODULE="iris.persistence.xml"
 	if [ $PERSISTENCE = "relational" ]; then
 		copy_persistence_relational_libs
@@ -226,8 +236,20 @@ create_persistence_modules () {
 	#pequeno teste antes de uma versao malehor para tests
 	if [ $TEST = "true" ]; then
 		copy_test_libs
-		create_module_test "iris.persistence.jdbc.test" "br.unb.cic.iris.persistence.jdbc.test.TestRunner"
-		run_test "iris.persistence.jdbc.test"
+		create_module_test "iris.persistence.test"	
+		
+		TEST_MODULE="iris.persistence.xml.test"
+		MAIN_CLASS="br.unb.cic.iris.persistence.xml.test.TestRunner"
+		if [ $PERSISTENCE = "relational" ]; then			
+			TEST_MODULE="iris.persistence.jdbc.test"
+			MAIN_CLASS="br.unb.cic.iris.persistence.jdbc.test.TestRunner"
+		elif [ $PERSISTENCE = "lucene" ]; then
+			echo "NOT YET IMPLEMENTED!!!"			
+			TEST_MODULE="iris.persistence.lucene.test"	
+			MAIN_CLASS=""
+		fi						
+		create_module_test_main $TEST_MODULE $MAIN_CLASS
+		run_test $TEST_MODULE
 	fi
 	
 }
@@ -355,10 +377,11 @@ run () {
 run_test () {
 	MODULE=$1
 	echo Testing: $MODULE 	
+	echo $JAVA_BIN/java -mp $MODS_GENERATED_DIR:$MODS_AUTOMATIC_DIR:$MODS_TEST_GENERATED_DIR:$MODS_TEST_AUTOMATIC_DIR -cp $MODS_TEST_CLASSPATH_DIR/hamcrest-core-1.3.jar -m $MODULE
 	$JAVA_BIN/java -mp $MODS_GENERATED_DIR:$MODS_AUTOMATIC_DIR:$MODS_TEST_GENERATED_DIR:$MODS_TEST_AUTOMATIC_DIR -cp $MODS_TEST_CLASSPATH_DIR/hamcrest-core-1.3.jar -m $MODULE
 }
 
 ################### EXECUTE ###################
 clean_all
 create_iris_modules
-run
+#run
