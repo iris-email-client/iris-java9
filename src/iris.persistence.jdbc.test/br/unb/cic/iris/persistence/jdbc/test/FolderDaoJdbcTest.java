@@ -1,7 +1,11 @@
 package br.unb.cic.iris.persistence.jdbc.test;
 
-import static org.junit.Assert.*;
+import static br.unb.cic.iris.model.IrisFolder.INBOX;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -10,6 +14,7 @@ import br.unb.cic.iris.model.EntityFactory;
 import br.unb.cic.iris.model.IrisFolder;
 import br.unb.cic.iris.persistence.FolderDAO;
 import br.unb.cic.iris.persistence.IrisPersistenceException;
+import br.unb.cic.iris.persistence.jdbc.DbUtil;
 
 public class FolderDaoJdbcTest {
 	private static FolderDAO dao;
@@ -21,10 +26,21 @@ public class FolderDaoJdbcTest {
 		entityFactory = IrisServiceLocator.instance().getEntityFactory();
 		assertNotNull("Folder DAO shouldn't be null", dao);
 	}
+	
+	
+	@Before
+	public void runOnceBeforeEachMethod() {
+		try {
+			DbUtil.instance().setConfig(new TestJdbcConfig());
+		} catch (IrisPersistenceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
 
 	@Test
 	public void testSaveFolder() throws IrisPersistenceException{
-		IrisFolder folder = dao.createFolder(IrisFolder.INBOX);
+		IrisFolder folder = dao.createFolder(INBOX);
 		assertNotNull("Folder shouldn't be null", folder);
 		assertNotNull("Folder ID shouldn't be null", folder.getId());
 	}
@@ -33,6 +49,31 @@ public class FolderDaoJdbcTest {
 	public void testSaveFolderFailNullName() throws IrisPersistenceException{
 		IrisFolder folder = dao.createFolder(null);
 		assertNull("Folder should be null", folder);		
+	}
+	
+	@Test(expected=IrisPersistenceException.class)
+	public void testSaveFolderFailBlankName() throws IrisPersistenceException{
+		IrisFolder folder = dao.createFolder("");
+		assertNull("Folder should be null", folder);		
+	}
+	
+	@Test(expected=IrisPersistenceException.class)
+	public void testSaveFolderFailSpaceName() throws IrisPersistenceException{
+		IrisFolder folder = dao.createFolder(" ");
+		assertNull("Folder should be null", folder);		
+	}
+	
+	@Test
+	public void testFindByName() throws IrisPersistenceException {
+		try {
+			dao.createFolder(INBOX);
+		} catch (IrisPersistenceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		IrisFolder folder = dao.findByName(INBOX);
+		assertNotNull("Folder shouldn't be null", folder);
+		assertEquals("Folder name should be: "+INBOX, INBOX, folder.getName());		
 	}
 
 }

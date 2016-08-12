@@ -8,7 +8,7 @@ public class StringUtil {
 		return s != null && ! s.isEmpty();
 	}
 	public static boolean isEmpty(String s) {
-		return s == null || s.isEmpty();
+		return s == null || s.trim().isEmpty();
 	}
 	public static boolean notEmpty(List<String> parameters) {
 		boolean retValue = true;

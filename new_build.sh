@@ -361,4 +361,4 @@ run_test () {
 ################### EXECUTE ###################
 clean_all
 create_iris_modules
-#run
+run
