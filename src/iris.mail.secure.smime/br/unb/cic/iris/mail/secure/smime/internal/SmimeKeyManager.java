@@ -24,7 +24,8 @@ public class SmimeKeyManager {
 
 	private static SmimeKeyManager instance;
 
-	private String pkcs12Keystore = Configuration.IRIS_HOME+"/keystore.pkcs12";
+	//TODO usando a mesma senha sempre, inclusive para as chaves privadas ... o usuario deve informar a senha da chave privada dele
+	private String pkcs12Keystore = Configuration.IRIS_HOME+Configuration.FILE_SEPARATOR+"keystore.pkcs12";
 	private String keystorePassword = "123456";
 
 	private KeyStore keystore;
@@ -76,7 +77,7 @@ public class SmimeKeyManager {
 		/* Get the private key to sign the message with */
 		System.out.println("Loading private key for: " + keyAlias);
 		System.out.println("isKeyEntry: "+keystore.isKeyEntry(keyAlias));
-		// TODO eh a chave do alias ... nao do keystore????
+		// TODO eh a chave do alias ... nao do keystore ... o usuario deve informar a senha da chave privada dele
 		PrivateKey privateKey = (PrivateKey) keystore.getKey(keyAlias, keystorePassword.toCharArray());
 		if (privateKey == null) {
 			throw new IrisException("Cannot find private key for alias: " + keyAlias);

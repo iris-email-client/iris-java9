@@ -7,14 +7,20 @@ public interface PersistenceConfiguration {
 	public String getPath();
 	public boolean reset();
 	
-	public default void doReset() throws IrisPersistenceException {
-		//System.out.println("Deleting: "+getPath());
+	public default void doReset() throws IrisPersistenceException {		
 		File persistenceFile = new File(getPath());
 		if(persistenceFile.exists()){
-			if(!persistenceFile.delete()){
-				throw new IrisPersistenceException("Could not delete file: "+getPath());
-			}
+			delete(persistenceFile);
 		}
+	}
+	
+	default void delete(File file){
+		if(file.isDirectory()){
+			for(File f: file.listFiles()){
+				delete(f);
+			}			
+		}
+		file.delete();		
 	}
 	
 }

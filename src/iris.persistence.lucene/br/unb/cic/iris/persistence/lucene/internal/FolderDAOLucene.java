@@ -53,10 +53,13 @@ public class FolderDAOLucene extends AbstractDAO<IrisFolder> implements FolderDA
 
 	public IrisFolder findByName(String folderName) throws IrisPersistenceException {
 		List<IrisFolder> result = doFindByName(folderName);
-		if (result.isEmpty()) {
-			throw new IrisPersistenceException(String.format("Folder '%s' not found", folderName), null);
+//		if (result.isEmpty()) {
+//			throw new IrisPersistenceException(String.format("Folder '%s' not found", folderName), null);
+//		}
+		if (! result.isEmpty()) {
+			return result.iterator().next();
 		}
-		return result.iterator().next();
+		return null;
 	}
 
 	public List<IrisFolder> doFindByName(String folderName) throws IrisPersistenceException {
@@ -82,7 +85,7 @@ public class FolderDAOLucene extends AbstractDAO<IrisFolder> implements FolderDA
 	public IrisFolder createFolder(String folderName) throws IrisPersistenceException {
 		EntityValidator.checkFolderBeforeCreate(this, folderName);
 		IrisFolder folder = IrisServiceLocator.instance().getEntityFactory().createIrisFolder(folderName);		
-		instance.saveOrUpdate(folder);
+		folder = fromDocument(instance.saveOrUpdate(folder));
 		System.out.println(String.format("%s folder created.", folderName));
 		return folder;
 	}

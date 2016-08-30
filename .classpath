@@ -18,6 +18,7 @@
 	<classpathentry kind="src" path="src/iris.persistence.jdbc"/>
 	<classpathentry kind="src" path="src/iris.persistence.jdbc.test"/>
 	<classpathentry kind="src" path="src/iris.persistence.lucene"/>
+	<classpathentry kind="src" path="src/iris.persistence.lucene.test"/>
 	<classpathentry kind="src" path="src/iris.persistence.xml"/>
 	<classpathentry kind="src" path="src/iris.persistence.xml.test"/>
 	<classpathentry kind="src" path="src/iris.ui.cli"/>

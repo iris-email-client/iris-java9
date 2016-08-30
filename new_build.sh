@@ -243,10 +243,9 @@ create_persistence_modules () {
 		if [ $PERSISTENCE = "relational" ]; then			
 			TEST_MODULE="iris.persistence.jdbc.test"
 			MAIN_CLASS="br.unb.cic.iris.persistence.jdbc.test.TestRunner"
-		elif [ $PERSISTENCE = "lucene" ]; then
-			echo "NOT YET IMPLEMENTED!!!"			
+		elif [ $PERSISTENCE = "lucene" ]; then					
 			TEST_MODULE="iris.persistence.lucene.test"	
-			MAIN_CLASS=""
+			MAIN_CLASS="br.unb.cic.iris.persistence.lucene.test.TestRunner"
 		fi						
 		create_module_test_main $TEST_MODULE $MAIN_CLASS
 		run_test $TEST_MODULE
@@ -376,10 +375,17 @@ run () {
 
 run_test () {
 	MODULE=$1
-	echo Testing: $MODULE 	
+	echo Testing: $MODULE
+	CLASSPATH="$MODS_TEST_CLASSPATH_DIR/hamcrest-core-1.3.jar" 	
+	if [ $PERSISTENCE = "lucene" ]; then
+		CLASSPATH=$CLASSPATH:$MODS_AUTOMATIC_DIR/lucene-core-4.10.2.jar:$MODS_CLASSPATH_DIR/lucene-codecs-4.10.2.jar
+		#CLASSPATH=$CLASSPATH:$MODS_CLASSPATH_DIR/lucene-codecs-4.10.2.jar
+	fi
+	
 	echo $JAVA_BIN/java -mp $MODS_GENERATED_DIR:$MODS_AUTOMATIC_DIR:$MODS_TEST_GENERATED_DIR:$MODS_TEST_AUTOMATIC_DIR -cp $MODS_TEST_CLASSPATH_DIR/hamcrest-core-1.3.jar -m $MODULE
-	$JAVA_BIN/java -mp $MODS_GENERATED_DIR:$MODS_AUTOMATIC_DIR:$MODS_TEST_GENERATED_DIR:$MODS_TEST_AUTOMATIC_DIR -cp $MODS_TEST_CLASSPATH_DIR/hamcrest-core-1.3.jar -m $MODULE
+	$JAVA_BIN/java -mp $MODS_GENERATED_DIR:$MODS_AUTOMATIC_DIR:$MODS_TEST_GENERATED_DIR:$MODS_TEST_AUTOMATIC_DIR -cp $CLASSPATH -m $MODULE
 }
+
 
 ################### EXECUTE ###################
 clean_all

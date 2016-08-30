@@ -2,6 +2,7 @@ package br.unb.cic.iris.persistence.lucene.internal;
 
 import java.io.File;
 import java.io.IOException;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.FieldType;
@@ -9,11 +10,15 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
+
+import br.unb.cic.iris.persistence.IrisPersistenceException;
+import br.unb.cic.iris.persistence.lucene.LuceneUtil;
 
 /***
  * added by dPersistenceLucene
@@ -37,7 +42,7 @@ public class IndexManager {
 	private IndexManager() {
 	}
 
-	public static Directory createIndex(String filepath) throws IOException {
+	public static Directory createIndex(String filepath) throws IOException, IrisPersistenceException {
 		File path = null;
 		if (filepath != null && !filepath.isEmpty()) {
 			path = new File(filepath);
@@ -68,34 +73,50 @@ public class IndexManager {
 		index = FSDirectory.open(path);
 	}
 
-	public static Directory getIndex() throws IOException {
+	public static Directory getIndex() throws IOException, IrisPersistenceException {
 		if (index == null) {
-			String path = System.getProperty("user.home") + "/.iris/lucene_idx";
+			index = createIndex(LuceneUtil.instance().getConfig().getPath());
+			//LuceneUtil.instance().getConfig().getPath();
+			
+			/*String path = System.getProperty("user.home") + "/.iris/lucene_idx";
 			if ("true".equals(System.getProperty("iris.lucene.ram"))) {
 				path = null;
 			}
-			index = createIndex(path);
+			index = createIndex(path);*/
 		}
+		System.out.println("INDEX: "+index);
 		return index;
 	}
 
 	public static void closeIndex() throws IOException {
-		index.close();
+//		if(writer != null){
+//		writer.deleteAll();
+//		writer.commit();
+//		}
+		if(index != null){
+			//index.clearLock(index.getLockID());
+			index.close();
+		}
+		
 		writer = null;
 		index = null;
 		reader = null;
 	}
 
-	public static IndexWriter getWriter() throws IOException {
+	public static IndexWriter getWriter() throws IOException, IrisPersistenceException {
 		if (writer == null) {
 			Analyzer analyzer = new StandardAnalyzer();
 			IndexWriterConfig config = new IndexWriterConfig(Version.LATEST, analyzer);
+			
+			//apenas para teste .....
+			config.setOpenMode(OpenMode.CREATE);
+			
 			writer = new IndexWriter(getIndex(), config);
 		}
 		return writer;
 	}
 
-	static IndexReader getReader() throws IOException {
+	static IndexReader getReader() throws IOException, IrisPersistenceException {
 		if (reader == null) {
 			reader = DirectoryReader.open(getIndex());
 		} else {
@@ -106,7 +127,7 @@ public class IndexManager {
 		return reader;
 	}
 
-	public static IndexSearcher getSearcher() throws IOException {
+	public static IndexSearcher getSearcher() throws IOException, IrisPersistenceException {
 		return new IndexSearcher(getReader());
 	}
 }

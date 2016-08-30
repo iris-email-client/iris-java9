@@ -92,7 +92,9 @@ public abstract class AbstractDAO<T> {
 			String id = doc.get("id");
 			if ("null".equals(id) || "0".equals(id) || id == null) {
 				doc.removeField("id");
-				doc.add(new StringField("id", java.util.UUID.randomUUID().toString(), Store.YES));
+				id = java.util.UUID.randomUUID().toString();
+				System.out.println("ID="+id);
+				doc.add(new StringField("id", id, Store.YES));
 				writer.addDocument(doc);
 			} else {
 				writer.updateDocument(new Term("id", id), doc);
@@ -129,7 +131,6 @@ public abstract class AbstractDAO<T> {
 		return result;
 	}
 
-	// TODO PersistenceException
 	protected abstract T fromDocument(Document doc) throws IrisPersistenceException;
 
 	protected abstract Document toDocument(T t) throws IrisPersistenceException;
