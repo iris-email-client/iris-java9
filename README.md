@@ -70,9 +70,9 @@ run the bash script (set specific variables before using) to build/test/run:
 
 ## usage
 
-Create 'iris.properties' file in $USER_HOME/.iris (follow the example in root folder)
+Create 'iris.properties' file in $USER_HOME/.iris 
 
-Example:
+Example (/home/pedro/.iris/iris.properties):
 
 ```
 language = 
