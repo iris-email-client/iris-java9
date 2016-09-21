@@ -46,7 +46,7 @@ Here are few links to get started:
 
 * Videos: 
 
-[Devoxx - Prepare for JDK 9! by Mark Reinhold/Alan Bateman] (https://www.youtube.com/watch?v=KZfbRuvv5qc) or [JavaOne - CON5107 Prepare for JDK 9] (https://www.youtube.com/watch?v=nBAUaOoBdGU)
+[JavaOne - CON5107 Prepare for JDK 9] (https://www.youtube.com/watch?v=nBAUaOoBdGU) or [Devoxx - Prepare for JDK 9! by Mark Reinhold/Alan Bateman] (https://www.youtube.com/watch?v=KZfbRuvv5qc)
 
 [JavaOne - CON5118 Introduction to Modular Development] (https://www.youtube.com/watch?v=a99RmjgG5Eo) or [Devoxx - Introduction to Modular Development by Mark Reinhold/Alan Bateman] (https://www.youtube.com/watch?v=qr4O4SbzihQ)
 
@@ -59,30 +59,13 @@ Here are few links to get started:
 [JavaOne - TUT6825 Project Jigsaw Hack Session] (https://www.youtube.com/watch?v=r2DeuDCCywM)
 
 
-## dependencies
-
-Dependencies, for now, will be downloaded 'manually', as declared on pom.xml
-
-The dependencies should be selected/declared manually according to your modules selection
-
-Then run:
-
-`mvn package`
-
-to download jar libs to a specific folder, that will be used as an automatic module.
-
-Example: ... 
-
 
 ## build
 
-run the bash script (set specific variables before using) to build and run:
+run the bash script (set specific variables before using) to build/test/run:
 
-`build.sh`
+`new_build.sh`
 
-or run ant script (set java_home before):
-
-`ant`
 
 
 ## usage
@@ -94,14 +77,27 @@ Example:
 ```
 language = 
 
+##default provider
 provider = gmail
 username = XXX@gmail.com
 password = XXX
+
+##security keys (uncomment/define if using gpg)
+#gpg.file.private=/home/pedro/.gnupg/secring.gpg
+#gpg.file.public=/home/pedro/.gnupg/pubring.gpg
+#gpg.file.secret=123456
 ```
 
-Run the main module created:
+'language' property can be blank to use the defualt language or defined to a specific language like 'language = pt_BR'
+
+
+
+If you want to run manually the main module created (iris.ui.gui in this example):
 
 `
 $JAVA_BIN/java -mp mlib:libs -m iris.ui.gui
 `
+
+or run using the bash script.
+
 
