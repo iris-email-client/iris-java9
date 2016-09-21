@@ -88,5 +88,5 @@ password = XXX
 #gpg.file.secret=123456
 ```
 
-'language' property can be blank to use the defualt language or defined to a specific language like 'language = pt_BR'
+'language' property can be left blank to use the defualt language or defined to a specific language like 'language = pt_BR'
 
