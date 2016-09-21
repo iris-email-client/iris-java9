@@ -60,11 +60,11 @@ Here are few links to get started:
 
 
 
-## build
+## build and run
 
 run the bash script (set specific variables before using) to build/test/run:
 
-`new_build.sh`
+`./new_build.sh`
 
 
 
@@ -89,15 +89,4 @@ password = XXX
 ```
 
 'language' property can be blank to use the defualt language or defined to a specific language like 'language = pt_BR'
-
-
-
-If you want to run manually the main module created (iris.ui.gui in this example):
-
-`
-$JAVA_BIN/java -mp mlib:libs -m iris.ui.gui
-`
-
-or run using the bash script.
-
 
