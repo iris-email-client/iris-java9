@@ -31,4 +31,12 @@ Por enquanto está sendo executado por script bash.
 Se o produto gerado for CLI, executar o __run-cli.sh__
 
 Se o produto gerado for GUI, executar o __run-gui.sh__
- 
+
+
+### Visualizar a hierarquia dos módulos
+
+Executar o script _deps.sh_
+
+Exemplo da imagem gerada para o produto _simple-gui_:
+
+<img src="./images/simple-gui.png" alt="drawing" width="1800"/>
