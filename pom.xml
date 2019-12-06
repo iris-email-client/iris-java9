@@ -1,184 +1,370 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
-	<groupId>br.unb.cic</groupId>
-	<artifactId>iris</artifactId>
+	<groupId>br.unb.cic.iris.java9</groupId>
+	<artifactId>iris-java9</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
-	
-	<description>POM used only to download the necessary dependencies.</description>
-
-	<organization>
-		<name>Universidade de Brasília</name>
-		<url>http://www.cic.unb.br/</url>
-	</organization>
+	<packaging>pom</packaging>
 
 	<properties>
-		<libs.dest.dir>${project.basedir}/libs</libs.dest.dir>
-		<java.mail.version>1.5.5</java.mail.version>		
+		<java.version>11</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+
+		<product.name></product.name>
+		<product.description></product.description>
+		<product.directory>${project.build.directory}/${product.name}</product.directory>
+		<product.directory.libs.name>libs</product.directory.libs.name>
+		<product.libs.classpath.prefix></product.libs.classpath.prefix>
+<!-- 		<classpathPrefix>${product.directory.libs.name}/</classpathPrefix> -->
+		<!-- <product.directory.libs>${product.directory}/${product.directory.libs.name}</product.directory.libs> -->
+		<product.directory.libs>${project.build.directory}/${product.directory.libs.name}</product.directory.libs>
+		<product.main.class></product.main.class>
+		<product.main.class.ui.cli>br.unb.cic.iris.cli.MainProgram</product.main.class.ui.cli>
+		<product.main.class.ui.gui>br.unb.cic.iris.gui.MainProgram</product.main.class.ui.gui>
+
+		<java.mail.version>1.5.5</java.mail.version>
 		<lucene.version>4.10.2</lucene.version>
 		<bouncycastle.version>1.54</bouncycastle.version>
 	</properties>
 
-	<dependencies>
-		<!-- java mail api -->
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>javax.mail-api</artifactId>
-			<version>${java.mail.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.mail</groupId>
-			<artifactId>javax.mail</artifactId>
-			<version>${java.mail.version}</version>
-		</dependency>
+	<modules>
+		<module>iris.model</module>
+		<module>iris.model.simple</module>
+		<module>iris.base</module>
+		<module>iris.mail</module>
+		<module>iris.mail.simple</module>
+		<module>iris.mail.provider</module>
+		<module>iris.mail.secure</module>
+		<module>iris.persistence</module>
+		<module>iris.core</module>
 
-		<!-- sqlite driver -->
-		<dependency>
-			<groupId>org.xerial</groupId>
-			<artifactId>sqlite-jdbc</artifactId>
-			<version>3.8.11.2</version>
-		</dependency>
-				
-		<!-- postgresql 
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>9.4.1208</version>
-		</dependency>-->
-		
-		<!-- Lucene -->
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-core</artifactId>
-			<version>${lucene.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-analyzers-common</artifactId>
-			<version>${lucene.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-queryparser</artifactId>
-			<version>${lucene.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-codecs</artifactId>
-			<version>${lucene.version}</version>
-		</dependency>
-		
-		<!-- JUnit -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-				
-		<!-- SECURE EMAIL -->
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcprov-jdk15on</artifactId>
-			<version>${bouncycastle.version}</version>
-		</dependency>
-		<!-- SMIME -->
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcpkix-jdk15on</artifactId>
-			<version>${bouncycastle.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcmail-jdk15on</artifactId>
-			<version>${bouncycastle.version}</version>
-		</dependency>
-		<!-- PGP -->
-		<!-- javamail-crypto http://javamail-crypto.sourceforge.net/ -->
-		<dependency>
-			<groupId>net.suberic.crypto</groupId>
-			<artifactId>javamail-crypto</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>net.suberic.crypto</groupId>
-			<artifactId>javamail-crypto-cryptix-openpgp</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<!-- cryptix -->
-		<dependency>
-			<groupId>cryptix</groupId>
-			<artifactId>cryptix-jce-provider</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>cryptix</groupId>
-			<artifactId>cryptix-message-api</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>cryptix</groupId>
-			<artifactId>cryptix-openpgp-provider</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>cryptix</groupId>
-			<artifactId>cryptix-pki-api</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<!--bouncy castle -->
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcprov-ext-jdk15on</artifactId>
-			<version>${bouncycastle.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcpg-jdk15on</artifactId>
-			<version>${bouncycastle.version}</version>
-		</dependency>
-	</dependencies>
+		<module>iris.mail.provider.gmail</module>
+		<module>iris.mail.provider.outlook</module>
+		<module>iris.mail.provider.yahoo</module>
+
+		<module>iris.mail.secure.pgp</module>
+		<module>iris.mail.secure.smime</module>
+
+		<module>iris.persistence.jdbc</module>
+
+		<module>iris.ui.cli</module>
+		<module>iris.ui.gui</module>
+
+		<module>iris.produtos</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.model</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.model.simple</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.base</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.mail</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.mail.simple</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.mail.provider</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.mail.provider.gmail</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.mail.provider.outlook</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.mail.provider.yahoo</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.mail.secure</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.mail.secure.pgp</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.mail.secure.smime</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.persistence</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.persistence.jdbc</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.ui.cli</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.ui.gui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+
+<!-- 			<dependency> -->
+<!-- 				<groupId>com.sun.activation</groupId> -->
+<!-- 				<artifactId>javax.activation</artifactId> -->
+<!-- 				<version>1.2.0</version> -->
+<!-- 			</dependency> -->
+			<!-- java mail api -->
+			<dependency>
+				<groupId>javax.mail</groupId>
+				<artifactId>javax.mail-api</artifactId>
+				<version>${java.mail.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.sun.mail</groupId>
+				<artifactId>javax.mail</artifactId>
+				<version>${java.mail.version}</version>
+			</dependency>
+
+			<!-- sqlite driver -->
+			<dependency>
+				<groupId>org.xerial</groupId>
+				<artifactId>sqlite-jdbc</artifactId>
+				<version>3.8.11.2</version>
+			</dependency>
+
+			<!-- postgresql <dependency> <groupId>org.postgresql</groupId> <artifactId>postgresql</artifactId> <version>9.4.1208</version> 
+				</dependency> -->
+
+			<!-- Lucene -->
+			<dependency>
+				<groupId>org.apache.lucene</groupId>
+				<artifactId>lucene-core</artifactId>
+				<version>${lucene.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.lucene</groupId>
+				<artifactId>lucene-analyzers-common</artifactId>
+				<version>${lucene.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.lucene</groupId>
+				<artifactId>lucene-queryparser</artifactId>
+				<version>${lucene.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.lucene</groupId>
+				<artifactId>lucene-codecs</artifactId>
+				<version>${lucene.version}</version>
+			</dependency>
+
+			<!-- JUnit -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.12</version>
+				<scope>test</scope>
+			</dependency>
+
+			<!-- SECURE EMAIL -->
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcprov-jdk15on</artifactId>
+				<version>${bouncycastle.version}</version>
+			</dependency>
+			<!-- SMIME -->
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcpkix-jdk15on</artifactId>
+				<version>${bouncycastle.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcmail-jdk15on</artifactId>
+				<version>${bouncycastle.version}</version>
+			</dependency>
+			<!-- PGP -->
+			<!-- javamail-crypto http://javamail-crypto.sourceforge.net/ -->
+			<dependency>
+				<groupId>net.suberic.crypto</groupId>
+				<artifactId>javamail-crypto</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>net.suberic.crypto</groupId>
+				<artifactId>javamail-crypto-cryptix-openpgp</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<!-- cryptix -->
+			<dependency>
+				<groupId>cryptix</groupId>
+				<artifactId>cryptix-jce-provider</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>cryptix</groupId>
+				<artifactId>cryptix-message-api</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>cryptix</groupId>
+				<artifactId>cryptix-openpgp-provider</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>cryptix</groupId>
+				<artifactId>cryptix-pki-api</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<!--bouncy castle -->
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcprov-ext-jdk15on</artifactId>
+				<version>${bouncycastle.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcpg-jdk15on</artifactId>
+				<version>${bouncycastle.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
-		<!-- <defaultGoal>dependency:copy-dependencies</defaultGoal> -->
-		<!-- http://maven.apache.org/plugins/maven-dependency-plugin/copy-dependencies-mojo.html -->
+		<defaultGoal>clean install</defaultGoal>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>3.1.1</version>
+					<executions>
+						<execution>
+							<id>copy-dependencies</id>
+							<phase>prepare-package</phase>
+							<goals>
+								<goal>copy-dependencies</goal>
+							</goals>
+							<configuration>
+								<outputDirectory>
+									${product.directory.libs}
+								</outputDirectory>
+<!-- 								<addParentPoms>true</addParentPoms> -->
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.2.0</version>
+					<configuration>
+						<archive>
+							<manifest>
+								<addClasspath>true</addClasspath>
+								<classpathPrefix>${product.libs.classpath.prefix}</classpathPrefix>
+								<mainClass>
+									${product.main.class}
+								</mainClass>
+							</manifest>
+							<manifestEntries>
+								<description>${product.description}</description>
+							</manifestEntries>
+						</archive>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
-      		<plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.10</version>
-				<executions>
-					<execution>
-						<id>copy</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${libs.dest.dir}</outputDirectory>	
-							<overWriteIfNewer>true</overWriteIfNewer>					 							
-						</configuration>
-					</execution>
-				</executions>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<debug>false</debug>
+					<optimize>true</optimize>
+					<showWarnings>true</showWarnings>
+					<showDeprecation>true</showDeprecation>
+				</configuration>
 			</plugin>
-   	 	</plugins>
-		
+		</plugins>
 	</build>
-	
-	<repositories>
-		<!-- iris repository on github -->
-		<repository>
-			<id>git-iris-email-client</id>
-			<name>iris-email-client's Git based repo</name>
-			<url>https://github.com/iris-email-client/mvn-repo/raw/master/</url>
-		</repository>
-		<repository>
-			<id>repo2</id>
-			<url>http://repo2.maven.org/maven2/</url>
-		</repository>
-	</repositories>
 
+
+
+
+	<issueManagement>
+		<system></system>
+		<url></url>
+	</issueManagement>
+	<distributionManagement>
+		<site>
+			<id>apache.local</id>
+			<url>file:///var/www/html/iris/</url>
+		</site>
+	</distributionManagement>
+	<ciManagement>
+		<system></system>
+		<url></url>
+	</ciManagement>
+	<developers>
+		<!-- <developer> <id></id> <name>Pedro Costa</name> <email></email> <organization></organization> <roles> <role>Developer</role> 
+			</roles> <timezone></timezone> </developer> -->
+	</developers>
+	<scm>
+		<connection>scm:git:https://github.com/rbonifacio/iris</connection>
+		<developerConnection>scm:git:https://github.com/rbonifacio/iris</developerConnection>
+		<url>https://github.com/rbonifacio/iris</url>
+	</scm>
+	<organization>
+		<name>Universidade de Brasília</name>
+		<url>http://unb.br/</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+			<distribution></distribution>
+			<comments></comments>
+		</license>
+	</licenses>
 </project>

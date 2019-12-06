@@ -1,0 +1,85 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>br.unb.cic.iris.java9</groupId>
+		<artifactId>iris-java9</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>iris.produtos</artifactId>
+
+	<properties>
+		<product.libs.classpath.prefix>${product.directory.libs.name}/</product.libs.classpath.prefix>
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>simple-cli</id>
+			<properties>
+				<product.name>produto01</product.name>
+				<product.description>Produto: gmail, jdbc, CLI</product.description>
+				<!-- <product.directory>${project.build.directory}/${product.name}</product.directory> -->
+				<!-- <product.directory.libs>${product.directory}/libs</product.directory.libs> -->
+				<product.main.class>${product.main.class.ui.cli}</product.main.class>
+			</properties>
+			<dependencies>
+				<!-- <dependency> -->
+				<!-- <groupId>br.unb.cic.iris.java9</groupId> -->
+				<!-- <artifactId>iris.model.simple</artifactId> -->
+				<!-- </dependency> -->
+				<dependency>
+					<groupId>br.unb.cic.iris.java9</groupId>
+					<artifactId>iris.mail.provider.gmail</artifactId>
+				</dependency>
+				<!-- <dependency> -->
+				<!-- <groupId>br.unb.cic.iris.java9</groupId> -->
+				<!-- <artifactId>iris.mail.provider.outlook</artifactId> -->
+				<!-- </dependency> -->
+				<!-- <dependency> -->
+				<!-- <groupId>br.unb.cic.iris.java9</groupId> -->
+				<!-- <artifactId>iris.mail.provider.yahoo</artifactId> -->
+				<!-- </dependency> -->
+				<dependency>
+					<groupId>br.unb.cic.iris.java9</groupId>
+					<artifactId>iris.persistence.jdbc</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>br.unb.cic.iris.java9</groupId>
+					<artifactId>iris.ui.cli</artifactId>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+			</plugin>
+
+
+			<!-- <plugin> -->
+			<!-- <groupId>org.apache.maven.plugins</groupId> -->
+			<!-- <artifactId>maven-jdeps-plugin</artifactId> -->
+			<!-- <version>3.1.2</version> -->
+			<!-- <executions> -->
+			<!-- <execution> -->
+			<!-- <goals> -->
+			<!-- <goal>jdkinternals</goal> -->
+			<!-- <goal>test-jdkinternals</goal> -->
+			<!-- </goals> -->
+			<!-- </execution> -->
+			<!-- </executions> -->
+			<!-- <configuration> -->
+			<!-- <dotOutput>${project.build.directory}/dot</dotOutput> -->
+			<!-- <recursive>true</recursive> -->
+			<!-- </configuration> -->
+			<!-- </plugin> -->
+		</plugins>
+	</build>
+</project>
