@@ -2,6 +2,7 @@
 
 __TODO:__ migrar o restante dos módulos relacionados a persistência. Apenas os módulos JDBC foram migrados.
 
+__TODO:__ refatoracao basica no pom.xml da raiz (basicamente uma limpeza)
 
 ### Configurar o iris
 
