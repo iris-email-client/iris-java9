@@ -18,7 +18,7 @@
 		<product.directory>${project.build.directory}/${product.name}</product.directory>
 		<product.directory.libs.name>libs</product.directory.libs.name>
 		<product.libs.classpath.prefix></product.libs.classpath.prefix>
-<!-- 		<classpathPrefix>${product.directory.libs.name}/</classpathPrefix> -->
+		<!-- <classpathPrefix>${product.directory.libs.name}/</classpathPrefix> -->
 		<!-- <product.directory.libs>${product.directory}/${product.directory.libs.name}</product.directory.libs> -->
 		<product.directory.libs>${project.build.directory}/${product.directory.libs.name}</product.directory.libs>
 		<product.main.class></product.main.class>
@@ -37,21 +37,32 @@
 		<module>iris.mail</module>
 		<module>iris.mail.simple</module>
 		<module>iris.mail.provider</module>
-		<module>iris.mail.secure</module>
-		<module>iris.persistence</module>
-		<module>iris.core</module>
-
 		<module>iris.mail.provider.gmail</module>
 		<module>iris.mail.provider.outlook</module>
 		<module>iris.mail.provider.yahoo</module>
-
+		<module>iris.mail.secure</module>
 		<module>iris.mail.secure.pgp</module>
 		<module>iris.mail.secure.smime</module>
-
+		<module>iris.persistence</module>
+		<module>iris.core</module>
 		<module>iris.persistence.jdbc</module>
+
+		<module>iris.addressbook.api</module>
+		<module>iris.addressbook.model.simple</module>
+		<module>iris.addressbook.persistence.jdbc</module>
+		<module>iris.search.api</module>
+		<module>iris.search.persistence.jdbc</module>
+		<module>iris.tag.api</module>
+		<module>iris.tag.model.simple</module>
+		<module>iris.tag.persistence.jdbc</module>
+
 
 		<module>iris.ui.cli</module>
 		<module>iris.ui.gui</module>
+		<module>iris.search.ui.cli</module>
+		<module>iris.search.ui.gui</module>
+		<module>iris.tag.ui.cli</module>
+		<module>iris.tag.ui.gui</module>
 
 		<module>iris.produtos</module>
 	</modules>
@@ -133,6 +144,70 @@
 				<artifactId>iris.core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.addressbook.api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.addressbook.model.simple</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.addressbook.persistence.jdbc</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.search.api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.search.persistence.jdbc</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.search.ui.cli</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.search.ui.gui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.tag.api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.tag.model.simple</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.tag.persistence.jdbc</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.tag.ui.cli</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.unb.cic.iris.java9</groupId>
+				<artifactId>iris.tag.ui.gui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>br.unb.cic.iris.java9</groupId>
 				<artifactId>iris.ui.cli</artifactId>
@@ -145,11 +220,11 @@
 			</dependency>
 
 
-<!-- 			<dependency> -->
-<!-- 				<groupId>com.sun.activation</groupId> -->
-<!-- 				<artifactId>javax.activation</artifactId> -->
-<!-- 				<version>1.2.0</version> -->
-<!-- 			</dependency> -->
+			<!-- <dependency> -->
+			<!-- <groupId>com.sun.activation</groupId> -->
+			<!-- <artifactId>javax.activation</artifactId> -->
+			<!-- <version>1.2.0</version> -->
+			<!-- </dependency> -->
 			<!-- java mail api -->
 			<dependency>
 				<groupId>javax.mail</groupId>
@@ -285,7 +360,7 @@
 								<outputDirectory>
 									${product.directory.libs}
 								</outputDirectory>
-<!-- 								<addParentPoms>true</addParentPoms> -->
+								<!-- <addParentPoms>true</addParentPoms> -->
 							</configuration>
 						</execution>
 					</executions>
