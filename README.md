@@ -3,9 +3,17 @@
 __TODO:__ migrar o restante dos módulos relacionados a persistência. Apenas os módulos JDBC foram migrados.
 
 
+### Configurar o iris
+
+Criar uma pasta _$HOME/.iris_
+
+Copiar o arquivo _iris.properties_ (da raiz do projeto) para o diretório criado (_$HOME/.iris_)
+
+Editar o arquivo _$HOME/.iris/iris.properties_ de acordo com as necessidades
+
 ### Configurar produtos
 
-Cada produto deve configurado em um profile específico no 'projeto' _iris.produtos_
+Cada produto deve ser configurado em um profile específico no 'projeto' _iris.produtos_
 
 Já foram configurados 2 _produtos/profiles_ como exemplo (um CLI e outro GUI)
 
