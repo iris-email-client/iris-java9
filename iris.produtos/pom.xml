@@ -49,6 +49,37 @@
 				</dependency>
 			</dependencies>
 		</profile>
+
+		<profile>
+			<id>simple-gui</id>
+			<properties>
+				<product.name>produto02</product.name>
+				<product.description>Produto: gmail/outlook/yahoo, jdbc, GUI</product.description>
+				<product.main.class>${product.main.class.ui.gui}</product.main.class>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>br.unb.cic.iris.java9</groupId>
+					<artifactId>iris.mail.provider.gmail</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>br.unb.cic.iris.java9</groupId>
+					<artifactId>iris.mail.provider.outlook</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>br.unb.cic.iris.java9</groupId>
+					<artifactId>iris.mail.provider.yahoo</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>br.unb.cic.iris.java9</groupId>
+					<artifactId>iris.persistence.jdbc</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>br.unb.cic.iris.java9</groupId>
+					<artifactId>iris.ui.gui</artifactId>
+				</dependency>
+			</dependencies>
+		</profile>
 	</profiles>
 
 	<build>

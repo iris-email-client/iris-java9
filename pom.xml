@@ -372,8 +372,8 @@
 					<configuration>
 						<archive>
 							<manifest>
-								<addClasspath>true</addClasspath>
-								<classpathPrefix>${product.libs.classpath.prefix}</classpathPrefix>
+<!-- 								<addClasspath>true</addClasspath> -->
+<!-- 								<classpathPrefix>${product.libs.classpath.prefix}</classpathPrefix> -->
 								<mainClass>
 									${product.main.class}
 								</mainClass>
